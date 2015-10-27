@@ -7,26 +7,37 @@
 	<artifactId>commons-eid-bom</artifactId>
 	<packaging>pom</packaging>
 	<version>0.2.1</version>
-	<distributionManagement>
-		<repository>
-			<id>e-contract-deploy</id>
-			<url>scp://e-contract.be/maven2</url>
-			<uniqueVersion>false</uniqueVersion>
-		</repository>
-		<site>
-			<id>e-contract-site</id>
-			<url>scp://e-contract.be/sites/commons-eid/</url>
-		</site>
-	</distributionManagement>
 	<build>
 		<extensions>
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
 				<artifactId>wagon-ssh</artifactId>
-				<version>2.2</version>
+				<version>2.10</version>
+			</extension>
+			<extension>
+				<groupId>org.apache.maven.scm</groupId>
+				<artifactId>maven-scm-provider-gitexe</artifactId>
+				<version>1.9.4</version>
+			</extension>
+			<extension>
+				<groupId>org.apache.maven.scm</groupId>
+				<artifactId>maven-scm-manager-plexus</artifactId>
+				<version>1.9.4</version>
+			</extension>
+			<extension>
+				<groupId>ar.com.synergian</groupId>
+				<artifactId>wagon-git</artifactId>
+				<version>0.2.5</version>
 			</extension>
 		</extensions>
 	</build>
+	<distributionManagement>
+		<repository>
+			<id>maven.eid.belgium.be</id>
+			<url>sftp://maven.eid.belgium.be/home/maven</url>
+			<uniqueVersion>false</uniqueVersion>
+		</repository>
+	</distributionManagement>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -51,4 +62,13 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>synergian-repo</id>
+			<url>https://raw.github.com/synergian/wagon-git/releases</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
 </project>
