@@ -36,8 +36,6 @@ import java.lang.annotation.Target;
 public @interface ConvertData {
 	/**
 	 * The data convertor class to use for conversion.
-	 * 
-	 * @return
 	 */
 	Class<? extends DataConvertor<?>> value();
 }

@@ -163,9 +163,9 @@ public class JCATest {
 
 	/**
 	 * Integration test for automatic recovery of a {@link PrivateKey} instance.
-	 * <p/>
+	 * <br>
 	 * Automatic recovery should work on the same eID card.
-	 * <p/>
+	 * <br>
 	 * When inserting another eID card however, the automatic recovery should
 	 * fail.
 	 * 

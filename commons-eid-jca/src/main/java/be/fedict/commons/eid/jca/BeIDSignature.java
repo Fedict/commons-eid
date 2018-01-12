@@ -50,7 +50,7 @@ import org.apache.commons.logging.LogFactory;
  * <li><code>SHA1withRSAandMGF1</code>, supported by future eID cards.</li>
  * <li><code>SHA256withRSAandMGF1</code>, supported by future eID cards.</li>
  * </ul>
- * <p/>
+ * <br>
  * Some of the more exotic digest algorithms like SHA-224 and RIPEMDxxx will
  * require an additional security provider like BouncyCastle.
  * 

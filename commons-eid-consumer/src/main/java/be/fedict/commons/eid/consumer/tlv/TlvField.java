@@ -36,8 +36,6 @@ import java.lang.annotation.Target;
 public @interface TlvField {
 	/**
 	 * The tag Id.
-	 * 
-	 * @return
 	 */
 	public int value();
 }

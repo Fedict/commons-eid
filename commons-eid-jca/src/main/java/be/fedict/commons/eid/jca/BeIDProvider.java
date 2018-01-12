@@ -34,7 +34,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * The JCA security provider. Provides an eID based {@link KeyStore},
  * {@link Signature}, {@link KeyManagerFactory}, and {@link SecureRandom}.
- * <p/>
+ * <br>
  * Usage:
  * 
  * <pre>

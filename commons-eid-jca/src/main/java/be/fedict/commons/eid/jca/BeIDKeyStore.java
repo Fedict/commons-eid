@@ -76,15 +76,15 @@ import be.fedict.commons.eid.dialogs.Messages;
  * Further the Citizen CA certificate can be accessed via the "CA" alias, the
  * Root CA certificate can be accessed via the "Root" alias, and the national
  * registration certificate can be accessed via the "RRN" alias.
- * <p/>
+ * <br>
  * Supports the eID specific {@link BeIDKeyStoreParameter} key store parameter.
  * You can also let any {@link JFrame} implement the
  * {@link KeyStore.LoadStoreParameter} interface. If you pass this to
  * {@link KeyStore#load(LoadStoreParameter)} the keystore will use that Swing
  * frame as parent for positioning the dialogs.
- * <p/>
+ * <br>
  * Usage:
- * <p/>
+ * <br>
  * 
  * <pre>
  * import java.security.KeyStore;

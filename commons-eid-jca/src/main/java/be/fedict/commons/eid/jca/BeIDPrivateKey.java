@@ -75,12 +75,6 @@ public class BeIDPrivateKey implements PrivateKey {
 
 	/**
 	 * Main constructor.
-	 * 
-	 * @param certificateFileType
-	 * @param beIDCard
-	 * @param logoff
-	 * @param autoRecovery
-	 * @param beIDKeyStore
 	 */
 	public BeIDPrivateKey(final FileType certificateFileType,
 			final BeIDCard beIDCard, final boolean logoff,

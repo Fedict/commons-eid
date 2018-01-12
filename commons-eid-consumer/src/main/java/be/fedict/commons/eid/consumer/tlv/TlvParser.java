@@ -44,11 +44,6 @@ public class TlvParser {
 	/**
 	 * Parses the given file using the meta-data annotations within the tlvClass
 	 * parameter.
-	 * 
-	 * @param <T>
-	 * @param file
-	 * @param tlvClass
-	 * @return
 	 */
 	public static <T> T parse(final byte[] file, final Class<T> tlvClass) {
 		T t;

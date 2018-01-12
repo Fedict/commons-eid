@@ -36,11 +36,6 @@ public class ByteArrayParser {
 	/**
 	 * Parses the given file using the meta-data annotations within the baClass
 	 * parameter.
-	 * 
-	 * @param <T>
-	 * @param file
-	 * @param baClass
-	 * @return
 	 */
 	public static <T> T parse(final byte[] file, final Class<T> baClass) {
 		T t;

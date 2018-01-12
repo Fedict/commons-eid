@@ -66,8 +66,6 @@ public enum SpecialStatus implements Serializable {
 
 	/**
 	 * Returns whether the citizen has a white cane. Blind people.
-	 * 
-	 * @return
 	 */
 	public boolean hasWhiteCane() {
 		return this.whiteCane;
@@ -75,8 +73,6 @@ public enum SpecialStatus implements Serializable {
 
 	/**
 	 * Extended Minority.
-	 * 
-	 * @return
 	 */
 	public boolean hasExtendedMinority() {
 		return this.extendedMinority;
@@ -84,8 +80,6 @@ public enum SpecialStatus implements Serializable {
 
 	/**
 	 * Returns whether the citizen has a yellow cane. Partially sighted people.
-	 * 
-	 * @return
 	 */
 	public boolean hasYellowCane() {
 		return this.yellowCane;
@@ -94,8 +88,6 @@ public enum SpecialStatus implements Serializable {
 	/**
 	 * Return whether the citizen has a bad sight. This means the citizen has
 	 * either a while cane or a yellow cane.
-	 * 
-	 * @return
 	 */
 	public boolean hasBadSight() {
 		return this.whiteCane || this.yellowCane;
@@ -103,9 +95,6 @@ public enum SpecialStatus implements Serializable {
 
 	/**
 	 * Converts the given string to the corresponding special status enum.
-	 * 
-	 * @param value
-	 * @return
 	 */
 	public static SpecialStatus toSpecialStatus(final String value) {
 		return SpecialStatus.map.get(value);

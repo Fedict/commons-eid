@@ -30,9 +30,9 @@ import be.fedict.commons.eid.client.spi.Logger;
  * An eID specific {@link KeyStore} parameter. Used to influence how the eID
  * card should be handled. If no {@link BeIDKeyStoreParameter} is used for
  * loading the keystore, a default behavior will be used.
- * <p/>
+ * <br>
  * Usage:
- * <p/>
+ * <br>
  * 
  * <pre>
  * import java.security.KeyStore;
@@ -71,8 +71,6 @@ public class BeIDKeyStoreParameter implements KeyStore.LoadStoreParameter {
 	/**
 	 * Sets the {@link BeIDCard} to be used by the corresponding
 	 * {@link KeyStore}.
-	 * 
-	 * @param beIDCard
 	 */
 	public void setBeIDCard(final BeIDCard beIDCard) {
 		this.beIDCard = beIDCard;
@@ -85,8 +83,6 @@ public class BeIDKeyStoreParameter implements KeyStore.LoadStoreParameter {
 	/**
 	 * Set to <code>true</code> if you want an eID logoff to be issued after
 	 * each PIN entry.
-	 * 
-	 * @param logoff
 	 */
 	public void setLogoff(final boolean logoff) {
 		this.logoff = logoff;
@@ -98,8 +94,6 @@ public class BeIDKeyStoreParameter implements KeyStore.LoadStoreParameter {
 
 	/**
 	 * Sets the parent component used to position the default eID dialogs.
-	 * 
-	 * @param parentComponent
 	 */
 	public void setParentComponent(final Component parentComponent) {
 		this.parentComponent = parentComponent;
@@ -111,8 +105,6 @@ public class BeIDKeyStoreParameter implements KeyStore.LoadStoreParameter {
 
 	/**
 	 * Sets the locale used for the default eID dialogs.
-	 * 
-	 * @param locale
 	 */
 	public void setLocale(final Locale locale) {
 		this.locale = locale;
@@ -130,8 +122,6 @@ public class BeIDKeyStoreParameter implements KeyStore.LoadStoreParameter {
 	 * Sets whether the private keys retrieved from the key store should feature
 	 * auto-recovery. This means that they can survive eID card
 	 * removal/re-insert events.
-	 * 
-	 * @param autoRecovery
 	 */
 	public void setAutoRecovery(boolean autoRecovery) {
 		this.autoRecovery = autoRecovery;
@@ -145,8 +135,6 @@ public class BeIDKeyStoreParameter implements KeyStore.LoadStoreParameter {
 	 * Sets whether the auto recovery should use card reader stickiness. If set
 	 * to true, the auto recovery will try to recover using the same card
 	 * reader.
-	 * 
-	 * @param cardReaderStickiness
 	 */
 	public void setCardReaderStickiness(boolean cardReaderStickiness) {
 		this.cardReaderStickiness = cardReaderStickiness;
@@ -154,8 +142,6 @@ public class BeIDKeyStoreParameter implements KeyStore.LoadStoreParameter {
 
 	/**
 	 * Sets the logger to be used within the BeIDCard sub-system.
-	 * 
-	 * @param logger
 	 */
 	public void setLogger(Logger logger) {
 		this.logger = logger;

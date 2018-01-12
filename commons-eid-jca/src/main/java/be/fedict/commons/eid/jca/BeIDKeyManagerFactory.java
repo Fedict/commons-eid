@@ -35,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * eID specific {@link KeyManagerFactory}. Can be used for mutual TLS
  * authentication.
- * <p/>
+ * <br>
  * Usage:
  * 
  * <pre>

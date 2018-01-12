@@ -26,7 +26,7 @@ import javax.net.ssl.ManagerFactoryParameters;
 /**
  * eID specific implementation of {@link ManagerFactoryParameters}. Can be used
  * to tweak the behavior of the eID handling in the context of mutual SSL.
- * <p/>
+ * <br>
  * Usage:
  * 
  * <pre>
@@ -64,8 +64,6 @@ public class BeIDManagerFactoryParameters implements ManagerFactoryParameters {
 
 	/**
 	 * Sets the parent component used to position the default eID dialogs.
-	 * 
-	 * @param parentComponent
 	 */
 	public void setParentComponent(final Component parentComponent) {
 		this.parentComponent = parentComponent;
@@ -77,8 +75,6 @@ public class BeIDManagerFactoryParameters implements ManagerFactoryParameters {
 
 	/**
 	 * Sets the locale used for the default eID dialogs.
-	 * 
-	 * @param locale
 	 */
 	public void setLocale(final Locale locale) {
 		this.locale = locale;
@@ -92,8 +88,6 @@ public class BeIDManagerFactoryParameters implements ManagerFactoryParameters {
 	 * Sets whether the private keys retrieved from the key store should feature
 	 * auto-recovery. This means that they can survive eID card
 	 * removal/re-insert events.
-	 * 
-	 * @param autoRecovery
 	 */
 	public void setAutoRecovery(boolean autoRecovery) {
 		this.autoRecovery = autoRecovery;
@@ -111,8 +105,6 @@ public class BeIDManagerFactoryParameters implements ManagerFactoryParameters {
 	 * Sets whether the auto recovery should use card reader stickiness. If set
 	 * to true, the auto recovery will try to recover using the same card
 	 * reader.
-	 * 
-	 * @param cardReaderStickiness
 	 */
 	public void setCardReaderStickiness(boolean cardReaderStickiness) {
 		this.cardReaderStickiness = cardReaderStickiness;

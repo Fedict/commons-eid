@@ -70,9 +70,6 @@ public class BeIDIntegrity {
 
 	/**
 	 * Loads a DER-encoded X509 certificate from a byte array.
-	 * 
-	 * @param encodedCertificate
-	 * @return
 	 */
 	public X509Certificate loadCertificate(final byte[] encodedCertificate) {
 		X509Certificate certificate;
@@ -89,12 +86,6 @@ public class BeIDIntegrity {
 
 	/**
 	 * Gives back a parsed identity file after integrity verification.
-	 * 
-	 * @param identityFile
-	 * @param identitySignatureFile
-	 * @param rrnCertificate
-	 * @return
-	 * @throws NoSuchAlgorithmException
 	 */
 	public Identity getVerifiedIdentity(final byte[] identityFile,
 			final byte[] identitySignatureFile,
@@ -108,13 +99,6 @@ public class BeIDIntegrity {
 	/**
 	 * Gives back a parsed identity file after integrity verification including
 	 * the eID photo.
-	 * 
-	 * @param identityFile
-	 * @param identitySignatureFile
-	 * @param photo
-	 * @param rrnCertificate
-	 * @return
-	 * @throws NoSuchAlgorithmException
 	 */
 	public Identity getVerifiedIdentity(final byte[] identityFile,
 			final byte[] identitySignatureFile, final byte[] photo,
@@ -147,12 +131,6 @@ public class BeIDIntegrity {
 
 	/**
 	 * Gives back a parsed address file after integrity verification.
-	 * 
-	 * @param addressFile
-	 * @param identitySignatureFile
-	 * @param addressSignatureFile
-	 * @param rrnCertificate
-	 * @return
 	 */
 	public Address getVerifiedAddress(final byte[] addressFile,
 			final byte[] identitySignatureFile,
@@ -180,14 +158,6 @@ public class BeIDIntegrity {
 
 	/**
 	 * Verifies a SHA1withRSA signature.
-	 * 
-	 * @param signatureData
-	 * @param publicKey
-	 * @param data
-	 * @return
-	 * @throws InvalidKeyException
-	 * @throws NoSuchAlgorithmException
-	 * @throws SignatureException
 	 */
 	public boolean verifySignature(final byte[] signatureData,
 			final PublicKey publicKey, final byte[]... data)
@@ -199,15 +169,6 @@ public class BeIDIntegrity {
 
 	/**
 	 * Verifies a signature.
-	 * 
-	 * @param signatureAlgo
-	 * @param signatureData
-	 * @param publicKey
-	 * @param data
-	 * @return
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidKeyException
-	 * @throws SignatureException
 	 */
 	public boolean verifySignature(final String signatureAlgo,
 			final byte[] signatureData, final PublicKey publicKey,
@@ -248,11 +209,6 @@ public class BeIDIntegrity {
 
 	/**
 	 * Verifies an authentication signature.
-	 * 
-	 * @param toBeSigned
-	 * @param signatureValue
-	 * @param authnCertificate
-	 * @return
 	 */
 	public boolean verifyAuthnSignature(final byte[] toBeSigned,
 			final byte[] signatureValue, final X509Certificate authnCertificate) {
@@ -276,11 +232,6 @@ public class BeIDIntegrity {
 
 	/**
 	 * Verifies a non-repudiation signature.
-	 * 
-	 * @param expectedDigestValue
-	 * @param signatureValue
-	 * @param certificate
-	 * @return
 	 */
 	public boolean verifyNonRepSignature(final byte[] expectedDigestValue,
 			final byte[] signatureValue, final X509Certificate certificate) {

@@ -25,7 +25,6 @@ import java.util.Arrays;
 /**
  * Enumeration of all supported eID digest algorithms. Also holds all PKCS#1
  * DigestInfo prefixes.
- * <p/>
  * Every DigestAlgorithmIdentifier also contains a NULL DER parameter. This
  * improves compatibility.
  * 

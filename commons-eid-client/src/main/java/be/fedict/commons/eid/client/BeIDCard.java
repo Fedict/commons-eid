@@ -283,12 +283,7 @@ public class BeIDCard {
 	 * AuthentificationCertificate, NonRepudiationCertificate, CACertificate,
 	 * RootCertificate and RRNCertificate.
 	 * 
-	 * @param fileType
 	 * @return the certificate requested
-	 * @throws CertificateException
-	 * @throws CardException
-	 * @throws IOException
-	 * @throws InterruptedException
 	 */
 	public X509Certificate getCertificate(final FileType fileType)
 			throws CertificateException, CardException, IOException,
@@ -303,10 +298,6 @@ public class BeIDCard {
 	 * for <code>getCertificate(FileType.AuthentificationCertificate)</code>
 	 * 
 	 * @return the X509 Authentication Certificate from the card.
-	 * @throws CardException
-	 * @throws IOException
-	 * @throws CertificateException
-	 * @throws InterruptedException
 	 */
 	public X509Certificate getAuthenticationCertificate() throws CardException,
 			IOException, CertificateException, InterruptedException {
@@ -317,12 +308,6 @@ public class BeIDCard {
 	 * Returns the X509 non-repudiation certificate. This is a convencience
 	 * method for
 	 * <code>getCertificate(FileType.NonRepudiationCertificate)</code>
-	 * 
-	 * @return
-	 * @throws CardException
-	 * @throws IOException
-	 * @throws CertificateException
-	 * @throws InterruptedException
 	 */
 	public X509Certificate getSigningCertificate() throws CardException,
 			IOException, CertificateException, InterruptedException {
@@ -332,12 +317,6 @@ public class BeIDCard {
 	/**
 	 * Returns the citizen CA certificate. This is a convenience method for
 	 * <code>getCertificate(FileType.CACertificate)</code>
-	 * 
-	 * @return
-	 * @throws CardException
-	 * @throws IOException
-	 * @throws CertificateException
-	 * @throws InterruptedException
 	 */
 	public X509Certificate getCACertificate() throws CardException,
 			IOException, CertificateException, InterruptedException {
@@ -348,10 +327,6 @@ public class BeIDCard {
 	 * Returns the Root CA certificate.
 	 * 
 	 * @return the Root CA X509 certificate.
-	 * @throws CertificateException
-	 * @throws CardException
-	 * @throws IOException
-	 * @throws InterruptedException
 	 */
 	public X509Certificate getRootCACertificate() throws CertificateException,
 			CardException, IOException, InterruptedException {
@@ -361,12 +336,6 @@ public class BeIDCard {
 	/**
 	 * Returns the national registration certificate. This is a convencience
 	 * method for <code>getCertificate(FileType.RRNCertificate)</code>
-	 * 
-	 * @return
-	 * @throws CardException
-	 * @throws IOException
-	 * @throws CertificateException
-	 * @throws InterruptedException
 	 */
 	public X509Certificate getRRNCertificate() throws CardException,
 			IOException, CertificateException, InterruptedException {
@@ -383,10 +352,6 @@ public class BeIDCard {
 	 * @param fileType
 	 *            which certificate's chain to return
 	 * @return the certificate's chain up to and including the Belgian Root Cert
-	 * @throws CertificateException
-	 * @throws CardException
-	 * @throws IOException
-	 * @throws InterruptedException
 	 */
 	public List<X509Certificate> getCertificateChain(final FileType fileType)
 			throws CertificateException, CardException, IOException,
@@ -407,15 +372,11 @@ public class BeIDCard {
 	}
 
 	/**
-	 * Returns the X509 authentication certificate chain. (Authentication ->
-	 * Citizen CA -> Root) This is a convenience method for
+	 * Returns the X509 authentication certificate chain. (Authentication -
+	 * Citizen CA - Root) This is a convenience method for
 	 * <code>getCertificateChain(FileType.AuthentificationCertificate)</code>
-	 * 
+	 *
 	 * @return the authentication certificate chain
-	 * @throws CardException
-	 * @throws IOException
-	 * @throws CertificateException
-	 * @throws InterruptedException
 	 */
 	public List<X509Certificate> getAuthenticationCertificateChain()
 			throws CardException, IOException, CertificateException,
@@ -424,15 +385,11 @@ public class BeIDCard {
 	}
 
 	/**
-	 * Returns the X509 non-repudiation certificate chain. (Non-Repudiation ->
-	 * Citizen CA -> Root) This is a convenience method for
+	 * Returns the X509 non-repudiation certificate chain. (Non-Repudiation -
+	 * Citizen CA - Root) This is a convenience method for
 	 * <code>getCertificateChain(FileType.NonRepudiationCertificate)</code>
 	 * 
 	 * @return the non-repudiation certificate chain
-	 * @throws CardException
-	 * @throws IOException
-	 * @throws CertificateException
-	 * @throws InterruptedException
 	 */
 	public List<X509Certificate> getSigningCertificateChain()
 			throws CardException, IOException, CertificateException,
@@ -441,15 +398,11 @@ public class BeIDCard {
 	}
 
 	/**
-	 * Returns the Citizen CA X509 certificate chain. (Citizen CA -> Root) This
+	 * Returns the Citizen CA X509 certificate chain. (Citizen CA - Root) This
 	 * is a convenience method for
 	 * <code>getCertificateChain(FileType.CACertificate)</code>
 	 * 
 	 * @return the citizen ca certificate chain
-	 * @throws CardException
-	 * @throws IOException
-	 * @throws CertificateException
-	 * @throws InterruptedException
 	 */
 	public List<X509Certificate> getCACertificateChain() throws CardException,
 			IOException, CertificateException, InterruptedException {
@@ -458,14 +411,10 @@ public class BeIDCard {
 
 	/**
 	 * Returns the national registry X509 certificate chain. (National Registry
-	 * -> Root) This is a convenience method for
+	 * - Root) This is a convenience method for
 	 * <code>getCertificateChain(FileType.RRNCertificate)</code>
 	 * 
 	 * @return the national registry certificate chain
-	 * @throws CardException
-	 * @throws IOException
-	 * @throws CertificateException
-	 * @throws InterruptedException
 	 */
 	public List<X509Certificate> getRRNCertificateChain() throws CardException,
 			IOException, CertificateException, InterruptedException {
@@ -483,11 +432,6 @@ public class BeIDCard {
 	 *            the certificate's file type.
 	 * @param requireSecureReader
 	 *            <code>true</code> if a secure pinpad reader is required.
-	 * @return
-	 * @throws CardException
-	 * @throws IOException
-	 * @throws InterruptedException
-	 * @throws UserCancelledException
 	 */
 	public byte[] sign(final byte[] digestValue, final BeIDDigest digestAlgo,
 			final FileType fileType, final boolean requireSecureReader)
@@ -600,11 +544,6 @@ public class BeIDCard {
 	 *            will be thrown unless a SPR is available
 	 * @return a SHA-1 digest of the input data signed by the citizen's
 	 *         authentication key
-	 * @throws NoSuchAlgorithmException
-	 * @throws CardException
-	 * @throws IOException
-	 * @throws InterruptedException
-	 * @throws UserCancelledException
 	 */
 	public byte[] signAuthn(final byte[] toBeSigned,
 			final boolean requireSecureReader) throws NoSuchAlgorithmException,
@@ -623,11 +562,6 @@ public class BeIDCard {
 	 * loading a successfully tests PIN into the PIN cache, so that unless the
 	 * card is removed, a subsequent authentication attempt will not request the
 	 * PIN, but proceed with the PIN given here.
-	 * 
-	 * @throws IOException
-	 * @throws CardException
-	 * @throws InterruptedException
-	 * @throws UserCancelledException
 	 */
 	public void verifyPin() throws IOException, CardException,
 			InterruptedException, UserCancelledException {
@@ -639,9 +573,6 @@ public class BeIDCard {
 	 * secure method available. if requiresSecureReader is true, this will throw
 	 * a SecurityException if no SPR is available, otherwise, this will default
 	 * to changing the PIN via the UI
-	 * 
-	 * @param requireSecureReader
-	 * @throws Exception
 	 */
 	public void changePin(final boolean requireSecureReader) throws Exception {
 		if (requireSecureReader
@@ -690,7 +621,6 @@ public class BeIDCard {
 	 * @param size
 	 *            the size of the requested random data.
 	 * @return size bytes of random data
-	 * @throws CardException
 	 */
 	public byte[] getChallenge(final int size) throws CardException {
 		final ResponseAPDU responseApdu = transmitCommand(
@@ -715,12 +645,6 @@ public class BeIDCard {
 	 * 
 	 * @param transactionMessage
 	 *            the transaction message to be signed.
-	 * @param requireSecureReader
-	 * @return
-	 * @throws CardException
-	 * @throws IOException
-	 * @throws InterruptedException
-	 * @throws UserCancelledException
 	 */
 	public byte[] signTransactionMessage(final String transactionMessage,
 			final boolean requireSecureReader) throws CardException,
@@ -747,7 +671,6 @@ public class BeIDCard {
 	 * Authentication signatures will require PIN entry. (non-repudation
 	 * signatures are automatically protected)
 	 * 
-	 * @throws Exception
 	 * @return this BeIDCard instance, to allow method chaining
 	 */
 	public BeIDCard logoff() throws Exception {
@@ -764,9 +687,6 @@ public class BeIDCard {
 	 * Unblocking PIN using PUKs. This will choose the most secure method
 	 * available to unblock a blocked PIN. If requireSecureReader is true, will
 	 * throw SecurityException if an SPR is not available
-	 * 
-	 * @param requireSecureReader
-	 * @throws Exception
 	 */
 	public void unblockPin(final boolean requireSecureReader) throws Exception {
 		if (requireSecureReader
@@ -809,8 +729,6 @@ public class BeIDCard {
 	 * getATR returns the ATR of the eID Card. If this BeIDCard instance was
 	 * constructed using the CardReader constructor, this is the only way to get
 	 * to the ATR.
-	 * 
-	 * @return
 	 */
 	public ATR getATR() {
 		return this.card.getATR();
@@ -833,7 +751,6 @@ public class BeIDCard {
 	 * BeIDCardManager by default, may have their own individual Locale settings
 	 * that may override those global settings.
 	 * 
-	 * @param locale
 	 * @return this BeIDCard instance, to allow method chaining
 	 */
 	public BeIDCard setLocale(Locale newLocale) {
@@ -856,7 +773,6 @@ public class BeIDCard {
 	 * to be all alone on the chip, shouldn't be necessary.
 	 * 
 	 * @return this BeIDCard instance, to allow method chaining
-	 * @throws CardException
 	 */
 	public BeIDCard selectApplet() throws CardException {
 		ResponseAPDU responseApdu;
@@ -909,7 +825,6 @@ public class BeIDCard {
 	 * methods.
 	 * 
 	 * @return this BeIDCard Instance, to allow method chaining.
-	 * @throws CardException
 	 */
 	public BeIDCard beginExclusive() throws CardException {
 		this.logger.debug("---begin exclusive---");
@@ -922,7 +837,6 @@ public class BeIDCard {
 	 * beginExclusive().
 	 * 
 	 * @return this BeIDCard Instance, to allow method chaining.
-	 * @throws CardException
 	 */
 	public BeIDCard endExclusive() throws CardException {
 		this.logger.debug("---end exclusive---");
@@ -943,9 +857,6 @@ public class BeIDCard {
 	 *            the estimated total size of the file to read (to allow for
 	 *            notification)
 	 * @return the data from the file
-	 * @throws CardException
-	 * @throws IOException
-	 * @throws InterruptedException
 	 */
 	public byte[] readBinary(final FileType fileType, final int estimatedMaxSize)
 			throws CardException, IOException, InterruptedException {
@@ -994,8 +905,6 @@ public class BeIDCard {
 	 * @param fileId
 	 *            the file to read
 	 * @return this BeIDCard Instance, to allow method chaining.
-	 * @throws CardException
-	 * @throws FileNotFoundException
 	 */
 	public BeIDCard selectFile(final byte[] fileId) throws CardException,
 			FileNotFoundException {
@@ -1026,9 +935,6 @@ public class BeIDCard {
 	 * @param fileType
 	 *            the file to read
 	 * @return the data from the file
-	 * @throws CardException
-	 * @throws IOException
-	 * @throws InterruptedException
 	 */
 	public byte[] readFile(final FileType fileType) throws CardException,
 			IOException, InterruptedException {
@@ -1580,10 +1486,6 @@ public class BeIDCard {
 		return this.cardTerminal;
 	}
 
-	/**
-	 * 
-	 * @param cardTerminal
-	 */
 	public void setCardTerminal(CardTerminal cardTerminal) {
 		this.cardTerminal = cardTerminal;
 	}
