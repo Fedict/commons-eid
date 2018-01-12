@@ -47,14 +47,10 @@
 	</scm>
 	<distributionManagement>
 		<repository>
-			<id>e-contract-deploy</id>
-			<url>sftp://e-contract.be/maven2</url>
+			<id>maven.eid.belgium.be</id>
+			<url>sftp://maven.eid.belgium.be/home/maven</url>
 			<uniqueVersion>false</uniqueVersion>
 		</repository>
-		<site>
-			<id>e-contract-site</id>
-			<url>sftp://e-contract.be/sites/commons-eid/</url>
-		</site>
 	</distributionManagement>
 	<modules>
 		<module>commons-eid-bom</module>
@@ -218,7 +214,22 @@
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
 				<artifactId>wagon-ssh</artifactId>
-				<version>2.6</version>
+				<version>2.10</version>
+			</extension>
+			<extension>
+				<groupId>org.apache.maven.scm</groupId>
+				<artifactId>maven-scm-provider-gitexe</artifactId>
+				<version>1.9.4</version>
+			</extension>
+			<extension>
+				<groupId>org.apache.maven.scm</groupId>
+				<artifactId>maven-scm-manager-plexus</artifactId>
+				<version>1.9.4</version>
+			</extension>
+			<extension>
+				<groupId>ar.com.synergian</groupId>
+				<artifactId>wagon-git</artifactId>
+				<version>0.2.5</version>
 			</extension>
 		</extensions>
 	</build>
@@ -237,6 +248,13 @@
 		<pluginRepository>
 			<id>maven-java-formatter-plugin</id>
 			<url>http://maven-java-formatter-plugin.googlecode.com/svn/maven2-repo/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</pluginRepository>
+		<pluginRepository>
+			<id>synergian-repo</id>
+			<url>https://raw.github.com/synergian/wagon-git/releases</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
