@@ -12,16 +12,16 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, see 
+ * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
 
 package be.fedict.commons.eid.client.spi;
 
+import be.fedict.commons.eid.client.BeIDCard;
+
 import java.util.Collection;
 import java.util.Locale;
-
-import be.fedict.commons.eid.client.BeIDCard;
 
 /**
  * An adapter implementing empty or simple implementations of the BeIDCardsUI
@@ -29,9 +29,8 @@ import be.fedict.commons.eid.client.BeIDCard;
  * implement unused methods. For example, in an embedded application where only
  * one card reader is possible, only adviseBeIDCardRequired() and adviseEnd()
  * would ever be called.
- * 
+ *
  * @author Frank Marien
- * 
  */
 public class BeIDCardsIUAdapter implements BeIDCardsUI {
 	protected Locale locale;
@@ -49,7 +48,7 @@ public class BeIDCardsIUAdapter implements BeIDCardsUI {
 	}
 
 	@Override
-	public BeIDCard selectBeIDCard(final Collection<BeIDCard> availableCards) {
+	public BeIDCard selectBeIDCard(Collection<BeIDCard> availableCards) {
 		return availableCards.iterator().next();
 	}
 

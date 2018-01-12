@@ -13,24 +13,23 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, see 
+ * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
 
 package be.fedict.commons.eid.client.spi;
 
-import java.util.Locale;
-
 import be.fedict.commons.eid.client.PINPurpose;
+
+import java.util.Locale;
 
 /**
  * An adapter implementing BeIDCardUI with empty default actions. Intended to be
  * extended by a useful class overriding only those methods it requires. For
  * example, in an embedded application having only a secure PINPAD reader, none
  * of the obtain() methods would ever be called.
- * 
+ *
  * @author Frank Marien
- * 
  */
 public class BeIDCardUIAdapter implements BeIDCardUI {
 
@@ -38,8 +37,7 @@ public class BeIDCardUIAdapter implements BeIDCardUI {
 	protected Locale locale;
 
 	@Override
-	public char[] obtainPIN(final int triesLeft, final PINPurpose type)
-			throws UserCancelledException {
+	public char[] obtainPIN(final int triesLeft, final PINPurpose type) {
 		throw new RuntimeException(OPERATION_CANCELLED);
 	}
 

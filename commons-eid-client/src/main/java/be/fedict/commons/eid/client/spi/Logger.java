@@ -12,7 +12,7 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, see 
+ * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
 
@@ -20,25 +20,22 @@ package be.fedict.commons.eid.client.spi;
 
 /**
  * Logger-interface.
- * 
+ *
  * @author Frank Cornelis
- * 
  */
 public interface Logger {
 
 	/**
 	 * Error messages receiver.
-	 * 
-	 * @param message
-	 *            the error message.
+	 *
+	 * @param message the error message.
 	 */
 	void error(String message);
 
 	/**
 	 * Debug messages receiver.
-	 * 
-	 * @param message
-	 *            the debug message.
+	 *
+	 * @param message the debug message.
 	 */
 	void debug(String message);
 }

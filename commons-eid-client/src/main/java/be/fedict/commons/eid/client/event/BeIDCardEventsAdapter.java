@@ -12,15 +12,15 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, see 
+ * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
 
 package be.fedict.commons.eid.client.event;
 
-import javax.smartcardio.CardTerminal;
-
 import be.fedict.commons.eid.client.BeIDCard;
+
+import javax.smartcardio.CardTerminal;
 
 public class BeIDCardEventsAdapter implements BeIDCardEventsListener {
 

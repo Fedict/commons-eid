@@ -12,7 +12,7 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, see 
+ * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
 
@@ -23,9 +23,8 @@ package be.fedict.commons.eid.client.spi;
  * and providing it with an independent object to apply to. Use when no obvious
  * objects are available to wait() upon, and multiple occurrences may be waited
  * for, to avoid cluttering such code with guard variables.
- * 
+ *
  * @author Frank Marien
- * 
  */
 public class Sleeper {
 	private boolean isAwoken;
@@ -35,7 +34,8 @@ public class Sleeper {
 			try {
 				this.wait(timeout);
 			} catch (final InterruptedException iex) {
-			} // intentionally empty
+				throw new RuntimeException("Interrupted!", iex);
+			}
 		}
 		this.isAwoken = false;
 	}
@@ -45,7 +45,8 @@ public class Sleeper {
 			try {
 				this.wait();
 			} catch (final InterruptedException iex) {
-			} // intentionally empty
+				throw new RuntimeException("Interrupted!", iex);
+			}
 		}
 		this.isAwoken = false;
 	}

@@ -12,26 +12,25 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, see 
+ * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
 
 package be.fedict.commons.eid.client.spi;
-
-import java.util.Collection;
-import java.util.Locale;
 
 import be.fedict.commons.eid.client.BeIDCard;
 import be.fedict.commons.eid.client.BeIDCards;
 import be.fedict.commons.eid.client.CancelledException;
 import be.fedict.commons.eid.client.OutOfCardsException;
 
+import java.util.Collection;
+import java.util.Locale;
+
 /**
  * implement a BeIDCardsUI to interact with the user with an instance of
  * {@link BeIDCards}.
- * 
+ *
  * @author Frank Marien
- * 
  */
 public interface BeIDCardsUI {
 	/**
@@ -40,14 +39,12 @@ public interface BeIDCardsUI {
 	 * instance respect the locale set here. Implementations MAY choose to
 	 * update any interface elements already facing the user at time of call,
 	 * but this is not required.
-	 * 
-	 * @param newLocale
 	 */
 	void setLocale(Locale newLocale);
 
 	/**
 	 * get the Locale currently set.
-	 * 
+	 *
 	 * @return the current Locale for this UI
 	 */
 	Locale getLocale();
@@ -78,24 +75,21 @@ public interface BeIDCardsUI {
 	 * throws CancelledException if user cancels throws OutOfCardsException if
 	 * all cards removed before selection could me made.
 	 */
-	BeIDCard selectBeIDCard(Collection<BeIDCard> availableCards)
-			throws CancelledException, OutOfCardsException;
+	BeIDCard selectBeIDCard(Collection<BeIDCard> availableCards) throws CancelledException, OutOfCardsException;
 
 	/**
 	 * user added a BeID card while selectBeIDCard() was blocking. An
 	 * implementation should update the list of cards, if possible.
-	 * 
-	 * @param card
-	 *            the card just inserted.
+	 *
+	 * @param card the card just inserted.
 	 */
 	void eIDCardInsertedDuringSelection(BeIDCard card);
 
 	/**
 	 * user removed a BeID card while selectBeIDCard() was blocking. An
 	 * implementation should update the list of cards, if possible.
-	 * 
-	 * @param card
-	 *            the card just removed.
+	 *
+	 * @param card the card just removed.
 	 */
 	void eIDCardRemovedDuringSelection(BeIDCard card);
 }

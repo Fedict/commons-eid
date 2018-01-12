@@ -18,6 +18,7 @@ public final class LocaleManager {
 		if (LocaleManager.locale == null) {
 			LocaleManager.locale = Locale.getDefault();
 		}
+
 		return LocaleManager.locale;
 	}
 }

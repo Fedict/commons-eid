@@ -12,7 +12,7 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, see 
+ * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
 
@@ -23,10 +23,9 @@ package be.fedict.commons.eid.client;
  * about the files stored on an BeIDCard. This allows a simple, unified
  * interface to many methods, and auxiliary information to be derived rather
  * than supplied separately.
- * 
+ *
  * @author Frank Cornelis
  * @author Frank Marien
- * 
  */
 public enum FileType {
 	Identity(new byte[]{0x3F, 0x00, (byte) 0xDF, 0x01, 0x40, 0x31}, 179), IdentitySignature(
@@ -44,36 +43,35 @@ public enum FileType {
 	private final byte keyId;
 	private final int estimatedMaxSize;
 
-	private FileType(final byte[] fileId, final int estimatedMaxSize) {
+	FileType(byte[] fileId, int estimatedMaxSize) {
 		this.fileId = fileId;
 		this.keyId = -1;
 		this.estimatedMaxSize = estimatedMaxSize;
 	}
 
-	private FileType(final byte[] fileId, final int estimatedMaxSize,
-			final int keyId) {
+	FileType(byte[] fileId, int estimatedMaxSize, int keyId) {
 		this.fileId = fileId;
 		this.keyId = (byte) keyId;
 		this.estimatedMaxSize = estimatedMaxSize;
 	}
 
 	public byte[] getFileId() {
-		return this.fileId;
+		return fileId;
 	}
 
 	public byte getKeyId() {
-		return this.keyId;
+		return keyId;
 	}
 
 	public boolean isCertificateUserCanSignWith() {
-		return this.keyId != -1;
+		return keyId != -1;
 	}
 
 	public boolean chainIncludesCitizenCA() {
-		return this.isCertificateUserCanSignWith();
+		return isCertificateUserCanSignWith();
 	}
 
 	public int getEstimatedMaxSize() {
-		return this.estimatedMaxSize;
+		return estimatedMaxSize;
 	}
 }

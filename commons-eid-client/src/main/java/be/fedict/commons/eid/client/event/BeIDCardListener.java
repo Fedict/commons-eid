@@ -12,7 +12,7 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, see 
+ * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
 
@@ -23,13 +23,14 @@ import be.fedict.commons.eid.client.FileType;
 /**
  * Listener interface for various eID related events like read progress. To be
  * used in user interfaces.
- * 
+ *
  * @author Frank Cornelis
- * 
  */
 public interface BeIDCardListener {
 
 	void notifyReadProgress(FileType fileType, int offset, int estimatedMaxSize);
+
 	void notifySigningBegin(FileType fileType);
+
 	void notifySigningEnd(FileType fileType);
 }

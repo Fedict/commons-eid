@@ -12,7 +12,7 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, see 
+ * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
 
@@ -24,9 +24,4 @@ package be.fedict.commons.eid.client;
  * requesting dialog)
  */
 public class CancelledException extends BeIDCardsException {
-	private static final long serialVersionUID = 1782770311681651884L;
-
-	public CancelledException() {
-		super();
-	}
 }
