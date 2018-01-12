@@ -4,7 +4,7 @@
 	<name>Commons eID Project</name>
 	<groupId>be.fedict</groupId>
 	<artifactId>commons-eid</artifactId>
-	<version>0.5.4-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<inceptionYear>2012</inceptionYear>
 	<licenses>
@@ -226,11 +226,6 @@
 				<artifactId>maven-scm-manager-plexus</artifactId>
 				<version>1.9.4</version>
 			</extension>
-			<extension>
-				<groupId>ar.com.synergian</groupId>
-				<artifactId>wagon-git</artifactId>
-				<version>0.2.5</version>
-			</extension>
 		</extensions>
 	</build>
 	<properties>
@@ -248,13 +243,6 @@
 		<pluginRepository>
 			<id>maven-java-formatter-plugin</id>
 			<url>http://maven-java-formatter-plugin.googlecode.com/svn/maven2-repo/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</pluginRepository>
-		<pluginRepository>
-			<id>synergian-repo</id>
-			<url>https://raw.github.com/synergian/wagon-git/releases</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>

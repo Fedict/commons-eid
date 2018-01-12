@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>be.fedict</groupId>
 		<artifactId>commons-eid</artifactId>
-		<version>0.5.4-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<name>Commons eID Integration Tests</name>
 	<groupId>be.fedict.commons-eid</groupId>
@@ -42,7 +42,7 @@
 			<dependency>
 				<groupId>be.fedict.commons-eid</groupId>
 				<artifactId>commons-eid-bom</artifactId>
-				<version>${project.version}</version>
+				<version>0.2.1</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
