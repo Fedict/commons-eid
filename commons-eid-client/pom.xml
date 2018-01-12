@@ -9,7 +9,6 @@
 		<relativePath>..</relativePath>
 	</parent>
 
-	<groupId>be.fedict.commons-eid</groupId>
 	<artifactId>commons-eid-client</artifactId>
 	<name>Commons eID Client</name>
 	<description>eID client library based on PC/SC</description>

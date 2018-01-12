@@ -8,7 +8,6 @@
 		<relativePath>..</relativePath>
 	</parent>
 
-	<groupId>be.fedict.commons-eid</groupId>
 	<artifactId>commons-eid-dialogs</artifactId>
 	<name>Commons eID Default Dialogs</name>
 	<description>Library holding a default implementation of the eID dialogs.</description>

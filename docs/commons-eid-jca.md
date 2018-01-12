@@ -1,0 +1,89 @@
+# Commons eID JCA
+
+This artifact provides a JCA security provider using the eID card.
+Once the JCA security provider has been registered you have a new key store available named "BeID".
+
+Within this key store you have two key aliases at your disposal:
+* "Authentication" which gives you access to the eID authentication private key and corresponding certificate chain.
+* "Signature" which gives you access to the eID non-repudiation private key and corresponding certificate chain.
+
+## Creating a signature
+
+Creating a signature using the Commons eID JCA provider is as easy as it can get.
+
+```
+Security.addProvider(new BeIDProvider());
+KeyStore keyStore = KeyStore.getInstance("BeID");
+keyStore.init(null);
+PrivateKey authnPrivateKey = (PrivateKey) keyStore.getKey("Authentication", null);
+Signature signature = Signature.getInstance("SHA1withRSA");
+signature.initSign(authnPrivateKey);
+byte[] toBeSigned = "hello world".getBytes();
+signature.update(toBeSigned);
+byte[] signatureValue = signature.sign();
+```
+
+Retrieving a certificate chain
+
+```
+Security.addProvider(new BeIDProvider());
+KeyStore keyStore = KeyStore.getInstance("BeID");
+keyStore.init(null);
+Certificate[] certificateChain = keyStore.getCertificateChain("Signature");
+```
+
+# Automatic recovery from eID card removal events
+
+When using multiple eID applications at the same time, 
+it might be possible that the PrivateKey instance all of the sudden no longer refers to a valid eID card instance.
+Normally in that case one has to reload the KeyStore to acquire a new valid PrivateKey instance.
+
+To make it even easier for developers, the Commons eID JCA key store implementation features an automatic recovery.
+The following example demonstrates how to activate this automatic recovery mechanism:
+
+```
+Security.addProvider(new BeIDProvider());
+KeyStore keyStore = KeyStore.getInstance("BeID");
+BeIDKeyStoreParameter keyStoreParameter = new BeIDKeyStoreParameter();
+keyStoreParameter.setAutoRecovery(true);
+keyStore.load(keyStoreParameter);
+PrivateKey authnPrivateKey = (PrivateKey) keyStore.getKey("Authentication", null);
+```
+
+The acquired PrivateKey instance now features an automatic recovery without the need to reload the KeyStore.
+Automatic recovery will check whether the same eID card has been re-inserted.
+
+Sometimes multiple eID cards, and thus multiple card readers, are available within the system.
+To be able to deal with such situations, one can enable card reader stickiness in combination with automatic recovery.
+The following example demonstrates how to activate both card reader stickiness and automatic recovery:
+
+```
+Security.addProvider(new BeIDProvider());
+KeyStore keyStore = KeyStore.getInstance("BeID");
+BeIDKeyStoreParameter keyStoreParameter = new BeIDKeyStoreParameter();
+keyStoreParameter.setAutoRecovery(true);
+keyStoreParameter.setCardReaderStickiness(true);
+keyStore.load(keyStoreParameter);
+PrivateKey authnPrivateKey = (PrivateKey) keyStore.getKey("Authentication", null);
+```
+
+In this case the key store will only try to recover using the original smart card reader.
+
+# Mutual SSL with automatic recovery and card reader stickiness
+
+The JCA security provider also features an eID specific KeyManagerFactory.
+The initialisation of this KeyManagerFactory can be configured via some specific parameter.
+The following example demonstrates how to use the KeyManagerFactory with a configuration that features both card reader stickiness and automatic recovery:
+
+```
+Security.addProvider(new BeIDProvider());
+KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("BeID");
+BeIDManagerFactoryParameters spec = new BeIDManagerFactoryParameters();
+spec.setAutoRecovery(true);
+spec.setCardReaderStickiness(true);
+keyManagerFactory.init(spec);
+
+SecureRandom secureRandom = new SecureRandom();
+sslContext.init(keyManagerFactory.getKeyManagers(), null, secureRandom);
+SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+```

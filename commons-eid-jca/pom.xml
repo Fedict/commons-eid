@@ -8,7 +8,6 @@
 		<relativePath>..</relativePath>
 	</parent>
 
-	<groupId>be.fedict.commons-eid</groupId>
 	<artifactId>commons-eid-jca</artifactId>
 	<name>Commons eID JCA</name>
 	<description>eID based JCA security provider</description>
