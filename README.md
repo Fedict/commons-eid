@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Fedict/commons-eid.svg?branch=develop)](https://travis-ci.org/Fedict/commons-eid)
+
 # README for Commons eID Project
 
 This project contains the source code tree of Commons eID.
