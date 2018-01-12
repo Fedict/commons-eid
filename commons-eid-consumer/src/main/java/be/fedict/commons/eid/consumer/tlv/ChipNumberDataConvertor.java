@@ -29,7 +29,7 @@ import org.apache.commons.codec.binary.Hex;
 public class ChipNumberDataConvertor implements DataConvertor<String> {
 
 	@Override
-	public String convert(final byte[] value) throws DataConvertorException {
+	public String convert(byte[] value) {
 		return new String(Hex.encodeHex(value)).toUpperCase();
 	}
 }

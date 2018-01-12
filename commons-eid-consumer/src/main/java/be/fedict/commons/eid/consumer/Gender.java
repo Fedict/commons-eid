@@ -27,12 +27,6 @@ import java.io.Serializable;
  * 
  */
 public enum Gender implements Serializable {
-	/**
-	 * Male.
-	 */
 	MALE,
-	/**
-	 * Female.
-	 */
 	FEMALE
 }

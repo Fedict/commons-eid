@@ -33,13 +33,6 @@ import be.fedict.commons.eid.consumer.tlv.TlvField;
  */
 public class Address implements Serializable {
 
-	/*
-	 * We implement serializable to allow this class to be used in distributed
-	 * containers as defined in the Servlet v2.4 specification.
-	 */
-
-	private static final long serialVersionUID = 1L;
-
 	@TlvField(1)
 	public String streetAndNumber;
 
@@ -52,24 +45,19 @@ public class Address implements Serializable {
 	@OriginalData
 	public byte[] data;
 
-	/*
-	 * We're also providing getters to make this class more useful within web
-	 * frameworks like JBoss Seam.
-	 */
-
 	public String getStreetAndNumber() {
-		return this.streetAndNumber;
+		return streetAndNumber;
 	}
 
 	public String getZip() {
-		return this.zip;
+		return zip;
 	}
 
 	public String getMunicipality() {
-		return this.municipality;
+		return municipality;
 	}
 
 	public byte[] getData() {
-		return this.data;
+		return data;
 	}
 }

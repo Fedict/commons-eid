@@ -30,12 +30,13 @@ import java.util.Map;
  */
 public enum DocumentType implements Serializable {
 
-	BELGIAN_CITIZEN("1"), KIDS_CARD("6"), BOOTSTRAP_CARD("7"), HABILITATION_CARD(
-			"8"),
+	BELGIAN_CITIZEN("1"),
+	KIDS_CARD("6"),
+	BOOTSTRAP_CARD("7"),
+	HABILITATION_CARD("8"),
 
 	/**
-	 * Bewijs van inschrijving in het vreemdelingenregister ??? Tijdelijk
-	 * verblijf
+	 * Bewijs van inschrijving in het vreemdelingenregister ??? Tijdelijk verblijf
 	 */
 	FOREIGNER_A("11"),
 
@@ -55,8 +56,7 @@ public enum DocumentType implements Serializable {
 	FOREIGNER_D("14"),
 
 	/**
-	 * (Verblijfs)kaart van een onderdaan van een lidstaat der EEG Verklaring
-	 * van inschrijving
+	 * (Verblijfs)kaart van een onderdaan van een lidstaat der EEG Verklaring van inschrijving
 	 */
 	FOREIGNER_E("15"),
 
@@ -77,29 +77,28 @@ public enum DocumentType implements Serializable {
 	FOREIGNER_F_PLUS("18"),
 
 	/**
-	 * H. Europese blauwe kaart. Toegang en verblijf voor onderdanen van derde
-	 * landen.
+	 * H. Europese blauwe kaart. Toegang en verblijf voor onderdanen van derde landen.
 	 */
 	EUROPEAN_BLUE_CARD_H("19");
 
 	private final int key;
 
-	private DocumentType(final String value) {
+	DocumentType(String value) {
 		this.key = toKey(value);
 	}
 
-	private int toKey(final String value) {
-		final char c1 = value.charAt(0);
+	private int toKey(String value) {
+		char c1 = value.charAt(0);
 		int key = c1 - '0';
 		if (2 == value.length()) {
 			key *= 10;
-			final char c2 = value.charAt(1);
+			char c2 = value.charAt(1);
 			key += c2 - '0';
 		}
 		return key;
 	}
 
-	private static int toKey(final byte[] value) {
+	private static int toKey(byte[] value) {
 		int key = value[0] - '0';
 		if (2 == value.length) {
 			key *= 10;
@@ -108,35 +107,30 @@ public enum DocumentType implements Serializable {
 		return key;
 	}
 
-	private static Map<Integer, DocumentType> documentTypes;
+	private static final Map<Integer, DocumentType> documentTypes = getDocumentTypes();
 
-	static {
-		final Map<Integer, DocumentType> documentTypes = new HashMap<Integer, DocumentType>();
+	private static Map<Integer, DocumentType> getDocumentTypes() {
+		Map<Integer, DocumentType> documentTypes = new HashMap<>();
 		for (DocumentType documentType : DocumentType.values()) {
-			final int encodedValue = documentType.key;
+			int encodedValue = documentType.key;
 			if (documentTypes.containsKey(encodedValue)) {
-				throw new RuntimeException("duplicate document type enum: "
-						+ encodedValue);
+				throw new RuntimeException("duplicate document type enum: " + encodedValue);
 			}
 			documentTypes.put(encodedValue, documentType);
 		}
-		DocumentType.documentTypes = documentTypes;
+		return documentTypes;
 	}
 
 	public int getKey() {
 		return this.key;
 	}
 
-	public static DocumentType toDocumentType(final byte[] value) {
-		final int key = DocumentType.toKey(value);
-		final DocumentType documentType = DocumentType.documentTypes.get(key);
-		/*
-		 * If the key is unknown, we simply return null.
-		 */
-		return documentType;
+	public static DocumentType toDocumentType(byte[] value) {
+		int key = DocumentType.toKey(value);
+		return DocumentType.documentTypes.get(key);
 	}
 
-	public static String toString(final byte[] documentTypeValue) {
+	public static String toString(byte[] documentTypeValue) {
 		return Integer.toString(DocumentType.toKey(documentTypeValue));
 	}
 }

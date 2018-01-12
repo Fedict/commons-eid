@@ -12,7 +12,7 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, see 
+ * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
 
@@ -26,12 +26,14 @@ import java.lang.annotation.Target;
 /**
  * Marks a field as being a ByteArray field to be filled out by a
  * ByteArrayParser
- * 
+ *
  * @author Frank Marien
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ByteArrayField {
-	public int offset();
-	public int length();
+
+	int offset();
+
+	int length();
 }

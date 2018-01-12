@@ -44,13 +44,6 @@ import be.fedict.commons.eid.consumer.tlv.ValidityDateDataConvertor;
  * 
  */
 public class Identity implements Serializable {
-
-	/*
-	 * We implement serializable to allow this class to be used in distributed
-	 * containers as defined in the Servlet v2.4 specification.
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@TlvField(1)
 	public String cardNumber;
 
@@ -124,11 +117,6 @@ public class Identity implements Serializable {
 
 	@OriginalData
 	public byte[] data;
-
-	/*
-	 * We're also providing getters and a toString to make this class more
-	 * useful within web frameworks like JBoss Seam.
-	 */
 
 	public String getCardNumber() {
 		return this.cardNumber;

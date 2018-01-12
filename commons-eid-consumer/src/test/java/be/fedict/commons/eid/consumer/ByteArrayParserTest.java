@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/.
  */
 
-package test.unit.be.fedict.commons.eid.consumer;
+package be.fedict.commons.eid.consumer;
 
 import java.math.BigInteger;
 
@@ -33,16 +33,13 @@ public class ByteArrayParserTest {
 
 	@Test
 	public void testByteArrayParser() {
-		final byte[] cardDataBytes = new BigInteger(
-				"534c494e33660013930d2061c018063fd0004801011100020001010f", 16)
-				.toByteArray();
-		final byte[] serialExpected = new byte[16];
-		final byte[] chipSerialExpected = new byte[12];
+		byte[] cardDataBytes = new BigInteger("534c494e33660013930d2061c018063fd0004801011100020001010f", 16).toByteArray();
+		byte[] serialExpected = new byte[16];
+		byte[] chipSerialExpected = new byte[12];
 		System.arraycopy(cardDataBytes, 0, serialExpected, 0, 16);
 		System.arraycopy(cardDataBytes, 4, chipSerialExpected, 0, 12);
 
-		final CardData cardData = ByteArrayParser.parse(cardDataBytes,
-				CardData.class);
+		CardData cardData = ByteArrayParser.parse(cardDataBytes, CardData.class);
 		assertEquals(cardData.applicationInterfaceVersion, 0);
 		assertEquals(cardData.applicationLifeCycle, 15);
 		assertEquals(cardData.applicationVersion, 17);

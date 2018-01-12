@@ -12,48 +12,39 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, see 
+ * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
 
 package be.fedict.commons.eid.consumer.tlv;
 
-import java.io.UnsupportedEncodingException;
-
+import be.fedict.commons.eid.consumer.SpecialOrganisation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import be.fedict.commons.eid.consumer.SpecialOrganisation;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Data convertor for special organisation eID identity field.
- * 
+ *
  * @author Frank Cornelis
- * 
  */
-public class SpecialOrganisationConvertor
-		implements
-			DataConvertor<SpecialOrganisation> {
+public class SpecialOrganisationConvertor implements DataConvertor<SpecialOrganisation> {
 
-	private static final Log LOG = LogFactory
-			.getLog(SpecialOrganisationConvertor.class);
+	private static final Log LOG = LogFactory.getLog(SpecialOrganisationConvertor.class);
 
 	@Override
-	public SpecialOrganisation convert(final byte[] value)
-			throws DataConvertorException {
+	public SpecialOrganisation convert(byte[] value) throws DataConvertorException {
 		if (null == value) {
 			return SpecialOrganisation.UNSPECIFIED;
 		}
-		String key;
+
 		try {
-			key = new String(value, "UTF-8");
+			String key = new String(value, "UTF-8");
+			LOG.debug("key: \"" + key + "\"");
+			return SpecialOrganisation.toSpecialOrganisation(key);
 		} catch (final UnsupportedEncodingException uex) {
-			throw new DataConvertorException("string error: "
-					+ uex.getMessage());
+			throw new DataConvertorException("string error: " + uex.getMessage());
 		}
-		LOG.debug("key: \"" + key + "\"");
-		final SpecialOrganisation specialOrganisation = SpecialOrganisation
-				.toSpecialOrganisation(key);
-		return specialOrganisation;
 	}
 }

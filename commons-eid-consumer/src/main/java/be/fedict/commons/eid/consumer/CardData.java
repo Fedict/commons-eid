@@ -12,20 +12,20 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, see 
+ * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
 
 package be.fedict.commons.eid.consumer;
 
-import java.io.Serializable;
-
 import be.fedict.commons.eid.consumer.tlv.ByteArrayField;
+
+import java.io.Serializable;
 
 /**
  * Holds the CARD DATA information returned by BeIDCard.getCardData() (see
  * BELPIC APPLICATION V2.0 specs, GET CARD DATA, p49.)
- * 
+ *
  * @author Frank Marien
  */
 public class CardData implements Serializable {
@@ -88,14 +88,12 @@ public class CardData implements Serializable {
 	@ByteArrayField(offset = 27, length = 1)
 	public int applicationLifeCycle;
 
-	// ----------------------------------------------------------------------
-
 	/**
 	 * get the complete card serial number "he serial number is composed of 2
 	 * bytes reserved for axalto, 2 bytes identifying the chip manufacturer, and
 	 * 12 bytes identifying uniquely the chip inside all chips from this
 	 * manufacturer."
-	 * 
+	 *
 	 * @return the complete 16-byte card serial number
 	 */
 	public byte[] getSerialNumber() {
@@ -104,9 +102,9 @@ public class CardData implements Serializable {
 
 	/**
 	 * get the "2 bytes reserved for axalto" from the card serial number
-	 * 
+	 *
 	 * @return the value of the 2 bytes reserved for axalto from the card serial
-	 *         number
+	 * number
 	 */
 	public int getAxaltoReservedNumber() {
 		return this.axaltoReservedNumber;
@@ -115,9 +113,9 @@ public class CardData implements Serializable {
 	/**
 	 * get the "2 bytes identifying the chip manufacturer" from the card serial
 	 * number
-	 * 
+	 *
 	 * @return the value of the 2 bytes identifying the chip manufacturer from
-	 *         the card serial number
+	 * the card serial number
 	 */
 	public int getChipManufacturer() {
 		return this.chipManufacturer;
@@ -126,9 +124,9 @@ public class CardData implements Serializable {
 	/**
 	 * get the 12 bytes uniquely identifying the chip inside all chips from this
 	 * manufacturer
-	 * 
+	 *
 	 * @return the 12 bytes uniquely identifying the chip inside all chips from
-	 *         this manufacturer
+	 * this manufacturer
 	 */
 	public byte[] getChipSerialNumber() {
 		return this.chipSerialNumber;
@@ -136,7 +134,7 @@ public class CardData implements Serializable {
 
 	/**
 	 * get the "component code" byte
-	 * 
+	 *
 	 * @return the "component code" byte
 	 */
 	public int getComponentCode() {
@@ -145,7 +143,7 @@ public class CardData implements Serializable {
 
 	/**
 	 * get the "OS number" byte
-	 * 
+	 *
 	 * @return the "OS number" byte
 	 */
 	public int getOsNumber() {
@@ -154,7 +152,7 @@ public class CardData implements Serializable {
 
 	/**
 	 * get the "OS version" byte
-	 * 
+	 *
 	 * @return the "OS version" byte
 	 */
 	public int getOsVersion() {
@@ -163,7 +161,7 @@ public class CardData implements Serializable {
 
 	/**
 	 * get the "Softmask number" byte
-	 * 
+	 *
 	 * @return the "Softmask number" byte
 	 */
 	public int getSoftmaskNumber() {
@@ -172,7 +170,7 @@ public class CardData implements Serializable {
 
 	/**
 	 * get the "Softmask version" byte
-	 * 
+	 *
 	 * @return the "Softmask version" byte
 	 */
 	public int getSoftmaskVersion() {
@@ -181,7 +179,7 @@ public class CardData implements Serializable {
 
 	/**
 	 * get the "Application version" byte
-	 * 
+	 *
 	 * @return the "Application version" byte
 	 */
 	public int getApplicationVersion() {
@@ -192,7 +190,7 @@ public class CardData implements Serializable {
 	 * get the 2 "Global OS version" bytes "This global number is unique for a
 	 * given set composed of: Component code || OS number || OS version ||
 	 * Softmask number || Softmask version || Application version"
-	 * 
+	 *
 	 * @return the 2 "Global OS version" bytes
 	 */
 	public int getGlobalOSVersion() {
@@ -201,7 +199,7 @@ public class CardData implements Serializable {
 
 	/**
 	 * get the "Application interface version" byte
-	 * 
+	 *
 	 * @return the "Application interface version" byte
 	 */
 	public int getApplicationInterfaceVersion() {
@@ -214,7 +212,7 @@ public class CardData implements Serializable {
 	 * 1 -- RSASSA-PSS supported (SHA-1) -- -- -- -- -- 1 -- -- RSAES-PKCS1 v1.5
 	 * supported -- -- -- -- 1 -- -- -- RSAES-OAEP supported -- -- -- 1 -- -- --
 	 * -- RSA-KEM supported
-	 * 
+	 *
 	 * @return the "PKCS#1 support" byte
 	 */
 	public int getPkcs1Support() {
@@ -223,7 +221,7 @@ public class CardData implements Serializable {
 
 	/**
 	 * get the "Key exchange version" byte
-	 * 
+	 *
 	 * @return the "Key exchange version" byte
 	 */
 	public int getKeyExchangeVersion() {
@@ -234,18 +232,16 @@ public class CardData implements Serializable {
 	 * get the "Application Life cycle" byte CAUTION: state of 0x0f
 	 * (DEACTIVATED) has been observed in otherwise active cards. It's a bad
 	 * idea to make a functional decision about card state based on this byte.
-	 * 
+	 *
 	 * @return the "Application Life cycle" byte
 	 */
 	public int getApplicationLifeCycle() {
 		return this.applicationLifeCycle;
 	}
 
-	// -----------------------------------------------------------------------
-
 	/**
 	 * Convenience method to test whether this card supports RSASSA-PKCS1 v1.5
-	 * 
+	 *
 	 * @return true if card supports RSASSA-PKCS1 v1.5, false otherwise
 	 */
 	public boolean isRSASSAPKCS115Supported() {
@@ -254,7 +250,7 @@ public class CardData implements Serializable {
 
 	/**
 	 * Convenience method to test whether this card supports RSASSA-PSS
-	 * 
+	 *
 	 * @return true if card supports RSASSA-PSS, false otherwise
 	 */
 	public boolean isRSASSAPSSSupported() {
@@ -263,23 +259,25 @@ public class CardData implements Serializable {
 
 	/**
 	 * Convenience method to test whether this card supports RSAES-PKCS1 v1.5
-	 * 
+	 *
 	 * @return true if card supports RSAES-PKCS1 v1.5, false otherwise
 	 */
 	public boolean isRSAESPKCS115Supported() {
 		return (this.getPkcs1Support() & RSAES_PKCS1_15_MASK) > 0;
 	}
+
 	/**
 	 * Convenience method to test whether this card supports RSAES-OAEP
-	 * 
+	 *
 	 * @return true if card supports RSAES-OAEP, false otherwise
 	 */
 	public boolean isRSAESOAEPSupported() {
 		return (this.getPkcs1Support() & RSAES_OAEP_MASK) > 0;
 	}
+
 	/**
 	 * Convenience method to test whether this card supports RSA-KEM
-	 * 
+	 *
 	 * @return true if card supports RSA-KEM, false otherwise
 	 */
 	public boolean isRSAKEMSupported() {
@@ -289,7 +287,7 @@ public class CardData implements Serializable {
 	/**
 	 * Convenience method to test whether this card is in the ACTIVATED state.
 	 * CAUTION: state DEACTIVATED has been observed in otherwise active cards.
-	 * 
+	 *
 	 * @return true if card is in ACTIVATED state, false otherwise
 	 */
 	public boolean isActivated() {
@@ -299,7 +297,7 @@ public class CardData implements Serializable {
 	/**
 	 * Convenience method to test whether this card is in the DEACTIVATED state.
 	 * CAUTION: state DEACTIVATED has been observed in otherwise active cards.
-	 * 
+	 *
 	 * @return true if card is in DEACTIVATED state, false otherwise
 	 */
 	public boolean isDeactivated() {
@@ -309,7 +307,7 @@ public class CardData implements Serializable {
 	/**
 	 * Convenience method to test whether this card is in the LOCKED state.
 	 * CAUTION: state DEACTIVATED has been observed in otherwise active cards.
-	 * 
+	 *
 	 * @return true if card is in LOCKED state, false otherwise
 	 */
 	public boolean isLocked() {

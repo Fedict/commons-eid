@@ -29,35 +29,34 @@ import java.util.Map;
  * 
  */
 public enum SpecialStatus implements Serializable {
-	NO_STATUS("0", false, false, false), WHITE_CANE("1", true, false, false), EXTENDED_MINORITY(
-			"2", false, true, false), WHITE_CANE_EXTENDED_MINORITY("3", true,
-			true, false), YELLOW_CANE("4", false, false, true), YELLOW_CANE_EXTENDED_MINORITY(
-			"5", false, true, true);
+	NO_STATUS("0", false, false, false),
+	WHITE_CANE("1", true, false, false),
+	EXTENDED_MINORITY("2", false, true, false),
+	WHITE_CANE_EXTENDED_MINORITY("3", true, true, false),
+	YELLOW_CANE("4", false, false, true),
+	YELLOW_CANE_EXTENDED_MINORITY("5", false, true, true);
 
-	private final String strValue;
+	private String strValue;
+	private boolean whiteCane;
+	private boolean extendedMinority;
+	private boolean yellowCane;
 
-	private final boolean whiteCane;
+	private static Map<String, SpecialStatus> map = getSpecialStatuses();
 
-	private final boolean extendedMinority;
-
-	private final boolean yellowCane;
-
-	private static Map<String, SpecialStatus> map;
-
-	static {
-		final Map<String, SpecialStatus> map = new HashMap<String, SpecialStatus>();
+	private static Map<String, SpecialStatus> getSpecialStatuses(){
+		Map<String, SpecialStatus> map = new HashMap<>();
 		for (SpecialStatus specialStatus : SpecialStatus.values()) {
-			final String value = specialStatus.strValue;
+			String value = specialStatus.strValue;
 			if (map.containsKey(value)) {
 				throw new RuntimeException("duplicate special status: " + value);
 			}
 			map.put(value, specialStatus);
 		}
-		SpecialStatus.map = map;
+		
+		return map;
 	}
 
-	private SpecialStatus(final String strValue, final boolean whiteCane,
-			final boolean extendedMinority, final boolean yellowCane) {
+	SpecialStatus(String strValue, boolean whiteCane, boolean extendedMinority, boolean yellowCane) {
 		this.strValue = strValue;
 		this.whiteCane = whiteCane;
 		this.extendedMinority = extendedMinority;
@@ -96,7 +95,7 @@ public enum SpecialStatus implements Serializable {
 	/**
 	 * Converts the given string to the corresponding special status enum.
 	 */
-	public static SpecialStatus toSpecialStatus(final String value) {
+	public static SpecialStatus toSpecialStatus(String value) {
 		return SpecialStatus.map.get(value);
 	}
 }

@@ -31,21 +31,21 @@ import be.fedict.commons.eid.consumer.DocumentType;
  */
 public class DocumentTypeConvertor implements DataConvertor<DocumentType> {
 
-	private static final Log LOG = LogFactory
-			.getLog(DocumentTypeConvertor.class);
+	private static final Log LOG = LogFactory.getLog(DocumentTypeConvertor.class);
 
 	@Override
-	public DocumentType convert(final byte[] value)
-			throws DataConvertorException {
+	public DocumentType convert(byte[] value) {
 		LOG.debug("# bytes for document type field: " + value.length);
+		
 		/*
 		 * More recent eID cards use 2 bytes per default for the document type
 		 * field.
 		 */
-		final DocumentType documentType = DocumentType.toDocumentType(value);
-		if (null == documentType) {
+		DocumentType documentType = DocumentType.toDocumentType(value);
+		if (documentType == null) {
 			LOG.debug("unknown document type: " + DocumentType.toString(value));
 		}
+		
 		return documentType;
 	}
 }

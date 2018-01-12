@@ -30,12 +30,16 @@ import java.util.Map;
  */
 public enum SpecialOrganisation implements Serializable {
 
-	UNSPECIFIED(null), SHAPE("1"), NATO("2"), FORMER_BLUE_CARD_HOLDER("4"), RESEARCHER(
-			"5"), UNKNOWN(null);
+	UNSPECIFIED(null),
+	SHAPE("1"),
+	NATO("2"),
+	FORMER_BLUE_CARD_HOLDER("4"),
+	RESEARCHER("5"),
+	UNKNOWN(null);
 
 	private final String key;
 
-	private SpecialOrganisation(final String key) {
+	SpecialOrganisation(String key) {
 		this.key = key;
 	}
 
@@ -43,13 +47,12 @@ public enum SpecialOrganisation implements Serializable {
 		return this.key;
 	}
 
-	private static Map<String, SpecialOrganisation> specialOrganisations;
+	private static Map<String, SpecialOrganisation> specialOrganisations = getSpecialOrganisations();
 
-	static {
-		final Map<String, SpecialOrganisation> specialOrganisations = new HashMap<String, SpecialOrganisation>();
-		for (SpecialOrganisation specialOrganisation : SpecialOrganisation
-				.values()) {
-			final String key = specialOrganisation.getKey();
+	private static Map<String, SpecialOrganisation> getSpecialOrganisations() {
+		Map<String, SpecialOrganisation> specialOrganisations = new HashMap<>();
+		for (SpecialOrganisation specialOrganisation : SpecialOrganisation.values()) {
+			String key = specialOrganisation.getKey();
 			if (key != null) {
 				if (specialOrganisations.containsKey(key)) {
 					throw new RuntimeException(
@@ -59,21 +62,20 @@ public enum SpecialOrganisation implements Serializable {
 				specialOrganisations.put(key, specialOrganisation);
 			}
 		}
-		SpecialOrganisation.specialOrganisations = specialOrganisations;
+
+		return specialOrganisations;
 	}
 
-	public static SpecialOrganisation toSpecialOrganisation(final String key) {
-		if (null == key) {
+	public static SpecialOrganisation toSpecialOrganisation(String key) {
+		if (null == key || key.isEmpty()) {
 			return UNSPECIFIED;
 		}
-		if (key.isEmpty()) {
-			return UNSPECIFIED;
-		}
-		final SpecialOrganisation specialOrganisation = SpecialOrganisation.specialOrganisations
-				.get(key);
+
+		SpecialOrganisation specialOrganisation = SpecialOrganisation.specialOrganisations.get(key);
 		if (null == specialOrganisation) {
 			return UNKNOWN;
 		}
+
 		return specialOrganisation;
 	}
 }

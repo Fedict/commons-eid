@@ -37,5 +37,5 @@ public @interface TlvField {
 	/**
 	 * The tag Id.
 	 */
-	public int value();
+	int value();
 }

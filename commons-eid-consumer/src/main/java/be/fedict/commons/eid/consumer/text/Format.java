@@ -19,38 +19,32 @@
 package be.fedict.commons.eid.consumer.text;
 
 /**
- * 
  * @author Frank Marien
  */
 public class Format {
 
 	private Format() {
-		super();
 	}
 
-	// format a national number into YY.MM.DD-S&G.CS
-	public static String formatNationalNumber(final String nationalNumber) {
+	/**
+	 * Format a national number into YY.MM.DD-S&amp;G.CS
+	 */
+	public static String formatNationalNumber(String nationalNumber) {
 		// YY MM DD S&G CS
 		// 01 23 45 678 9A
 
-		final StringBuilder formatted = new StringBuilder(
-				nationalNumber.substring(0, 2));
-		formatted.append('.');
-		formatted.append(nationalNumber.substring(2, 4));
-		formatted.append('.');
-		formatted.append(nationalNumber.substring(4, 6));
-		formatted.append('-');
-		formatted.append(nationalNumber.substring(6, 9));
-		formatted.append('.');
-		formatted.append(nationalNumber.substring(9));
-		return formatted.toString();
+		return nationalNumber.substring(0, 2) + '.'
+				+ nationalNumber.substring(2, 4) + '.'
+				+ nationalNumber.substring(4, 6) + '-'
+				+ nationalNumber.substring(6, 9) + '.'
+				+ nationalNumber.substring(9);
 	}
 
-	/*
-	 * format a card number into XXX-YYYYYYYY-ZZ
+	/**
+	 * Format a card number into XXX-YYYYYYYY-ZZ
 	 */
-	public static String formatCardNumber(final String cardNumber) {
-		final StringBuilder formatted = new StringBuilder();
+	public static String formatCardNumber(String cardNumber) {
+		StringBuilder formatted = new StringBuilder();
 
 		if (cardNumber.length() == 10 && cardNumber.startsWith("B")) {
 			// B 0123456 78

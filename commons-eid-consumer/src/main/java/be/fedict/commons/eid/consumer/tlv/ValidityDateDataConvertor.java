@@ -26,17 +26,15 @@ import java.util.GregorianCalendar;
  * @author Frank Cornelis
  * 
  */
-public class ValidityDateDataConvertor
-		implements
-			DataConvertor<GregorianCalendar> {
+public class ValidityDateDataConvertor implements DataConvertor<GregorianCalendar> {
 
 	@Override
-	public GregorianCalendar convert(final byte[] value)
-			throws DataConvertorException {
-		final String dateStr = new String(value);
-		final int day = Integer.parseInt(dateStr.substring(0, 2));
-		final int month = Integer.parseInt(dateStr.substring(3, 5));
-		final int year = Integer.parseInt(dateStr.substring(6));
+	public GregorianCalendar convert(byte[] value) {
+		String dateStr = new String(value);
+		int day = Integer.parseInt(dateStr.substring(0, 2));
+		int month = Integer.parseInt(dateStr.substring(3, 5));
+		int year = Integer.parseInt(dateStr.substring(6));
+
 		return new GregorianCalendar(year, month - 1, day);
 	}
 }

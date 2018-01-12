@@ -30,54 +30,46 @@ import java.nio.ByteBuffer;
 public class ByteArrayParser {
 
 	private ByteArrayParser() {
-		super();
 	}
 
 	/**
 	 * Parses the given file using the meta-data annotations within the baClass
 	 * parameter.
 	 */
-	public static <T> T parse(final byte[] file, final Class<T> baClass) {
+	public static <T> T parse(byte[] file, Class<T> baClass) {
 		T t;
 		try {
 			t = parseThrowing(file, baClass);
-		} catch (final Exception ex) {
-			throw new RuntimeException("error parsing file: "
-					+ baClass.getName(), ex);
+		} catch (Exception ex) {
+			throw new RuntimeException("error parsing file: " + baClass.getName(), ex);
 		}
 		return t;
 	}
 
-	private static <T> T parseThrowing(final byte[] data, final Class<T> baClass)
-			throws InstantiationException, IllegalAccessException {
-		final Field[] fields = baClass.getDeclaredFields();
+	private static <T> T parseThrowing(byte[] data, Class<T> baClass) throws InstantiationException, IllegalAccessException {
+		Field[] fields = baClass.getDeclaredFields();
 
-		final T baObject = baClass.newInstance();
+		T baObject = baClass.newInstance();
 		for (Field field : fields) {
-			final ByteArrayField baFieldAnnotation = field
-					.getAnnotation(ByteArrayField.class);
+			ByteArrayField baFieldAnnotation = field.getAnnotation(ByteArrayField.class);
 			if (baFieldAnnotation != null) {
-				final int offset = baFieldAnnotation.offset();
-				final int length = baFieldAnnotation.length();
-				if (field.getType().isArray()
-						&& field.getType().getComponentType()
-								.equals(byte.class)) {
-					final byte[] byteArray = new byte[length];
+				int offset = baFieldAnnotation.offset();
+				int length = baFieldAnnotation.length();
+				if (field.getType().isArray() && field.getType().getComponentType().equals(byte.class)) {
+					byte[] byteArray = new byte[length];
 					System.arraycopy(data, offset, byteArray, 0, length);
 					field.set(baObject, byteArray);
 				} else if (field.getType().equals(int.class)) {
-					final ByteBuffer buff = ByteBuffer.wrap(data);
+					ByteBuffer buff = ByteBuffer.wrap(data);
 					switch (length) {
 						case 1 :
 							field.set(baObject, (int) buff.get(offset) & 0xff);
 							break;
 
 						case 2 :
-							field.set(baObject,
-									(int) buff.getShort(offset) & 0xffff);
+							field.set(baObject, (int) buff.getShort(offset) & 0xffff);
 							break;
 					}
-
 				}
 			}
 		}
