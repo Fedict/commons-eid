@@ -20,8 +20,6 @@
 package be.fedict.commons.eid.dialogs;
 
 import java.awt.Component;
-import java.awt.DisplayMode;
-import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.util.Collection;
@@ -45,7 +43,7 @@ import be.fedict.commons.eid.client.spi.BeIDCardsUI;
  * 
  */
 public class DefaultBeIDCardsUI implements BeIDCardsUI {
-	private Component parentComponent;
+	private final Component parentComponent;
 	private Messages messages;
 	private JFrame adviseFrame;
 	private BeIDSelector selectionDialog;
@@ -55,19 +53,16 @@ public class DefaultBeIDCardsUI implements BeIDCardsUI {
 		this(null);
 	}
 
-	public DefaultBeIDCardsUI(final Component parentComponent) {
+	public DefaultBeIDCardsUI(Component parentComponent) {
 		this(parentComponent, null);
 	}
 
-	public DefaultBeIDCardsUI(final Component parentComponent,
-			final Messages messages) {
-		this.parentComponent = parentComponent;
-		this.messages = messages;
+	public DefaultBeIDCardsUI(Component parentComponent, Messages messages) {
 		if (GraphicsEnvironment.isHeadless()) {
-			throw new UnsupportedOperationException(
-					"DefaultBeIDCardsUI is a GUI and cannot run in a headless environment");
+			throw new UnsupportedOperationException("DefaultBeIDCardsUI is a GUI and cannot run in a headless environment");
 		}
 
+		this.parentComponent = parentComponent;
 		if (messages != null) {
 			this.messages = messages;
 			setLocale(messages.getLocale());
@@ -79,43 +74,43 @@ public class DefaultBeIDCardsUI implements BeIDCardsUI {
 	@Override
 	public void adviseCardTerminalRequired() {
 		showAdvise(
-				this.messages.getMessage(Messages.MESSAGE_ID.CONNECT_READER),
-				this.messages.getMessage(Messages.MESSAGE_ID.CONNECT_READER));
+				messages.getMessage(Messages.MESSAGE_ID.CONNECT_READER),
+				messages.getMessage(Messages.MESSAGE_ID.CONNECT_READER)
+		);
 	}
 
 	@Override
 	public void adviseBeIDCardRequired() {
 		showAdvise(
-				this.messages
-						.getMessage(Messages.MESSAGE_ID.INSERT_CARD_QUESTION),
-				this.messages
-						.getMessage(Messages.MESSAGE_ID.INSERT_CARD_QUESTION));
+				messages.getMessage(Messages.MESSAGE_ID.INSERT_CARD_QUESTION),
+				messages.getMessage(Messages.MESSAGE_ID.INSERT_CARD_QUESTION)
+		);
 	}
 
 	@Override
 	public void adviseBeIDCardRemovalRequired() {
-		showAdvise(this.messages.getMessage(Messages.MESSAGE_ID.REMOVE_CARD),
-				this.messages.getMessage(Messages.MESSAGE_ID.REMOVE_CARD));
+		showAdvise(
+				messages.getMessage(Messages.MESSAGE_ID.REMOVE_CARD),
+				messages.getMessage(Messages.MESSAGE_ID.REMOVE_CARD)
+		);
 
 	}
 
 	@Override
-	public BeIDCard selectBeIDCard(final Collection<BeIDCard> availableCards)
-			throws CancelledException, OutOfCardsException {
+	public BeIDCard selectBeIDCard(Collection<BeIDCard> availableCards) throws CancelledException, OutOfCardsException {
 		try {
-			this.selectionDialog = new BeIDSelector(this.parentComponent,
-					"Select eID card", availableCards);
-			return this.selectionDialog.choose();
+			selectionDialog = new BeIDSelector(parentComponent, "Select eID card", availableCards);
+			return selectionDialog.choose();
 		} finally {
-			this.selectionDialog = null;
+			selectionDialog = null;
 		}
 	}
 
 	@Override
 	public void adviseEnd() {
-		if (null != this.adviseFrame) {
-			this.adviseFrame.dispose();
-			this.adviseFrame = null;
+		if (null != adviseFrame) {
+			adviseFrame.dispose();
+			adviseFrame = null;
 		}
 	}
 
@@ -123,57 +118,40 @@ public class DefaultBeIDCardsUI implements BeIDCardsUI {
 	 * **********************************************************************************************************************
 	 */
 
-	private void showAdvise(final String title, final String message) {
-		if (null != this.adviseFrame) {
-			this.adviseEnd();
+	private void showAdvise(String title, String message) {
+		if (null != adviseFrame) {
+			adviseEnd();
 		}
 
-		this.adviseFrame = new JFrame(title);
-		JPanel panel = new JPanel() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Insets getInsets() {
-				return new Insets(10, 30, 10, 30);
-			}
-		};
-		final BoxLayout boxLayout = new BoxLayout(panel, BoxLayout.PAGE_AXIS);
+		adviseFrame = new JFrame(title);
+		JPanel panel = new JPanelWithInsets(new Insets(10, 30, 10, 30));
+		BoxLayout boxLayout = new BoxLayout(panel, BoxLayout.PAGE_AXIS);
 		panel.setLayout(boxLayout);
 
 		panel.add(new JLabel(message));
-		this.adviseFrame.getContentPane().add(panel);
-		this.adviseFrame.pack();
+		adviseFrame.getContentPane().add(panel);
+		adviseFrame.pack();
 
-		if (this.parentComponent != null) {
-			this.adviseFrame.setLocationRelativeTo(this.parentComponent);
+		if (parentComponent != null) {
+			adviseFrame.setLocationRelativeTo(parentComponent);
 		} else {
-			GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment
-					.getLocalGraphicsEnvironment();
-			GraphicsDevice graphicsDevice = graphicsEnvironment
-					.getDefaultScreenDevice();
-			DisplayMode displayMode = graphicsDevice.getDisplayMode();
-			int screenWidth = displayMode.getWidth();
-			int screenHeight = displayMode.getHeight();
-			int dialogWidth = this.adviseFrame.getWidth();
-			int dialogHeight = this.adviseFrame.getHeight();
-			this.adviseFrame.setLocation((screenWidth - dialogWidth) / 2,
-					(screenHeight - dialogHeight) / 2);
+			Util.centerOnScreen(adviseFrame);
 		}
 
-		this.adviseFrame.setVisible(true);
+		adviseFrame.setVisible(true);
 	}
 
 	@Override
-	public void eIDCardInsertedDuringSelection(final BeIDCard card) {
-		if (this.selectionDialog != null) {
-			this.selectionDialog.addEIDCard(card);
+	public void eIDCardInsertedDuringSelection(BeIDCard card) {
+		if (selectionDialog != null) {
+			selectionDialog.addEIDCard(card);
 		}
 	}
 
 	@Override
-	public void eIDCardRemovedDuringSelection(final BeIDCard card) {
-		if (this.selectionDialog != null) {
-			this.selectionDialog.removeEIDCard(card);
+	public void eIDCardRemovedDuringSelection(BeIDCard card) {
+		if (selectionDialog != null) {
+			selectionDialog.removeEIDCard(card);
 		}
 	}
 
@@ -181,13 +159,12 @@ public class DefaultBeIDCardsUI implements BeIDCardsUI {
 	public void setLocale(Locale newLocale) {
 		this.locale = newLocale;
 		this.messages = Messages.getInstance(newLocale);
-
 	}
 
 	@Override
 	public Locale getLocale() {
-		if (this.locale != null) {
-			return this.locale;
+		if (locale != null) {
+			return locale;
 		}
 		return LocaleManager.getLocale();
 	}

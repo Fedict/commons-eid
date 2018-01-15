@@ -29,7 +29,6 @@ import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -68,10 +67,11 @@ import be.fedict.commons.eid.consumer.tlv.TlvParser;
  * 
  */
 public class BeIDSelector {
+
 	private JDialog dialog;
 	private JPanel masterPanel;
-	private DefaultListModel listModel;
-	private JList list;
+	private DefaultListModel<ListData> listModel;
+	private JList<ListData> list;
 
 	private final Component parentComponent;
 	private final ListData selectedListData;
@@ -79,107 +79,84 @@ public class BeIDSelector {
 	private int identitiesbeingRead;
 	private boolean outOfCards;
 
-	public BeIDSelector(final Component parentComponent, final String title,
-			final Collection<BeIDCard> initialCards) {
+	public BeIDSelector(Component parentComponent, String title, Collection<BeIDCard> initialCards) {
 		this.parentComponent = parentComponent;
 		this.selectedListData = new ListData(null);
-		this.updaters = new HashMap<BeIDCard, ListDataUpdater>();
+		this.updaters = new HashMap<>();
 		this.identitiesbeingRead = 0;
 		this.outOfCards = false;
 
-		initComponents(title, initialCards);
-
+		initComponents(title);
 		for (BeIDCard card : initialCards) {
 			addEIDCard(card);
 		}
-
-		MouseListener mouseListener = new MouseAdapter() {
-			public void mouseClicked(final MouseEvent mouseEvent) {
-				final JList theList = (JList) mouseEvent.getSource();
-				if (mouseEvent.getClickCount() == 2) {
-					final int index = theList.locationToIndex(mouseEvent
-							.getPoint());
-					if (index >= 0) {
-						stop();
-						final Object object = theList.getModel().getElementAt(
-								index);
-						final ListData listData = (ListData) object;
-						BeIDSelector.this.selectedListData.card = listData
-								.getCard();
-						BeIDSelector.this.dialog.dispose();
-					}
-				}
-			}
-		};
-		this.list.addMouseListener(mouseListener);
+		list.addMouseListener(new ListMouseAdapter());
 	}
 
-	public void addEIDCard(final BeIDCard card) {
-		final ListData listData = new ListData(card);
-		this.addToList(listData);
-		final ListDataUpdater listDataUpdater = new ListDataUpdater(this,
-				listData);
-		this.updaters.put(card, listDataUpdater);
+	public void addEIDCard(BeIDCard card) {
+		ListData listData = new ListData(card);
+		addToList(listData);
+		ListDataUpdater listDataUpdater = new ListDataUpdater(this, listData);
+		updaters.put(card, listDataUpdater);
 		listDataUpdater.start();
 	}
 
-	public void removeEIDCard(final BeIDCard card) {
-		final ListDataUpdater listDataUpdater = this.updaters.get(card);
+	public void removeEIDCard(BeIDCard card) {
+		ListDataUpdater listDataUpdater = updaters.get(card);
 		listDataUpdater.stop();
-		this.updaters.remove(card);
-		this.removeFromList(listDataUpdater.getListData());
+		updaters.remove(card);
+		removeFromList(listDataUpdater.getListData());
 	}
 
 	public synchronized void startReadingIdentity() {
-		this.identitiesbeingRead++;
+		identitiesbeingRead++;
 		notifyAll();
 	}
 
 	public synchronized void endReadingIdentity() {
-		this.identitiesbeingRead--;
-		this.repack();
+		identitiesbeingRead--;
+		repack();
 		notifyAll();
 	}
 
 	public synchronized void waitUntilIdentitiesRead() {
 		try {
-			while (this.identitiesbeingRead > 0) {
-				this.wait();
+			while (identitiesbeingRead > 0) {
+				wait();
 			}
-		} catch (final InterruptedException iex) {
-			return;
+		} catch (InterruptedException iex) {
+			throw new RuntimeException("Interrupted", iex);
 		}
 	}
 
 	public void stop() {
-		for (ListDataUpdater updater : this.updaters.values()) {
+		for (ListDataUpdater updater : updaters.values()) {
 			updater.stop();
 		}
 
-		for (ListDataUpdater updater : this.updaters.values()) {
+		for (ListDataUpdater updater : updaters.values()) {
 			try {
 				updater.join();
-			} catch (final InterruptedException iex) {
+			} catch (InterruptedException iex) {
 				return;
 			}
 		}
 	}
 
 	public BeIDCard choose() throws OutOfCardsException, CancelledException {
-		this.waitUntilIdentitiesRead();
+		waitUntilIdentitiesRead();
 
-		if (this.parentComponent != null) {
-			this.dialog.setLocationRelativeTo(this.parentComponent);
+		if (parentComponent != null) {
+			dialog.setLocationRelativeTo(parentComponent);
 		} else {
-			final Dimension screen = Toolkit.getDefaultToolkit()
-					.getScreenSize();
-			this.dialog.setLocation(
-					(screen.width - this.dialog.getSize().width) / 2,
-					(screen.height - this.dialog.getSize().height) / 2);
+			Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+			dialog.setLocation(
+					(screen.width - dialog.getSize().width) / 2,
+					(screen.height - dialog.getSize().height) / 2);
 		}
 
-		this.dialog.setResizable(false);
-		this.dialog.setVisible(true);
+		dialog.setResizable(false);
+		dialog.setVisible(true);
 
 		// dialog is modal so setVisible will block until dispose is called.
 		// mouseListener calls dispose after setting selection, on double-click
@@ -187,98 +164,62 @@ public class BeIDSelector {
 		// removed
 		// user closing dialog will have no selection and outOfCards not set
 		// indicating cancel
-
-		if (this.outOfCards) {
+		if (outOfCards) {
 			throw new OutOfCardsException();
 		}
-		if (this.selectedListData.getCard() == null) {
+		if (selectedListData.getCard() == null) {
 			throw new CancelledException();
 		}
 
-		return this.selectedListData.getCard();
-
+		return selectedListData.getCard();
 	}
 
-	// ----------------------------------------------------------------------------------------------------
-	// methods to alter the dialog in a Swing-Thread safe way
-	// ----------------------------------------------------------------------------------------------------
-
-	private void initComponents(final String title,
-			final Collection<BeIDCard> initialCards) {
+	private void initComponents(String title) {
 		try {
-			SwingUtilities.invokeAndWait(new Runnable() {
-				@Override
-				public void run() {
-					BeIDSelector.this.dialog = new JDialog((Frame) null, title,
-							true);
-					BeIDSelector.this.masterPanel = new JPanel(
-							new BorderLayout());
-					BeIDSelector.this.masterPanel.setBorder(BorderFactory
-							.createEmptyBorder(16, 16, 16, 16));
-					BeIDSelector.this.listModel = new DefaultListModel();
-					BeIDSelector.this.list = new JList(
-							BeIDSelector.this.listModel);
-					BeIDSelector.this.list
-							.setCellRenderer(new EidListCellRenderer());
-					BeIDSelector.this.masterPanel.add(BeIDSelector.this.list);
-					BeIDSelector.this.dialog.add(BeIDSelector.this.masterPanel);
-				}
+			SwingUtilities.invokeAndWait(() -> {
+				dialog = new JDialog((Frame) null, title, true);
+				masterPanel = new JPanel(new BorderLayout());
+				masterPanel.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
+				listModel = new DefaultListModel<>();
+				list = new JList<>(listModel);
+				list.setCellRenderer(new EidListCellRenderer());
+				masterPanel.add(list);
+				dialog.add(masterPanel);
 			});
-		} catch (final InterruptedException e) {
-		} catch (final InvocationTargetException e) {
+		} catch (InterruptedException | InvocationTargetException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
-	private synchronized void updateListData(
-			final ListDataUpdater listDataUpdater, final ListData listData) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				final int index = BeIDSelector.this.listModel.indexOf(listData);
-				if (index != -1) {
-					BeIDSelector.this.listModel.set(index, listData);
-				}
+	private synchronized void updateListData(ListData listData) {
+		SwingUtilities.invokeLater(() -> {
+			int index = listModel.indexOf(listData);
+			if (index != -1) {
+				listModel.set(index, listData);
 			}
 		});
 	}
 
-	private void addToList(final ListData listData) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				BeIDSelector.this.listModel.addElement(listData);
-			}
-		});
+	private void addToList(ListData listData) {
+		SwingUtilities.invokeLater(() -> listModel.addElement(listData));
 	}
 
-	private void removeFromList(final ListData listData) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				BeIDSelector.this.listModel.removeElement(listData);
-				if (BeIDSelector.this.listModel.isEmpty()) {
-					BeIDSelector.this.selectedListData.card = null;
-					BeIDSelector.this.outOfCards = true;
-					BeIDSelector.this.dialog.dispose();
-				} else {
-					BeIDSelector.this.dialog.pack();
-				}
+	private void removeFromList(ListData listData) {
+		SwingUtilities.invokeLater(() -> {
+			listModel.removeElement(listData);
+			if (listModel.isEmpty()) {
+				selectedListData.card = null;
+				outOfCards = true;
+				dialog.dispose();
+			} else {
+				dialog.pack();
 			}
 		});
 	}
 
 	private void repack() {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				BeIDSelector.this.dialog.pack();
-			}
-		});
+		SwingUtilities.invokeLater(() -> dialog.pack());
 	}
-
-	/*
-	 * **********************************************************************************************************************
-	 */
 
 	private static class ListData {
 		private BeIDCard card;
@@ -287,98 +228,83 @@ public class BeIDSelector {
 		private int photoProgress, photoSizeEstimate;
 		private boolean error;
 
-		public ListData(final BeIDCard card) {
-			super();
+		public ListData(BeIDCard card) {
 			this.card = card;
 		}
 
 		public BeIDCard getCard() {
-			return this.card;
+			return card;
 		}
 
 		public ImageIcon getPhoto() {
-			return this.photo;
+			return photo;
 		}
 
 		public Identity getIdentity() {
-			return this.identity;
+			return identity;
 		}
 
-		public void setIdentity(final Identity identity) {
+		public void setIdentity(Identity identity) {
 			this.identity = identity;
 		}
 
-		public void setPhoto(final ImageIcon photo) {
+		public void setPhoto(ImageIcon photo) {
 			this.photo = photo;
 		}
 
 		public int getPhotoProgress() {
-			return this.photoProgress;
+			return photoProgress;
 		}
 
-		public void setPhotoProgress(final int photoProgress) {
+		public void setPhotoProgress(int photoProgress) {
 			this.photoProgress = photoProgress;
 		}
 
-		public void setPhotoSizeEstimate(final int photoSizeEstimate) {
+		public void setPhotoSizeEstimate(int photoSizeEstimate) {
 			this.photoSizeEstimate = photoSizeEstimate;
 		}
 
 		public int getPhotoSizeEstimate() {
-			return this.photoSizeEstimate;
+			return photoSizeEstimate;
 		}
 
 		public boolean hasError() {
-			return this.error;
+			return error;
 		}
 
 		public void setError() {
-			this.error = true;
+			error = true;
 		}
-
 	}
 
-	private static class EidListCellRenderer extends JPanel
-			implements
-				ListCellRenderer {
-		private static final long serialVersionUID = -6914001662919942232L;
-
-		public Component getListCellRendererComponent(final JList list,
-				final Object value, final int index, final boolean isSelected,
-				final boolean cellHasFocus) {
-			final JPanel panel = new JPanel();
-			final ListData listData = (ListData) value;
+	private static class EidListCellRenderer extends JPanel implements ListCellRenderer<ListData> {
+		public Component getListCellRendererComponent(JList<? extends ListData> list, ListData listData, int index, boolean isSelected, boolean cellHasFocus) {
+			JPanel panel = new JPanel();
 			panel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
 			if (listData.hasError()) {
-				panel.setBackground(redden(isSelected ? list
-						.getSelectionBackground() : list.getBackground()));
+				panel.setBackground(redden(isSelected ? list.getSelectionBackground() : list.getBackground()));
 			} else {
-				panel.setBackground(isSelected
-						? list.getSelectionBackground()
-						: list.getBackground());
+				panel.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
 			}
 
-			panel.add(new PhotoPanel(listData.getPhoto(), listData
-					.getPhotoProgress(), listData.getPhotoSizeEstimate()));
+			panel.add(new PhotoPanel(listData.getPhoto(), listData.getPhotoProgress(), listData.getPhotoSizeEstimate()));
 			panel.add(new IdentityPanel(listData.getIdentity()));
 
 			return panel;
 		}
 
-		private Color redden(final Color originalColor) {
-			final Color less = originalColor.darker().darker();
-			final Color more = originalColor.brighter().brighter();
+		private Color redden(Color originalColor) {
+			Color less = originalColor.darker().darker();
+			Color more = originalColor.brighter().brighter();
 			return new Color(more.getRed(), less.getGreen(), less.getBlue());
 		}
 	}
 
 	private static class PhotoPanel extends JPanel {
-		private static final long serialVersionUID = -8779658857811406077L;
 		private JProgressBar progressBar;
 
-		public PhotoPanel(final ImageIcon photo, final int progress,
-				final int max) {
+		public PhotoPanel(ImageIcon photo, int progress, int max) {
 			super(new GridBagLayout());
 			setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
 			Dimension fixedSize = new Dimension(140, 200);
@@ -387,29 +313,27 @@ public class BeIDSelector {
 			setMaximumSize(fixedSize);
 
 			if (photo == null) {
-				this.progressBar = new JProgressBar(0, max);
-				this.progressBar.setIndeterminate(false);
-				this.progressBar.setValue(progress);
+				progressBar = new JProgressBar(0, max);
+				progressBar.setIndeterminate(false);
+				progressBar.setValue(progress);
 				fixedSize = new Dimension(100, 16);
-				this.progressBar.setPreferredSize(fixedSize);
-				this.add(this.progressBar);
+				progressBar.setPreferredSize(fixedSize);
+				add(progressBar);
 			} else {
-				this.add(new JLabel(photo));
+				add(new JLabel(photo));
 			}
 		}
 	}
 
 	private static class IdentityPanel extends JPanel {
-		private static final long serialVersionUID = 1293396834578252226L;
-
-		public IdentityPanel(final Identity identity) {
+		public IdentityPanel(Identity identity) {
 			super(new GridBagLayout());
 			setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
 			setMinimumSize(new Dimension(140, 200));
 			setOpaque(false);
 
 			if (identity == null) {
-				this.add(new JLabel("-"));
+				add(new JLabel("-"));
 			} else {
 				GridBagConstraints gbc = new GridBagConstraints();
 				gbc.gridy = 0;
@@ -421,8 +345,7 @@ public class BeIDSelector {
 				gbc.gridy = 1;
 				gbc.anchor = GridBagConstraints.LINE_START;
 				gbc.ipady = 4;
-				add(new JLabel(identity.getFirstName() + " "
-						+ identity.getMiddleName()), gbc);
+				add(new JLabel(identity.getFirstName() + " " + identity.getMiddleName()), gbc);
 
 				gbc = new GridBagConstraints();
 				gbc.gridy = 2;
@@ -433,13 +356,8 @@ public class BeIDSelector {
 				gbc.gridy = 3;
 				gbc.anchor = GridBagConstraints.LINE_START;
 				gbc.ipady = 4;
-				final DateFormat dateFormat = DateFormat.getDateInstance(
-						DateFormat.DEFAULT, Locale.getDefault());
-				add(new JLabel(
-						identity.getPlaceOfBirth()
-								+ " "
-								+ dateFormat.format(identity.getDateOfBirth()
-										.getTime())), gbc);
+				DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
+				add(new JLabel(identity.getPlaceOfBirth() + " " + dateFormat.format(identity.getDateOfBirth().getTime())), gbc);
 
 				gbc = new GridBagConstraints();
 				gbc.gridy = 4;
@@ -461,8 +379,7 @@ public class BeIDSelector {
 				gbc.gridy = 7;
 				gbc.anchor = GridBagConstraints.LINE_START;
 				gbc.ipady = 4;
-				add(new JLabel(
-						Format.formatCardNumber(identity.getCardNumber())), gbc);
+				add(new JLabel(Format.formatCardNumber(identity.getCardNumber())), gbc);
 			}
 		}
 	}
@@ -472,9 +389,7 @@ public class BeIDSelector {
 		final private ListData listData;
 		final private Thread worker;
 
-		public ListDataUpdater(final BeIDSelector selectionDialog,
-				final ListData listData) {
-			super();
+		public ListDataUpdater(BeIDSelector selectionDialog, ListData listData) {
 			this.selectionDialog = selectionDialog;
 			this.listData = listData;
 			this.worker = new Thread(this, "ListDataUpdater");
@@ -484,15 +399,15 @@ public class BeIDSelector {
 		}
 
 		public void stop() {
-			this.worker.interrupt();
+			worker.interrupt();
 		}
 
 		public void start() {
-			this.worker.start();
+			worker.start();
 		}
 
 		public void join() throws InterruptedException {
-			this.worker.join();
+			worker.join();
 		}
 
 		@Override
@@ -501,65 +416,56 @@ public class BeIDSelector {
 			setWorkerName(null, "Reading Identity");
 
 			try {
-				identity = TlvParser.parse(
-						this.listData.getCard().readFile(FileType.Identity),
-						Identity.class);
-				this.listData.setIdentity(identity);
-				this.selectionDialog.updateListData(this, this.listData);
+				identity = TlvParser.parse(listData.getCard().readFile(FileType.Identity), Identity.class);
+				listData.setIdentity(identity);
+				selectionDialog.updateListData(listData);
 				setWorkerName(identity, "Identity Read");
-			} catch (final Exception ex) {
-				this.listData.setError();
-				this.selectionDialog.updateListData(this, this.listData);
+			} catch (Exception ex) {
+				listData.setError();
+				selectionDialog.updateListData(listData);
 				setWorkerName(identity, "Error Reading Identity");
 			} finally {
-				this.selectionDialog.endReadingIdentity();
+				selectionDialog.endReadingIdentity();
 			}
 
 			setWorkerName(identity, "Reading Photo");
 
 			try {
-				this.listData.setPhotoSizeEstimate(FileType.Photo
-						.getEstimatedMaxSize());
-				this.selectionDialog.updateListData(this, this.listData);
+				listData.setPhotoSizeEstimate(FileType.Photo.getEstimatedMaxSize());
+				selectionDialog.updateListData(listData);
 
-				this.listData.getCard().addCardListener(new BeIDCardListener() {
+				listData.getCard().addCardListener(new BeIDCardListener() {
 					@Override
-					public void notifyReadProgress(final FileType fileType,
-							final int offset, final int estimatedMaxSize) {
-						ListDataUpdater.this.listData.setPhotoProgress(offset);
-						ListDataUpdater.this.selectionDialog.updateListData(
-								ListDataUpdater.this,
-								ListDataUpdater.this.listData);
+					public void notifyReadProgress(FileType fileType, int offset, int estimatedMaxSize) {
+						listData.setPhotoProgress(offset);
+						selectionDialog.updateListData(listData);
 					}
 
 					@Override
-					public void notifySigningBegin(final FileType keyType) {
+					public void notifySigningBegin(FileType keyType) {
 						// can safely ignore this here
 					}
 
 					@Override
-					public void notifySigningEnd(final FileType keyType) {
+					public void notifySigningEnd(FileType keyType) {
 						// can safely ignore this here
 					}
 				});
 
-				final byte[] photoFile = this.listData.getCard().readFile(
-						FileType.Photo);
-				final BufferedImage photoImage = ImageIO
-						.read(new ByteArrayInputStream(photoFile));
-				this.listData.setPhoto(new ImageIcon(photoImage));
-				this.selectionDialog.updateListData(this, this.listData);
+				byte[] photoFile = listData.getCard().readFile(FileType.Photo);
+				BufferedImage photoImage = ImageIO.read(new ByteArrayInputStream(photoFile));
+				listData.setPhoto(new ImageIcon(photoImage));
+				selectionDialog.updateListData(listData);
 				setWorkerName(identity, "All Done");
-			} catch (final Exception ex) {
-				this.listData.setError();
-				this.selectionDialog.updateListData(this, this.listData);
+			} catch (Exception ex) {
+				listData.setError();
+				selectionDialog.updateListData(listData);
 				setWorkerName(identity, "Error Reading Photo");
 			}
 		}
 
-		private void setWorkerName(final Identity identity,
-				final String activity) {
-			final StringBuilder builder = new StringBuilder("ListDataUpdater");
+		private void setWorkerName(Identity identity, String activity) {
+			StringBuilder builder = new StringBuilder("ListDataUpdater");
 
 			if (identity != null) {
 				builder.append(" [");
@@ -573,7 +479,6 @@ public class BeIDSelector {
 				}
 
 				builder.append("]");
-
 			}
 
 			if (activity != null) {
@@ -582,11 +487,27 @@ public class BeIDSelector {
 				builder.append("]");
 			}
 
-			this.worker.setName(builder.toString());
+			worker.setName(builder.toString());
 		}
 
 		public ListData getListData() {
-			return this.listData;
+			return listData;
+		}
+	}
+
+	private class ListMouseAdapter extends MouseAdapter {
+		public void mouseClicked(MouseEvent mouseEvent) {
+			JList theList = (JList) mouseEvent.getSource();
+			if (mouseEvent.getClickCount() == 2) {
+				int index = theList.locationToIndex(mouseEvent.getPoint());
+				if (index >= 0) {
+					stop();
+					Object object = theList.getModel().getElementAt(index);
+					ListData listData = (ListData) object;
+					selectedListData.card = listData.getCard();
+					dialog.dispose();
+				}
+			}
 		}
 	}
 }

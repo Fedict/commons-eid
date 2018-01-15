@@ -19,41 +19,18 @@
 
 package be.fedict.commons.eid.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.DisplayMode;
-import java.awt.FlowLayout;
-import java.awt.Frame;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.Arrays;
-import java.util.Locale;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.Icon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.UIManager;
-import javax.swing.border.Border;
-
 import be.fedict.commons.eid.client.PINPurpose;
 import be.fedict.commons.eid.client.spi.BeIDCardUI;
 import be.fedict.commons.eid.client.spi.UserCancelledException;
 import be.fedict.commons.eid.dialogs.Messages.MESSAGE_ID;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.Arrays;
+import java.util.Locale;
 
 /**
  * Default Implementation of BeIDCardUI Interface
@@ -63,14 +40,16 @@ import be.fedict.commons.eid.dialogs.Messages.MESSAGE_ID;
  * 
  */
 public class DefaultBeIDCardUI implements BeIDCardUI {
+
 	public static final int MIN_PIN_SIZE = 4;
 	public static final int MAX_PIN_SIZE = 12;
 	public static final int PUK_SIZE = 6;
-	private static final String OPERATION_CANCELLED = "operation cancelled.";
 
-	// TODO can pinPadFrame and secureReaderTransactionFrame be on-screen at the
-	// same time? if not can be one member var and one dispose method
-	private Component parentComponent;
+	private static final String OPERATION_CANCELLED = "operation cancelled.";
+	private static final int BORDER_SIZE = 20;
+
+	// TODO can pinPadFrame and secureReaderTransactionFrame be on-screen at the same time? if not can be one member var and one dispose method
+	private final Component parentComponent;
 	private JFrame pinPadFrame;
 	private JFrame secureReaderTransactionFrame;
 	private Locale locale;
@@ -84,58 +63,48 @@ public class DefaultBeIDCardUI implements BeIDCardUI {
 		this(null, messages);
 	}
 
-	public DefaultBeIDCardUI(final Component parentComponent, Messages messages) {
+	public DefaultBeIDCardUI(Component parentComponent, Messages messages) {
 		if (GraphicsEnvironment.isHeadless()) {
-			throw new UnsupportedOperationException(
-					"DefaultBeIDCardUI is a GUI and hence requires an interactive GraphicsEnvironment");
+			throw new UnsupportedOperationException("DefaultBeIDCardUI is a GUI and hence requires an interactive GraphicsEnvironment");
 		}
-		this.parentComponent = parentComponent;
 
+		this.parentComponent = parentComponent;
 		if (messages != null) {
 			this.messages = messages;
 		} else {
 			this.messages = Messages.getInstance();
 		}
-
 	}
 
 	@Override
 	public void advisePINBlocked() {
-		JOptionPane.showMessageDialog(this.parentComponent,
-				this.messages.getMessage(MESSAGE_ID.PIN_BLOCKED),
-				"eID card blocked", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(parentComponent, messages.getMessage(MESSAGE_ID.PIN_BLOCKED), "eID card blocked", JOptionPane.ERROR_MESSAGE);
 	}
 
 	@Override
 	public void advisePINChanged() {
-		JOptionPane.showMessageDialog(this.parentComponent,
-				this.messages.getMessage(MESSAGE_ID.PIN_CHANGED),
-				"eID PIN change", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(parentComponent, messages.getMessage(MESSAGE_ID.PIN_CHANGED), "eID PIN change", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	@Override
-	public void advisePINPadChangePIN(final int retriesLeft) {
-		showPINPadFrame(retriesLeft, "eID PIN change",
-				this.messages.getMessage(MESSAGE_ID.PIN_PAD_CHANGE));
+	public void advisePINPadChangePIN(int retriesLeft) {
+		showPINPadFrame(retriesLeft, "eID PIN change", messages.getMessage(MESSAGE_ID.PIN_PAD_CHANGE));
 
 	}
 
 	@Override
-	public void advisePINPadNewPINEntry(final int retriesLeft) {
-		showPINPadFrame(retriesLeft, "eID PIN change",
-				this.messages.getMessage(MESSAGE_ID.PIN_PAD_MODIFY_NEW));
+	public void advisePINPadNewPINEntry(int retriesLeft) {
+		showPINPadFrame(retriesLeft, "eID PIN change", messages.getMessage(MESSAGE_ID.PIN_PAD_MODIFY_NEW));
 	}
 
 	@Override
-	public void advisePINPadNewPINEntryAgain(final int retriesLeft) {
-		showPINPadFrame(retriesLeft, "eID PIN change",
-				this.messages.getMessage(MESSAGE_ID.PIN_PAD_MODIFY_NEW_AGAIN));
+	public void advisePINPadNewPINEntryAgain(int retriesLeft) {
+		showPINPadFrame(retriesLeft, "eID PIN change", messages.getMessage(MESSAGE_ID.PIN_PAD_MODIFY_NEW_AGAIN));
 	}
 
 	@Override
-	public void advisePINPadOldPINEntry(final int retriesLeft) {
-		showPINPadFrame(retriesLeft, "eID PIN change",
-				this.messages.getMessage(MESSAGE_ID.PIN_PAD_MODIFY_OLD));
+	public void advisePINPadOldPINEntry(int retriesLeft) {
+		showPINPadFrame(retriesLeft, "eID PIN change", messages.getMessage(MESSAGE_ID.PIN_PAD_MODIFY_OLD));
 
 	}
 
@@ -145,46 +114,38 @@ public class DefaultBeIDCardUI implements BeIDCardUI {
 	}
 
 	@Override
-	public void advisePINPadPINEntry(final int retriesLeft,
-			final PINPurpose purpose) {
-		showPINPadFrame(
-				retriesLeft,
-				"PIN",
-				this.messages.getMessage(MESSAGE_ID.PIN_REASON,
-						purpose.getType()),
-				this.messages.getMessage(MESSAGE_ID.PIN_PAD));
+	public void advisePINPadPINEntry(int retriesLeft, PINPurpose purpose) {
+		showPINPadFrame(retriesLeft, "PIN",
+				messages.getMessage(MESSAGE_ID.PIN_REASON, purpose.getType()),
+				messages.getMessage(MESSAGE_ID.PIN_PAD)
+		);
 	}
 
 	@Override
-	public void advisePINPadPUKEntry(final int retriesLeft) {
-		showPINPadFrame(retriesLeft, "eID PIN unblock",
-				this.messages.getMessage(MESSAGE_ID.PUK_PAD));
+	public void advisePINPadPUKEntry(int retriesLeft) {
+		showPINPadFrame(retriesLeft, "eID PIN unblock", messages.getMessage(MESSAGE_ID.PUK_PAD));
 
 	}
 
 	@Override
 	public void advisePINUnblocked() {
-		JOptionPane.showMessageDialog(this.parentComponent,
-				this.messages.getMessage(MESSAGE_ID.PIN_UNBLOCKED),
-				"eID PIN unblock", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(parentComponent, messages.getMessage(MESSAGE_ID.PIN_UNBLOCKED), "eID PIN unblock", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	@Override
-	public char[][] obtainOldAndNewPIN(final int retriesLeft) {
-		final Box mainPanel = Box.createVerticalBox();
+	public char[][] obtainOldAndNewPIN(int retriesLeft) {
+		Box mainPanel = Box.createVerticalBox();
 
 		if (-1 != retriesLeft) {
 			mainPanel.add(Box.createVerticalStrut(4));
-			final Box retriesPanel = createWarningBox(this.messages
-					.getMessage(MESSAGE_ID.RETRIES_LEFT) + ": " + retriesLeft);
+			Box retriesPanel = createWarningBox(messages.getMessage(MESSAGE_ID.RETRIES_LEFT) + ": " + retriesLeft);
 			mainPanel.add(retriesPanel);
 			mainPanel.add(Box.createVerticalStrut(24));
 		}
 
-		final JPasswordField oldPinField = new JPasswordField(MAX_PIN_SIZE);
-		final Box oldPinPanel = Box.createHorizontalBox();
-		final JLabel oldPinLabel = new JLabel(
-				this.messages.getMessage(MESSAGE_ID.CURRENT_PIN) + ":");
+		JPasswordField oldPinField = new JPasswordField(MAX_PIN_SIZE);
+		Box oldPinPanel = Box.createHorizontalBox();
+		JLabel oldPinLabel = new JLabel(messages.getMessage(MESSAGE_ID.CURRENT_PIN) + ":");
 		oldPinLabel.setLabelFor(oldPinField);
 		oldPinPanel.add(oldPinLabel);
 		oldPinPanel.add(Box.createHorizontalStrut(5));
@@ -193,10 +154,9 @@ public class DefaultBeIDCardUI implements BeIDCardUI {
 
 		mainPanel.add(Box.createVerticalStrut(5));
 
-		final JPasswordField newPinField = new JPasswordField(MAX_PIN_SIZE);
-		final Box newPinPanel = Box.createHorizontalBox();
-		final JLabel newPinLabel = new JLabel(
-				this.messages.getMessage(MESSAGE_ID.NEW_PIN) + ":");
+		JPasswordField newPinField = new JPasswordField(MAX_PIN_SIZE);
+		Box newPinPanel = Box.createHorizontalBox();
+		JLabel newPinLabel = new JLabel(messages.getMessage(MESSAGE_ID.NEW_PIN) + ":");
 		newPinLabel.setLabelFor(newPinField);
 		newPinPanel.add(newPinLabel);
 		newPinPanel.add(Box.createHorizontalStrut(5));
@@ -205,136 +165,99 @@ public class DefaultBeIDCardUI implements BeIDCardUI {
 
 		mainPanel.add(Box.createVerticalStrut(5));
 
-		final JPasswordField new2PinField = new JPasswordField(MAX_PIN_SIZE);
-		{
-			final Box new2PinPanel = Box.createHorizontalBox();
-			final JLabel new2PinLabel = new JLabel(
-					this.messages.getMessage(MESSAGE_ID.NEW_PIN) + ":");
+		JPasswordField new2PinField = new JPasswordField(MAX_PIN_SIZE);
+			Box new2PinPanel = Box.createHorizontalBox();
+			JLabel new2PinLabel = new JLabel(
+					messages.getMessage(MESSAGE_ID.NEW_PIN) + ":");
 			new2PinLabel.setLabelFor(new2PinField);
 			new2PinPanel.add(new2PinLabel);
 			new2PinPanel.add(Box.createHorizontalStrut(5));
 			new2PinPanel.add(new2PinField);
 			mainPanel.add(new2PinPanel);
-		}
 
-		final int result = JOptionPane.showOptionDialog(this.parentComponent,
-				mainPanel, "Change eID PIN", JOptionPane.OK_CANCEL_OPTION,
-				JOptionPane.QUESTION_MESSAGE, null, null, null);
+		int result = JOptionPane.showOptionDialog(parentComponent, mainPanel,
+				"Change eID PIN", JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.QUESTION_MESSAGE, null, null, null
+		);
 		if (result != JOptionPane.OK_OPTION) {
 			throw new RuntimeException(OPERATION_CANCELLED);
 		}
-		if (false == Arrays.equals(newPinField.getPassword(),
-				new2PinField.getPassword())) {
+		if (!Arrays.equals(newPinField.getPassword(), new2PinField.getPassword())) {
 			throw new RuntimeException("new PINs not equal");
 		}
-		final char[] oldPin = new char[oldPinField.getPassword().length];
-		final char[] newPin = new char[newPinField.getPassword().length];
-		System.arraycopy(oldPinField.getPassword(), 0, oldPin, 0,
-				oldPinField.getPassword().length);
-		System.arraycopy(newPinField.getPassword(), 0, newPin, 0,
-				newPinField.getPassword().length);
+		char[] oldPin = new char[oldPinField.getPassword().length];
+		char[] newPin = new char[newPinField.getPassword().length];
+		System.arraycopy(oldPinField.getPassword(), 0, oldPin, 0, oldPinField.getPassword().length);
+		System.arraycopy(newPinField.getPassword(), 0, newPin, 0, newPinField.getPassword().length);
 		Arrays.fill(oldPinField.getPassword(), (char) 0);
 		Arrays.fill(newPinField.getPassword(), (char) 0);
 		return new char[][]{oldPin, newPin};
 	}
 
 	@Override
-	public char[] obtainPIN(final int retriesLeft, final PINPurpose reason)
-			throws UserCancelledException {
-		// main panel
-		JPanel mainPanel = new JPanel() {
-			private static final long serialVersionUID = 1L;
-			private static final int BORDER_SIZE = 20;
-
-			@Override
-			public Insets getInsets() {
-				return new Insets(BORDER_SIZE, BORDER_SIZE, BORDER_SIZE,
-						BORDER_SIZE);
-			}
-		};
-		final BoxLayout boxLayout = new BoxLayout(mainPanel,
-				BoxLayout.PAGE_AXIS);
+	public char[] obtainPIN(int retriesLeft, PINPurpose reason) throws UserCancelledException {
+		JPanel mainPanel = new JPanelWithInsets(new Insets(BORDER_SIZE, BORDER_SIZE, BORDER_SIZE, BORDER_SIZE));
+		BoxLayout boxLayout = new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS);
 		mainPanel.setLayout(boxLayout);
 
-		final Box reasonPanel = Box.createHorizontalBox();
-		final JLabel reasonLabel = new JLabel(this.messages.getMessage(
-				MESSAGE_ID.PIN_REASON, reason.getType()));
+		Box reasonPanel = Box.createHorizontalBox();
+		JLabel reasonLabel = new JLabel(messages.getMessage(MESSAGE_ID.PIN_REASON, reason.getType()));
 		reasonPanel.add(reasonLabel);
 		reasonPanel.add(Box.createHorizontalGlue());
 		mainPanel.add(reasonPanel);
 		mainPanel.add(Box.createVerticalStrut(16));
 
 		if (-1 != retriesLeft) {
-			addWarningBox(mainPanel,
-					this.messages.getMessage(MESSAGE_ID.RETRIES_LEFT) + ": "
-							+ retriesLeft);
+			addWarningBox(mainPanel, messages.getMessage(MESSAGE_ID.RETRIES_LEFT) + ": " + retriesLeft);
 		}
 
-		final Box passwordPanel = Box.createHorizontalBox();
-		final JLabel promptLabel = new JLabel(
-				this.messages.getMessage(MESSAGE_ID.LABEL_PIN) + ": ");
+		Box passwordPanel = Box.createHorizontalBox();
+		JLabel promptLabel = new JLabel(messages.getMessage(MESSAGE_ID.LABEL_PIN) + ": ");
 		passwordPanel.add(promptLabel);
 		passwordPanel.add(Box.createHorizontalStrut(5));
-		final JPasswordField passwordField = new JPasswordField(MAX_PIN_SIZE);
+		JPasswordField passwordField = new JPasswordField(MAX_PIN_SIZE);
 		promptLabel.setLabelFor(passwordField);
 		passwordPanel.add(passwordField);
 		passwordPanel.setBorder(createGenerousLowerBevelBorder());
 		mainPanel.add(passwordPanel);
 
 		// button panel
-		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Insets getInsets() {
-				return new Insets(0, 0, 5, 5);
-			}
-		};
-		final JButton okButton = new JButton(
-				this.messages.getMessage(MESSAGE_ID.OK));
+		JPanel buttonPanel = new JPanelWithInsets(new FlowLayout(FlowLayout.RIGHT), new Insets(0, 0, 5, 5));
+		JButton okButton = new JButton(messages.getMessage(MESSAGE_ID.OK));
 		okButton.setEnabled(false);
 		buttonPanel.add(okButton);
-		final JButton cancelButton = new JButton(
-				this.messages.getMessage(MESSAGE_ID.CANCEL));
+		JButton cancelButton = new JButton(messages.getMessage(MESSAGE_ID.CANCEL));
 		buttonPanel.add(cancelButton);
 
 		// dialog box
-		final JDialog dialog = new JDialog((Frame) null,
-				this.messages.getMessage(MESSAGE_ID.ENTER_PIN), true);
+		JDialog dialog = new JDialog((Frame) null, messages.getMessage(MESSAGE_ID.ENTER_PIN), true);
 		dialog.setLayout(new BorderLayout());
 		dialog.getContentPane().add(mainPanel, BorderLayout.CENTER);
 		dialog.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-		final DialogResult dialogResult = new DialogResult();
+		DialogResult dialogResult = new DialogResult();
 
-		okButton.addActionListener(new ActionListener() {
-			public void actionPerformed(final ActionEvent event) {
+		okButton.addActionListener(event -> {
+			dialogResult.result = DialogResult.Result.OK;
+			dialog.dispose();
+		});
+		cancelButton.addActionListener(event -> {
+			dialogResult.result = DialogResult.Result.CANCEL;
+			dialog.dispose();
+		});
+		passwordField.addActionListener(event -> {
+			int pinSize = passwordField.getPassword().length;
+			if (MIN_PIN_SIZE <= pinSize && pinSize <= MAX_PIN_SIZE) {
 				dialogResult.result = DialogResult.Result.OK;
 				dialog.dispose();
 			}
 		});
-		cancelButton.addActionListener(new ActionListener() {
-			public void actionPerformed(final ActionEvent event) {
-				dialogResult.result = DialogResult.Result.CANCEL;
-				dialog.dispose();
-			}
-		});
-		passwordField.addActionListener(new ActionListener() {
-			public void actionPerformed(final ActionEvent event) {
-				final int pinSize = passwordField.getPassword().length;
-				if (MIN_PIN_SIZE <= pinSize && pinSize <= MAX_PIN_SIZE) {
-					dialogResult.result = DialogResult.Result.OK;
-					dialog.dispose();
-				}
-			}
-		});
+
 		passwordField.addKeyListener(new KeyListener() {
+			public void keyPressed(KeyEvent e) { }
 
-			public void keyPressed(final KeyEvent e) {
-			}
-
-			public void keyReleased(final KeyEvent e) {
-				final int pinSize = passwordField.getPassword().length;
+			public void keyReleased(KeyEvent e) {
+				int pinSize = passwordField.getPassword().length;
 				if (MIN_PIN_SIZE <= pinSize && pinSize <= MAX_PIN_SIZE) {
 					okButton.setEnabled(true);
 				} else {
@@ -342,29 +265,17 @@ public class DefaultBeIDCardUI implements BeIDCardUI {
 				}
 			}
 
-			public void keyTyped(final KeyEvent e) {
-			}
+			public void keyTyped(KeyEvent e) { }
 		});
 
 		dialog.pack();
-		if (this.parentComponent != null) {
-			dialog.setLocationRelativeTo(this.parentComponent);
+		if (parentComponent != null) {
+			dialog.setLocationRelativeTo(parentComponent);
 		} else {
-			GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment
-					.getLocalGraphicsEnvironment();
-			GraphicsDevice graphicsDevice = graphicsEnvironment
-					.getDefaultScreenDevice();
-			DisplayMode displayMode = graphicsDevice.getDisplayMode();
-			int screenWidth = displayMode.getWidth();
-			int screenHeight = displayMode.getHeight();
-			int dialogWidth = dialog.getWidth();
-			int dialogHeight = dialog.getHeight();
-			dialog.setLocation((screenWidth - dialogWidth) / 2,
-					(screenHeight - dialogHeight) / 2);
+			Util.centerOnScreen(dialog);
 		}
 
-		dialog.setVisible(true);
-		// setVisible will wait until some button or so has been pressed
+		dialog.setVisible(true); // setVisible will wait until some button or so has been pressed
 
 		if (dialogResult.result == DialogResult.Result.OK) {
 			return passwordField.getPassword();
@@ -373,18 +284,16 @@ public class DefaultBeIDCardUI implements BeIDCardUI {
 	}
 
 	@Override
-	public char[][] obtainPUKCodes(final int retriesLeft) {
-		final Box mainPanel = Box.createVerticalBox();
+	public char[][] obtainPUKCodes(int retriesLeft) {
+		Box mainPanel = Box.createVerticalBox();
 
 		if (-1 != retriesLeft) {
-			addWarningBox(mainPanel,
-					this.messages.getMessage(MESSAGE_ID.RETRIES_LEFT) + ": "
-							+ retriesLeft);
+			addWarningBox(mainPanel, messages.getMessage(MESSAGE_ID.RETRIES_LEFT) + ": " + retriesLeft);
 		}
 
-		final JPasswordField puk1Field = new JPasswordField(8);
-		final Box puk1Panel = Box.createHorizontalBox();
-		final JLabel puk1Label = new JLabel("eID PUK1:");
+		JPasswordField puk1Field = new JPasswordField(8);
+		Box puk1Panel = Box.createHorizontalBox();
+		JLabel puk1Label = new JLabel("eID PUK1:");
 		puk1Label.setLabelFor(puk1Field);
 		puk1Panel.add(puk1Label);
 		puk1Panel.add(Box.createHorizontalStrut(5));
@@ -393,31 +302,28 @@ public class DefaultBeIDCardUI implements BeIDCardUI {
 
 		mainPanel.add(Box.createVerticalStrut(5));
 
-		final JPasswordField puk2Field = new JPasswordField(8);
-		final Box puk2Panel = Box.createHorizontalBox();
-		final JLabel puk2Label = new JLabel("eID PUK2:");
+		JPasswordField puk2Field = new JPasswordField(8);
+		Box puk2Panel = Box.createHorizontalBox();
+		JLabel puk2Label = new JLabel("eID PUK2:");
 		puk2Label.setLabelFor(puk2Field);
 		puk2Panel.add(puk2Label);
 		puk2Panel.add(Box.createHorizontalStrut(5));
 		puk2Panel.add(puk2Field);
 		mainPanel.add(puk2Panel);
 
-		final int result = JOptionPane.showOptionDialog(this.parentComponent,
-				mainPanel, "eID PIN unblock", JOptionPane.OK_CANCEL_OPTION,
-				JOptionPane.QUESTION_MESSAGE, null, null, null);
+		int result = JOptionPane.showOptionDialog(parentComponent, mainPanel,
+				"eID PIN unblock", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+				null, null, null);
 		if (result != JOptionPane.OK_OPTION) {
 			throw new RuntimeException(OPERATION_CANCELLED);
 		}
-		if (puk1Field.getPassword().length != PUK_SIZE
-				|| puk2Field.getPassword().length != PUK_SIZE) {
+		if (puk1Field.getPassword().length != PUK_SIZE || puk2Field.getPassword().length != PUK_SIZE) {
 			throw new RuntimeException("PUK size incorrect");
 		}
-		final char[] puk1 = new char[puk1Field.getPassword().length];
-		final char[] puk2 = new char[puk2Field.getPassword().length];
-		System.arraycopy(puk1Field.getPassword(), 0, puk1, 0,
-				puk1Field.getPassword().length);
-		System.arraycopy(puk2Field.getPassword(), 0, puk2, 0,
-				puk2Field.getPassword().length);
+		char[] puk1 = new char[puk1Field.getPassword().length];
+		char[] puk2 = new char[puk2Field.getPassword().length];
+		System.arraycopy(puk1Field.getPassword(), 0, puk1, 0, puk1Field.getPassword().length);
+		System.arraycopy(puk2Field.getPassword(), 0, puk2, 0, puk2Field.getPassword().length);
 		Arrays.fill(puk1Field.getPassword(), (char) 0);
 		Arrays.fill(puk2Field.getPassword(), (char) 0);
 		return new char[][]{puk1, puk2};
@@ -425,46 +331,25 @@ public class DefaultBeIDCardUI implements BeIDCardUI {
 
 	@Override
 	public void adviseSecureReaderOperation() {
-		if (null != this.secureReaderTransactionFrame) {
+		if (null != secureReaderTransactionFrame) {
 			disposeSecureReaderFrame();
 		}
-		this.secureReaderTransactionFrame = new JFrame(
-				"Transaction Confirmation");
-		JPanel panel = new JPanel() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Insets getInsets() {
-				return new Insets(10, 30, 10, 30);
-			}
-		};
-		final BoxLayout boxLayout = new BoxLayout(panel, BoxLayout.PAGE_AXIS);
+		secureReaderTransactionFrame = new JFrame("Transaction Confirmation");
+		JPanel panel = new JPanelWithInsets(new Insets(10, 30, 10, 30));
+		BoxLayout boxLayout = new BoxLayout(panel, BoxLayout.PAGE_AXIS);
 		panel.setLayout(boxLayout);
-		panel.add(new JLabel(
-				"Check the transaction message on the secure card reader."));
+		panel.add(new JLabel("Check the transaction message on the secure card reader."));
 
-		this.secureReaderTransactionFrame.getContentPane().add(panel);
-		this.secureReaderTransactionFrame.pack();
+		secureReaderTransactionFrame.getContentPane().add(panel);
+		secureReaderTransactionFrame.pack();
 
-		if (this.parentComponent != null) {
-			this.secureReaderTransactionFrame
-					.setLocationRelativeTo(this.parentComponent);
+		if (parentComponent != null) {
+			secureReaderTransactionFrame.setLocationRelativeTo(parentComponent);
 		} else {
-			GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment
-					.getLocalGraphicsEnvironment();
-			GraphicsDevice graphicsDevice = graphicsEnvironment
-					.getDefaultScreenDevice();
-			DisplayMode displayMode = graphicsDevice.getDisplayMode();
-			int screenWidth = displayMode.getWidth();
-			int screenHeight = displayMode.getHeight();
-			int dialogWidth = this.secureReaderTransactionFrame.getWidth();
-			int dialogHeight = this.secureReaderTransactionFrame.getHeight();
-			this.secureReaderTransactionFrame.setLocation(
-					(screenWidth - dialogWidth) / 2,
-					(screenHeight - dialogHeight) / 2);
+			Util.centerOnScreen(secureReaderTransactionFrame);
 		}
 
-		this.secureReaderTransactionFrame.setVisible(true);
+		secureReaderTransactionFrame.setVisible(true);
 	}
 
 	@Override
@@ -476,123 +361,94 @@ public class DefaultBeIDCardUI implements BeIDCardUI {
 	 * **********************************************************************************************************************
 	 */
 
-	private Box addWarningBox(final JComponent parent,
-			final String warningMessage) {
+	private void addWarningBox(JComponent parent, String warningMessage) {
 		parent.add(Box.createVerticalStrut(4));
-		final Box retriesPanel = createWarningBox(warningMessage);
+		Box retriesPanel = createWarningBox(warningMessage);
 		parent.add(retriesPanel);
 		parent.add(Box.createVerticalStrut(24));
-		return retriesPanel;
 	}
 
-	private Box createWarningBox(final String warningText) {
-		final Box warningBox = Box.createHorizontalBox();
-		final JLabel warningLabel = new JLabel(warningText);
+	private Box createWarningBox(String warningText) {
+		Box warningBox = Box.createHorizontalBox();
+		JLabel warningLabel = new JLabel(warningText);
 		warningLabel.setForeground(Color.RED);
-		final Icon warningIcon = UIManager.getIcon("OptionPane.warningIcon");
-		if (warningIcon != null) {
-			warningLabel.setIcon(warningIcon);
-		}
+		Icon warningIcon = UIManager.getIcon("OptionPane.warningIcon");
+		if (warningIcon != null) warningLabel.setIcon(warningIcon);
 		warningBox.add(warningLabel);
 		warningBox.add(Box.createHorizontalGlue());
 		warningBox.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createLineBorder(Color.red, 1),
-				BorderFactory.createEmptyBorder(8, 8, 8, 8)));
+				BorderFactory.createEmptyBorder(8, 8, 8, 8))
+		);
 		return warningBox;
 	}
 
 	private Border createGenerousLowerBevelBorder() {
 		return BorderFactory.createCompoundBorder(
 				BorderFactory.createLoweredBevelBorder(),
-				BorderFactory.createEmptyBorder(16, 16, 16, 16));
+				BorderFactory.createEmptyBorder(16, 16, 16, 16)
+		);
 	}
 
-	private void showPINPadFrame(final int retriesLeft, final String title,
-			final String... messages) {
-		if (null != this.pinPadFrame) {
+	private void showPINPadFrame(int retriesLeft, String title, String... messages) {
+		if (null != pinPadFrame) {
 			disposePINPadFrame();
 		}
-		this.pinPadFrame = new JFrame(title);
-		JPanel panel = new JPanel() {
-			private static final long serialVersionUID = 1L;
-
-			// @Override
-			// public Insets getInsets() {
-			// return new Insets(10, 30, 10, 30);
-			// }
-		};
-		final BoxLayout boxLayout = new BoxLayout(panel, BoxLayout.PAGE_AXIS);
+		pinPadFrame = new JFrame(title);
+		JPanel panel = new JPanel();
+		BoxLayout boxLayout = new BoxLayout(panel, BoxLayout.PAGE_AXIS);
 		panel.setLayout(boxLayout);
 		panel.setBorder(BorderFactory.createEmptyBorder(32, 32, 32, 32));
 
 		if (messages.length > 0) {
-			final JLabel label = new JLabel(messages[0]);
+			JLabel label = new JLabel(messages[0]);
 			label.setAlignmentX((float) 0.5);
 			panel.add(label);
 		}
 
 		if (-1 != retriesLeft) {
 			panel.add(Box.createVerticalStrut(24));
-			final Box warningBox = this.createWarningBox(this.messages
-					.getMessage(MESSAGE_ID.RETRIES_LEFT) + ": " + retriesLeft);
+			Box warningBox = createWarningBox(this.messages.getMessage(MESSAGE_ID.RETRIES_LEFT) + ": " + retriesLeft);
 			panel.add(warningBox);
 			panel.add(Box.createVerticalStrut(24));
 		}
 
 		for (int i = 1; i < messages.length; i++) {
-			final JLabel label = new JLabel(messages[i]);
+			JLabel label = new JLabel(messages[i]);
 			label.setAlignmentX((float) 0.5);
 			panel.add(label);
 		}
 
-		this.pinPadFrame.getContentPane().add(panel);
-		this.pinPadFrame.pack();
+		pinPadFrame.getContentPane().add(panel);
+		pinPadFrame.pack();
 
-		if (this.parentComponent != null) {
-			this.pinPadFrame.setLocationRelativeTo(this.parentComponent);
+		if (parentComponent != null) {
+			pinPadFrame.setLocationRelativeTo(parentComponent);
 		} else {
-			GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment
-					.getLocalGraphicsEnvironment();
-			GraphicsDevice graphicsDevice = graphicsEnvironment
-					.getDefaultScreenDevice();
-			DisplayMode displayMode = graphicsDevice.getDisplayMode();
-			int screenWidth = displayMode.getWidth();
-			int screenHeight = displayMode.getHeight();
-			int dialogWidth = this.pinPadFrame.getWidth();
-			int dialogHeight = this.pinPadFrame.getHeight();
-			this.pinPadFrame.setLocation((screenWidth - dialogWidth) / 2,
-					(screenHeight - dialogHeight) / 2);
+			Util.centerOnScreen(pinPadFrame);
 		}
 
-		this.pinPadFrame.setVisible(true);
+		pinPadFrame.setVisible(true);
 	}
 
 	private void disposePINPadFrame() {
-		if (null != this.pinPadFrame) {
-			this.pinPadFrame.dispose();
-			this.pinPadFrame = null;
+		if (null != pinPadFrame) {
+			pinPadFrame.dispose();
+			pinPadFrame = null;
 		}
 	}
-
-	/*
-	 * 
-	 */
 
 	private void disposeSecureReaderFrame() {
-		if (null != this.secureReaderTransactionFrame) {
-			this.secureReaderTransactionFrame.dispose();
-			this.secureReaderTransactionFrame = null;
+		if (null != secureReaderTransactionFrame) {
+			secureReaderTransactionFrame.dispose();
+			secureReaderTransactionFrame = null;
 		}
 	}
-
-	/*
-	 * 
-	 */
 
 	private static class DialogResult {
 		enum Result {
 			OK, CANCEL
-		};
+		}
 
 		public Result result = null;
 	}
