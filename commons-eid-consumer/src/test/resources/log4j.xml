@@ -4,12 +4,12 @@
 	debug="false">
 	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
 		<param name="Target" value="System.out" />
-		<param name="Threshold" value="DEBUG" />
+		<param name="Threshold" value="INFO" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%-5p [%c{1}] %m%n" />
 		</layout>
 	</appender>
-	<category name="test.unit">
+	<category name="be.fedict">
 		<priority value="DEBUG" />
 	</category>
 	<root>
