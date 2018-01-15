@@ -25,4 +25,8 @@ package be.fedict.commons.eid.consumer.tlv;
  * @see DataConvertor
  */
 public class DataConvertorException extends Exception {
+
+	public DataConvertorException(String message) {
+		super(message);
+	}
 }
