@@ -121,9 +121,7 @@ public class BeIDCardTest {
 		}
 
 		BeIDIntegrity beIDIntegrity = new BeIDIntegrity();
-		boolean result = beIDIntegrity.verifyAuthnSignature(toBeSigned, signatureValue, authnCertificate);
-
-		assertTrue(result);
+		assertTrue(beIDIntegrity.verifyAuthnSignature(toBeSigned, signatureValue, authnCertificate));
 	}
 
 	@Test
@@ -213,13 +211,13 @@ public class BeIDCardTest {
 		byte[] toBeSigned = new byte[10];
 		SecureRandom secureRandom = new SecureRandom();
 		secureRandom.nextBytes(toBeSigned);
-		MessageDigest messageDigest = MessageDigest.getInstance("SHA1");
+		MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 		byte[] digestValue = messageDigest.digest(toBeSigned);
 
 		X509Certificate signingCertificate;
 		byte[] signatureValue;
 		try (BeIDCard beIDCard = getBeIDCard()) {
-			signatureValue = beIDCard.sign(digestValue, BeIDDigest.SHA_1, FileType.NonRepudiationCertificate, false);
+			signatureValue = beIDCard.sign(digestValue, BeIDDigest.SHA_256, FileType.NonRepudiationCertificate, false);
 			assertNotNull(signatureValue);
 			signingCertificate = beIDCard.getSigningCertificate();
 		}

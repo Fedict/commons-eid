@@ -317,7 +317,7 @@ public class SSLTest {
 			throw new RuntimeException(e);
 		}
 
-		AlgorithmIdentifier sigAlgId = new DefaultSignatureAlgorithmIdentifierFinder().find("SHA1withRSA");
+		AlgorithmIdentifier sigAlgId = new DefaultSignatureAlgorithmIdentifierFinder().find("SHA256withRSA");
 		AlgorithmIdentifier digAlgId = new DefaultDigestAlgorithmIdentifierFinder().find(sigAlgId);
 		AsymmetricKeyParameter asymmetricKeyParameter;
 		try {

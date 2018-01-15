@@ -444,15 +444,13 @@ public class BeIDCard implements AutoCloseable {
 	 *                            citizen's PIN if false, the current BeIDCardUI will be used in
 	 *                            the absence of a secure pinpad reader. If true, an exception
 	 *                            will be thrown unless a SPR is available
-	 * @return a SHA-1 digest of the input data signed by the citizen's authentication key
+	 * @return a SHA-256 digest of the input data signed by the citizen's authentication key
 	 */
-	// TODO Can we use SHA-256 or better?
 	public byte[] signAuthn(byte[] toBeSigned, boolean requireSecureReader)
 			throws NoSuchAlgorithmException, CardException, IOException, InterruptedException, UserCancelledException {
-		MessageDigest messageDigest = BeIDDigest.SHA_1.getMessageDigestInstance();
+		MessageDigest messageDigest = BeIDDigest.SHA_256.getMessageDigestInstance();
 		byte[] digest = messageDigest.digest(toBeSigned);
-		return sign(digest, BeIDDigest.SHA_1,
-				FileType.AuthentificationCertificate, requireSecureReader);
+		return sign(digest, BeIDDigest.SHA_256, FileType.AuthentificationCertificate, requireSecureReader);
 	}
 
 	/**

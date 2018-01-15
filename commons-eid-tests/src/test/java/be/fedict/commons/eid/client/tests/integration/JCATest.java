@@ -72,7 +72,7 @@ public class JCATest {
 		keyStore.load(keyStoreParameter);
 
 		PrivateKey authnPrivateKey = (PrivateKey) keyStore.getKey("Authentication", null);
-		Signature signature = Signature.getInstance("SHA1withRSA");
+		Signature signature = Signature.getInstance("SHA256withRSA");
 		signature.initSign(authnPrivateKey);
 
 		byte[] toBeSigned = "hello world".getBytes();
@@ -100,7 +100,7 @@ public class JCATest {
 		keyStore.load(new MyFrame());
 
 		PrivateKey authnPrivateKey = (PrivateKey) keyStore.getKey("Authentication", null);
-		Signature signature = Signature.getInstance("SHA1withRSA");
+		Signature signature = Signature.getInstance("SHA256withRSA");
 		signature.initSign(authnPrivateKey);
 
 		byte[] toBeSigned = "hello world".getBytes();
@@ -121,7 +121,7 @@ public class JCATest {
 		keyStore.load(null);
 
 		PrivateKey authnPrivateKey = (PrivateKey) keyStore.getKey("Authentication", null);
-		Signature signature = Signature.getInstance("SHA1withRSA");
+		Signature signature = Signature.getInstance("SHA256withRSA");
 		signature.initSign(authnPrivateKey);
 
 		byte[] toBeSigned = "hello world".getBytes();
@@ -155,7 +155,7 @@ public class JCATest {
 
 		PrivateKey authnPrivateKey = (PrivateKey) keyStore.getKey("Authentication", null);
 		PublicKey authnPublicKey = keyStore.getCertificate("Authentication").getPublicKey();
-		Signature signature = Signature.getInstance("SHA1withRSA");
+		Signature signature = Signature.getInstance("SHA256withRSA");
 		signature.initSign(authnPrivateKey);
 
 		byte[] toBeSigned = "hello world".getBytes();
@@ -243,7 +243,7 @@ public class JCATest {
 		X509Certificate authnCertificate = (X509Certificate) keyStore.getCertificate("Authentication");
 		PrivateKey authnPrivateKey = (PrivateKey) keyStore.getKey("Authentication", null);
 
-		verifySignatureAlgorithm("SHA1withRSA", authnPrivateKey, authnCertificate.getPublicKey());
+		verifySignatureAlgorithm("SHA256withRSA", authnPrivateKey, authnCertificate.getPublicKey());
 		verifySignatureAlgorithm("SHA224withRSA", authnPrivateKey, authnCertificate.getPublicKey());
 		verifySignatureAlgorithm("SHA256withRSA", authnPrivateKey, authnCertificate.getPublicKey());
 		verifySignatureAlgorithm("SHA384withRSA", authnPrivateKey, authnCertificate.getPublicKey());
@@ -259,7 +259,7 @@ public class JCATest {
 		keyStore.load(null);
 
 		PrivateKey signPrivateKey = (PrivateKey) keyStore.getKey("Signature", null);
-		Signature signature = Signature.getInstance("SHA1withRSA");
+		Signature signature = Signature.getInstance("SHA256withRSA");
 		signature.initSign(signPrivateKey);
 
 		byte[] toBeSigned = "hello world".getBytes();
@@ -279,7 +279,7 @@ public class JCATest {
 		keyStore.load(null);
 
 		PrivateKey signPrivateKey = (PrivateKey) keyStore.getKey("Signature", null);
-		Signature signature = Signature.getInstance("SHA1withRSA");
+		Signature signature = Signature.getInstance("SHA256withRSA");
 		signature.initSign(signPrivateKey);
 
 		byte[] toBeSigned = "hello world".getBytes();
@@ -302,7 +302,7 @@ public class JCATest {
 		keyStore.load(beIDKeyStoreParameter);
 
 		PrivateKey privateKey = (PrivateKey) keyStore.getKey("Signature", null);
-		Signature signature = Signature.getInstance("SHA1withRSA");
+		Signature signature = Signature.getInstance("SHA256withRSA");
 		signature.initSign(privateKey);
 
 		byte[] toBeSigned = "hello world".getBytes();
@@ -352,12 +352,12 @@ public class JCATest {
 		PrivateKey signPrivateKey = (PrivateKey) keyStore.getKey("Signature", null);
 		assertNotNull(signPrivateKey);
 
-		verifySignatureAlgorithm("SHA1withRSA", authnPrivateKey, authnCertificate.getPublicKey());
+		verifySignatureAlgorithm("SHA256withRSA", authnPrivateKey, authnCertificate.getPublicKey());
 		verifySignatureAlgorithm("SHA256withRSA", signPrivateKey, signCertificate.getPublicKey());
 		verifySignatureAlgorithm("SHA384withRSA", authnPrivateKey, authnCertificate.getPublicKey());
 		verifySignatureAlgorithm("SHA512withRSA", authnPrivateKey, authnCertificate.getPublicKey());
 
-		verifySignatureAlgorithm("SHA1withRSAandMGF1", authnPrivateKey, authnCertificate.getPublicKey());
+		verifySignatureAlgorithm("SHA256withRSAandMGF1", authnPrivateKey, authnCertificate.getPublicKey());
 		verifySignatureAlgorithm("SHA256withRSAandMGF1", authnPrivateKey, authnCertificate.getPublicKey());
 	}
 
@@ -369,7 +369,7 @@ public class JCATest {
 		X509Certificate authnCertificate = (X509Certificate) keyStore.getCertificate("Authentication");
 		PublicKey authnPublicKey = authnCertificate.getPublicKey();
 
-		Signature signature = Signature.getInstance("SHA1withRSAandMGF1");
+		Signature signature = Signature.getInstance("SHA256withRSAandMGF1");
 		signature.initSign(authnPrivateKey);
 
 		byte[] toBeSigned = "hello world".getBytes();

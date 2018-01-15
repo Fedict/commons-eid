@@ -50,10 +50,10 @@ public class CMSTest {
 
 		CMSTypedData msg = new CMSProcessableByteArray("Hello world!".getBytes());
 		CMSSignedDataGenerator gen = new CMSSignedDataGenerator();
-		ContentSigner sha1Signer = new JcaContentSignerBuilder("SHA1withRSA").build(privateKey);
+		ContentSigner sha256Signer = new JcaContentSignerBuilder("SHA256withRSA").build(privateKey);
 
 		gen.addSignerInfoGenerator(new JcaSignerInfoGeneratorBuilder(new JcaDigestCalculatorProviderBuilder().setProvider("BC").build())
-				.build(sha1Signer, certificate));
+				.build(sha256Signer, certificate));
 
 		CMSSignedData sigData = gen.generate(msg, false);
 		System.out.println(sigData);

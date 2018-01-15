@@ -135,11 +135,11 @@ public class BeIDIntegrity {
 	}
 
 	/**
-	 * Verifies a SHA1withRSA signature.
+	 * Verifies a SHA256withRSA signature.
 	 */
 	public boolean verifySignature(byte[] signatureData, PublicKey publicKey, byte[]... data)
 			throws InvalidKeyException, NoSuchAlgorithmException, SignatureException {
-		return verifySignature("SHA1withRSA", signatureData, publicKey, data);
+		return verifySignature("SHA256withRSA", signatureData, publicKey, data);
 	}
 
 	/**
