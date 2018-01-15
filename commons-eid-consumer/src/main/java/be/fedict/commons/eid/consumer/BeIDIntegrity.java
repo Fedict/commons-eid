@@ -22,16 +22,8 @@ package be.fedict.commons.eid.consumer;
 import be.fedict.commons.eid.consumer.tlv.TlvParser;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.bouncycastle.asn1.ASN1InputStream;
-import org.bouncycastle.asn1.ASN1Sequence;
-import org.bouncycastle.asn1.x509.DigestInfo;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -191,49 +183,6 @@ public class BeIDIntegrity {
 			LOG.warn("signature error: " + sigex.getMessage(), sigex);
 			return false;
 		}
-	}
-
-	/**
-	 * Verifies a non-repudiation signature.
-	 */
-	public boolean verifyNonRepSignature(byte[] expectedDigestValue, byte[] signatureValue, X509Certificate certificate) {
-		try {
-			return doVerifyNonRepSignature(expectedDigestValue, signatureValue, certificate);
-		} catch (InvalidKeyException ikex) {
-			LOG.warn("invalid key: " + ikex.getMessage(), ikex);
-			return false;
-		} catch (NoSuchAlgorithmException nsaex) {
-			LOG.warn("no such algo: " + nsaex.getMessage(), nsaex);
-			return false;
-		} catch (NoSuchPaddingException nspex) {
-			LOG.warn("no such padding: " + nspex.getMessage(), nspex);
-			return false;
-		} catch (BadPaddingException bpex) {
-			LOG.warn("bad padding: " + bpex.getMessage(), bpex);
-			return false;
-		} catch (IOException ioex) {
-			LOG.warn("IO error: " + ioex.getMessage(), ioex);
-			return false;
-		} catch (IllegalBlockSizeException ibex) {
-			LOG.warn("illegal block size: " + ibex.getMessage(), ibex);
-			return false;
-		}
-	}
-
-	private boolean doVerifyNonRepSignature(byte[] expectedDigestValue, byte[] signatureValue, X509Certificate certificate)
-			throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, IOException {
-		PublicKey publicKey = certificate.getPublicKey();
-
-		Cipher cipher = Cipher.getInstance("RSA");
-		cipher.init(Cipher.DECRYPT_MODE, publicKey);
-		byte[] actualSignatureDigestInfoValue = cipher.doFinal(signatureValue);
-
-		ASN1InputStream asnInputStream = new ASN1InputStream(actualSignatureDigestInfoValue);
-		DigestInfo actualSignatureDigestInfo = new DigestInfo((ASN1Sequence) asnInputStream.readObject());
-		asnInputStream.close();
-
-		byte[] actualDigestValue = actualSignatureDigestInfo.getDigest();
-		return Arrays.equals(expectedDigestValue, actualDigestValue);
 	}
 
 	private String getDigestAlgo(int hashSize) throws NoSuchAlgorithmException {

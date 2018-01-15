@@ -18,6 +18,15 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<configuration>
+					<artifactSet>
+						<includes>
+							<include>be.fedict.commons-eid:commons-eid-jca</include>
+							<include>be.fedict.commons-eid:commons-eid-client</include>
+							<include>be.fedict.commons-eid:commons-eid-dialogs</include>
+							<include>be.fedict.commons-eid:commons-eid-consumer</include>
+							<include>commons-logging:commons-logging-api</include>
+						</includes>
+					</artifactSet>
 				</configuration>
 				<executions>
 					<execution>

@@ -28,15 +28,22 @@ import be.fedict.commons.eid.client.impl.BeIDDigest;
 import be.fedict.commons.eid.consumer.Address;
 import be.fedict.commons.eid.consumer.BeIDIntegrity;
 import be.fedict.commons.eid.consumer.Identity;
+import org.bouncycastle.asn1.ASN1InputStream;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.x509.DigestInfo;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.Test;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.ByteArrayInputStream;
-import java.security.MessageDigest;
-import java.security.SecureRandom;
-import java.security.Security;
+import java.io.IOException;
+import java.security.*;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -222,8 +229,7 @@ public class BeIDCardTest {
 			signingCertificate = beIDCard.getSigningCertificate();
 		}
 
-		BeIDIntegrity beIDIntegrity = new BeIDIntegrity();
-		boolean result = beIDIntegrity.verifyNonRepSignature(digestValue, signatureValue, signingCertificate);
+		boolean result = verifyNonRepSignature(digestValue, signatureValue, signingCertificate);
 		assertTrue(result);
 	}
 
@@ -256,4 +262,20 @@ public class BeIDCardTest {
 
 		return beIDCard;
 	}
+
+	public boolean verifyNonRepSignature(byte[] expectedDigestValue, byte[] signatureValue, X509Certificate certificate) throws NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, IOException {
+		PublicKey publicKey = certificate.getPublicKey();
+
+		Cipher cipher = Cipher.getInstance("RSA");
+		cipher.init(Cipher.DECRYPT_MODE, publicKey);
+		byte[] actualSignatureDigestInfoValue = cipher.doFinal(signatureValue);
+
+		ASN1InputStream asnInputStream = new ASN1InputStream(actualSignatureDigestInfoValue);
+		DigestInfo actualSignatureDigestInfo = new DigestInfo((ASN1Sequence) asnInputStream.readObject());
+		asnInputStream.close();
+
+		byte[] actualDigestValue = actualSignatureDigestInfo.getDigest();
+		return Arrays.equals(expectedDigestValue, actualDigestValue);
+	}
+
 }

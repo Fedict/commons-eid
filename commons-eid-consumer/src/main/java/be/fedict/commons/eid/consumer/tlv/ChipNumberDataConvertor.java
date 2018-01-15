@@ -18,8 +18,6 @@
 
 package be.fedict.commons.eid.consumer.tlv;
 
-import org.apache.commons.codec.binary.Hex;
-
 /**
  * Convertor for the chip number field.
  * 
@@ -30,6 +28,10 @@ public class ChipNumberDataConvertor implements DataConvertor<String> {
 
 	@Override
 	public String convert(byte[] value) {
-		return new String(Hex.encodeHex(value)).toUpperCase();
+		StringBuilder result = new StringBuilder();
+		for (byte b : value) {
+			result.append(String.format("%02X", b));
+		}
+		return result.toString();
 	}
 }

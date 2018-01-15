@@ -28,10 +28,10 @@ import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -386,7 +386,7 @@ public class TlvParserTest {
 	public void testParseOldIdentityFile() throws Exception {
 		InputStream inputStream = TlvParserTest.class.getResourceAsStream("/old-eid.txt");
 		byte[] base64IdentityData = IOUtils.toByteArray(inputStream);
-		byte[] identityData = Base64.decodeBase64(base64IdentityData);
+		byte[] identityData = Base64.getDecoder().decode(base64IdentityData);
 
 		Identity identity = TlvParser.parse(identityData, Identity.class);
 
@@ -401,7 +401,7 @@ public class TlvParserTest {
 	public void testParseNewIdentityFile() throws Exception {
 		InputStream inputStream = TlvParserTest.class.getResourceAsStream("/new-eid.txt");
 		byte[] base64IdentityData = IOUtils.toByteArray(inputStream);
-		byte[] identityData = Base64.decodeBase64(base64IdentityData);
+		byte[] identityData = Base64.getDecoder().decode(base64IdentityData);
 
 		Identity identity = TlvParser.parse(identityData, Identity.class);
 
