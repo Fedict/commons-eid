@@ -137,7 +137,7 @@ public class DefaultBeIDCardsUI implements BeIDCardsUI {
 		} else {
 			Util.centerOnScreen(adviseFrame);
 		}
-
+		adviseFrame.setAlwaysOnTop(true);
 		adviseFrame.setVisible(true);
 	}
 

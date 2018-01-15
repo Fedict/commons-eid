@@ -275,6 +275,7 @@ public class DefaultBeIDCardUI implements BeIDCardUI {
 			Util.centerOnScreen(dialog);
 		}
 
+		dialog.setAlwaysOnTop(true);
 		dialog.setVisible(true); // setVisible will wait until some button or so has been pressed
 
 		if (dialogResult.result == DialogResult.Result.OK) {
@@ -349,6 +350,7 @@ public class DefaultBeIDCardUI implements BeIDCardUI {
 			Util.centerOnScreen(secureReaderTransactionFrame);
 		}
 
+		secureReaderTransactionFrame.setAlwaysOnTop(true);
 		secureReaderTransactionFrame.setVisible(true);
 	}
 
@@ -428,6 +430,7 @@ public class DefaultBeIDCardUI implements BeIDCardUI {
 			Util.centerOnScreen(pinPadFrame);
 		}
 
+		pinPadFrame.setAlwaysOnTop(true);
 		pinPadFrame.setVisible(true);
 	}
 

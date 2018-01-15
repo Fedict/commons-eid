@@ -156,6 +156,7 @@ public class BeIDSelector {
 		}
 
 		dialog.setResizable(false);
+		dialog.setAlwaysOnTop(true);
 		dialog.setVisible(true);
 
 		// dialog is modal so setVisible will block until dispose is called.
