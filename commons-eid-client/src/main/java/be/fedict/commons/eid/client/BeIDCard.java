@@ -1037,9 +1037,9 @@ public class BeIDCard implements AutoCloseable {
 		return new ResponseAPDU(transmitCCIDControl(getCCID().usesPPDU(), CCID.FEATURE.VERIFY_PIN_FINISH));
 	}
 
-	private boolean isWindows8() {
+	private boolean isWindows8Or10() {
 		String osName = System.getProperty("os.name");
-		return osName.contains("Windows 8");
+		return osName.contains("Windows 8") || osName.contains("Windows 10");
 	}
 
 	/*
@@ -1047,7 +1047,7 @@ public class BeIDCard implements AutoCloseable {
 	 */
 	private ResponseAPDU verifyPINViaUI(int retriesLeft, PINPurpose purpose) throws CardException,
 			UserCancelledException {
-		boolean windows8 = isWindows8();
+		boolean windows8 = isWindows8Or10();
 		if (windows8) {
 			endExclusive();
 		}
@@ -1099,7 +1099,7 @@ public class BeIDCard implements AutoCloseable {
 			logger.debug("PINs differ");
 		} else if (0x6401 == responseApdu.getSW()) {
 			logger.debug("canceled by user");
-			throw new SecurityException("canceled by user",new ResponseAPDUException(responseApdu));
+			throw new SecurityException("canceled by user", new ResponseAPDUException(responseApdu));
 		} else if (0x6400 == responseApdu.getSW()) {
 			logger.debug("PIN pad timeout");
 		}
