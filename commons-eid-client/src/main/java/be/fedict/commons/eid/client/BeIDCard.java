@@ -87,7 +87,7 @@ import java.util.Locale;
  * @author Frank Cornelis
  * @author Frank Marien
  */
-public class BeIDCard {
+public class BeIDCard implements AutoCloseable {
 
 	private static final String UI_MISSING_LOG_MESSAGE = "No BeIDCardUI set and can't load DefaultBeIDCardUI";
 	private static final String UI_DEFAULT_REQUIRES_HEAD = "No BeIDCardUI set and DefaultBeIDCardUI requires a graphical environment";
@@ -170,10 +170,8 @@ public class BeIDCard {
 	/**
 	 * close this BeIDCard, when you are done with it, to release any underlying
 	 * resources. All subsequent calls will fail.
-	 *
-	 * @return this BeIDCard instance, to allow method chaining
 	 */
-	public BeIDCard close() {
+	public void close() {
 		logger.debug("closing eID card");
 		setCardTerminal(null);
 
@@ -182,8 +180,6 @@ public class BeIDCard {
 		} catch (CardException e) {
 			logger.error("could not disconnect the card: " + e.getMessage());
 		}
-
-		return this;
 	}
 
 	/**

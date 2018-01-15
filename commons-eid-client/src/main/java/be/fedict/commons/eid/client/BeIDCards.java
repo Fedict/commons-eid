@@ -46,7 +46,7 @@ import java.util.*;
  *
  * @author Frank Marien
  */
-public class BeIDCards {
+public class BeIDCards implements AutoCloseable {
 	private static final String UI_MISSING_LOG_MESSAGE = "No BeIDCardsUI set and can't load DefaultBeIDCardsUI";
 	private static final String DEFAULT_UI_IMPLEMENTATION = "be.fedict.commons.eid.dialogs.DefaultBeIDCardsUI";
 
@@ -268,9 +268,8 @@ public class BeIDCards {
 	/**
 	 * Call close() if you no longer need this BeIDCards instance.
 	 */
-	public BeIDCards close() throws InterruptedException {
+	public void close() throws InterruptedException {
 		cardManager.stop();
-		return this;
 	}
 
 	/**

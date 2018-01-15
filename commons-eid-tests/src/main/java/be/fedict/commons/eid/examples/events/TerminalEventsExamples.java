@@ -12,77 +12,51 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, see 
+ * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
 
 package be.fedict.commons.eid.examples.events;
 
-import javax.smartcardio.CardTerminal;
 import be.fedict.commons.eid.client.CardAndTerminalManager;
 import be.fedict.commons.eid.client.event.CardTerminalEventsListener;
 
+import javax.smartcardio.CardTerminal;
+
 public class TerminalEventsExamples {
 
-	/*
-	 * get information about CardTerminals being attached and detached, while
-	 * doing something else:
-	 */
-	public TerminalEventsExamples cardterminals_basic_asynchronous()
-			throws InterruptedException {
-		// -------------------------------------------------------------------------------------------------------
-		// instantiate a CardAndTerminalManager with default settings (no
-		// logging, default timeout)
-		// -------------------------------------------------------------------------------------------------------
-		final CardAndTerminalManager cardAndTerminalManager = new CardAndTerminalManager();
-
-		// -------------------------------------------------------------------------------------------------------
-		// register a CardTerminalEventsListener
-		// -------------------------------------------------------------------------------------------------------
-		cardAndTerminalManager
-				.addCardTerminalListener(new CardTerminalEventsListener() {
-
-					@Override
-					public void terminalDetached(final CardTerminal cardTerminal) {
-						System.out.println("CardTerminal ["
-								+ cardTerminal.getName() + "] detached\n");
-					}
-
-					@Override
-					public void terminalAttached(final CardTerminal cardTerminal) {
-						System.out.println("CardTerminal ["
-								+ cardTerminal.getName() + "] attached\n");
-					}
-
-					@Override
-					public void terminalEventsInitialized() {
-						System.out
-								.println("From now on you'll see terminals being Attached/Detached");
-					}
-
-				});
-
-		System.out
-				.println("First, you'll see Attach events for CardTerminals that were already attached");
-
-		// -------------------------------------------------------------------------------------------------------
-		// start the CardAndTerminalManager instance running as a daemon thread.
-		// -------------------------------------------------------------------------------------------------------
-		cardAndTerminalManager.start();
-
-		// -------------------------------------------------------------------------------------------------------
-		// the main thread goes off and does other things (for this example,
-		// just loop and sleep)
-		// -------------------------------------------------------------------------------------------------------
-		for (;;) {
-			Thread.sleep(2000);
-		}
+	public static void main(String[] args) throws InterruptedException {
+		TerminalEventsExamples examples = new TerminalEventsExamples();
+		examples.cardTerminalsBasicAsynchronous();
 	}
 
-	// -------------------------------------------------------------------------------------------------------
+	public void cardTerminalsBasicAsynchronous() throws InterruptedException {
+		CardAndTerminalManager cardAndTerminalManager = new CardAndTerminalManager();
 
-	public static void main(final String[] args) throws InterruptedException {
-		final TerminalEventsExamples examples = new TerminalEventsExamples();
-		examples.cardterminals_basic_asynchronous();
+		cardAndTerminalManager.addCardTerminalListener(new CardTerminalEventsListener() {
+			@Override
+			public void terminalDetached(CardTerminal cardTerminal) {
+				System.out.println("CardTerminal [" + cardTerminal.getName() + "] detached\n");
+			}
+
+			@Override
+			public void terminalAttached(CardTerminal cardTerminal) {
+				System.out.println("CardTerminal [" + cardTerminal.getName() + "] attached\n");
+			}
+
+			@Override
+			public void terminalEventsInitialized() {
+				System.out.println("From now on you'll see terminals being Attached/Detached");
+			}
+		});
+
+		System.out.println("First, you'll see Attach events for CardTerminals that were already attached");
+
+		cardAndTerminalManager.start();
+
+		//noinspection InfiniteLoopStatement
+		for (; ; ) {
+			Thread.sleep(2000);
+		}
 	}
 }
