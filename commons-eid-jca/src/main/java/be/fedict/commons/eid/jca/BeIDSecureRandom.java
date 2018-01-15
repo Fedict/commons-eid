@@ -45,21 +45,19 @@ import be.fedict.commons.eid.client.CancelledException;
  */
 public class BeIDSecureRandom extends SecureRandomSpi {
 
-	private static final long serialVersionUID = 1L;
-
 	private static final Log LOG = LogFactory.getLog(BeIDSecureRandom.class);
 
 	private BeIDCard beIDCard;
 
 	@Override
-	protected void engineSetSeed(final byte[] seed) {
+	protected void engineSetSeed(byte[] seed) {
 		LOG.debug("engineSetSeed");
 	}
 
 	@Override
-	protected void engineNextBytes(final byte[] bytes) {
+	protected void engineNextBytes(byte[] bytes) {
 		LOG.debug("engineNextBytes: " + bytes.length + " bytes");
-		BeIDCard beIDCard = getBeIDCard();
+		BeIDCard beIDCard = getBeIDCard(false);
 		byte[] randomData;
 		try {
 			try {
@@ -68,20 +66,20 @@ public class BeIDSecureRandom extends SecureRandomSpi {
 				beIDCard = getBeIDCard(true);
 				randomData = beIDCard.getChallenge(bytes.length);
 			}
-		} catch (final CardException e) {
+		} catch (CardException e) {
 			throw new RuntimeException(e);
 		}
 		System.arraycopy(randomData, 0, bytes, 0, bytes.length);
 	}
 
 	@Override
-	protected byte[] engineGenerateSeed(final int numBytes) {
+	protected byte[] engineGenerateSeed(int numBytes) {
 		LOG.debug("engineGenerateSeed: " + numBytes + " bytes");
-		final BeIDCard beIDCard = getBeIDCard();
+		BeIDCard beIDCard = getBeIDCard(false);
 		byte[] randomData;
 		try {
 			randomData = beIDCard.getChallenge(numBytes);
-		} catch (final CardException e) {
+		} catch (CardException e) {
 			throw new RuntimeException(e);
 		}
 		return randomData;
@@ -89,21 +87,19 @@ public class BeIDSecureRandom extends SecureRandomSpi {
 
 	private BeIDCard getBeIDCard(boolean autoRecover) {
 		if (autoRecover) {
-			this.beIDCard = null;
+			beIDCard = null;
 		}
-		return getBeIDCard();
-	}
+		if (null != beIDCard) {
+			return beIDCard;
+		}
 
-	private BeIDCard getBeIDCard() {
-		if (null != this.beIDCard) {
-			return this.beIDCard;
-		}
-		final BeIDCards beIDCards = new BeIDCards();
+		BeIDCards beIDCards = new BeIDCards();
 		try {
-			this.beIDCard = beIDCards.getOneBeIDCard();
-		} catch (final CancelledException e) {
+			beIDCard = beIDCards.getOneBeIDCard();
+		} catch (CancelledException e) {
 			throw new RuntimeException(e);
 		}
-		return this.beIDCard;
+
+		return beIDCard;
 	}
 }

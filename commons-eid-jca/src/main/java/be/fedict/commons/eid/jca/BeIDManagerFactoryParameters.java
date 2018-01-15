@@ -48,24 +48,14 @@ import javax.net.ssl.ManagerFactoryParameters;
 public class BeIDManagerFactoryParameters implements ManagerFactoryParameters {
 
 	private Component parentComponent;
-
 	private Locale locale;
-
 	private boolean autoRecovery;
-
 	private boolean cardReaderStickiness;
-
-	/**
-	 * Default constructor.
-	 */
-	public BeIDManagerFactoryParameters() {
-		super();
-	}
 
 	/**
 	 * Sets the parent component used to position the default eID dialogs.
 	 */
-	public void setParentComponent(final Component parentComponent) {
+	public void setParentComponent(Component parentComponent) {
 		this.parentComponent = parentComponent;
 	}
 
@@ -76,12 +66,12 @@ public class BeIDManagerFactoryParameters implements ManagerFactoryParameters {
 	/**
 	 * Sets the locale used for the default eID dialogs.
 	 */
-	public void setLocale(final Locale locale) {
+	public void setLocale(Locale locale) {
 		this.locale = locale;
 	}
 
 	public Locale getLocale() {
-		return this.locale;
+		return locale;
 	}
 
 	/**
@@ -94,11 +84,11 @@ public class BeIDManagerFactoryParameters implements ManagerFactoryParameters {
 	}
 
 	public boolean getAutoRecovery() {
-		return this.autoRecovery;
+		return autoRecovery;
 	}
 
 	public boolean getCardReaderStickiness() {
-		return this.cardReaderStickiness;
+		return cardReaderStickiness;
 	}
 
 	/**

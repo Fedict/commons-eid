@@ -40,26 +40,18 @@ import be.fedict.commons.eid.client.impl.BeIDDigest;
  */
 public class BeIDPrivateKey implements PrivateKey {
 
-	private static final long serialVersionUID = 1L;
-
 	private static final Log LOG = LogFactory.getLog(BeIDPrivateKey.class);
 
 	private final FileType certificateFileType;
-
 	private BeIDCard beIDCard;
-
 	private final boolean logoff;
-
 	private final boolean autoRecovery;
-
 	private final BeIDKeyStore beIDKeyStore;
-
 	private final static Map<String, BeIDDigest> beIDDigests;
-
 	private X509Certificate authenticationCertificate;
 
 	static {
-		beIDDigests = new HashMap<String, BeIDDigest>();
+		beIDDigests = new HashMap<>();
 		beIDDigests.put("SHA-1", BeIDDigest.SHA_1);
 		beIDDigests.put("SHA-224", BeIDDigest.SHA_224);
 		beIDDigests.put("SHA-256", BeIDDigest.SHA_256);
@@ -76,9 +68,7 @@ public class BeIDPrivateKey implements PrivateKey {
 	/**
 	 * Main constructor.
 	 */
-	public BeIDPrivateKey(final FileType certificateFileType,
-			final BeIDCard beIDCard, final boolean logoff,
-			boolean autoRecovery, BeIDKeyStore beIDKeyStore) {
+	public BeIDPrivateKey(FileType certificateFileType, BeIDCard beIDCard, boolean logoff, boolean autoRecovery, BeIDKeyStore beIDKeyStore) {
 		LOG.debug("constructor: " + certificateFileType);
 		this.certificateFileType = certificateFileType;
 		this.beIDCard = beIDCard;
@@ -102,55 +92,50 @@ public class BeIDPrivateKey implements PrivateKey {
 		return null;
 	}
 
-	byte[] sign(final byte[] digestValue, final String digestAlgo)
-			throws SignatureException {
-		LOG.debug("auto recovery: " + this.autoRecovery);
-		final BeIDDigest beIDDigest = beIDDigests.get(digestAlgo);
+	byte[] sign(byte[] digestValue, String digestAlgo) throws SignatureException {
+		LOG.debug("auto recovery: " + autoRecovery);
+
+		BeIDDigest beIDDigest = beIDDigests.get(digestAlgo);
 		if (null == beIDDigest) {
 			throw new SignatureException("unsupported algo: " + digestAlgo);
 		}
-		byte[] signatureValue;
+
 		try {
-			if (this.autoRecovery) {
+			if (autoRecovery) {
 				/*
 				 * We keep a copy of the authentication certificate to make sure
 				 * that the automatic recovery only operates against the same
 				 * eID card.
 				 */
-				if (null == this.authenticationCertificate) {
+				if (authenticationCertificate == null) {
 					try {
-						this.authenticationCertificate = this.beIDCard
-								.getAuthenticationCertificate();
+						authenticationCertificate = beIDCard.getAuthenticationCertificate();
 					} catch (Exception e) {
 						// don't fail here
 					}
 				}
 			}
 			try {
-				signatureValue = this.beIDCard.sign(digestValue, beIDDigest,
-						this.certificateFileType, false);
+				return beIDCard.sign(digestValue, beIDDigest, certificateFileType, false);
 			} catch (Exception e) {
-				if (this.autoRecovery) {
+				if (autoRecovery) {
 					LOG.debug("trying to recover...");
-					this.beIDCard = this.beIDKeyStore.getBeIDCard(true);
-					if (null != this.authenticationCertificate) {
-						X509Certificate newAuthenticationCertificate = this.beIDCard
-								.getAuthenticationCertificate();
-						if (false == this.authenticationCertificate
-								.equals(newAuthenticationCertificate)) {
+					beIDCard = beIDKeyStore.getBeIDCard(true);
+					if (null != authenticationCertificate) {
+						X509Certificate newAuthenticationCertificate = beIDCard.getAuthenticationCertificate();
+						if (!authenticationCertificate.equals(newAuthenticationCertificate)) {
 							throw new SignatureException("different eID card");
 						}
 					}
 				}
-				signatureValue = this.beIDCard.sign(digestValue, beIDDigest,
-						this.certificateFileType, false);
+				return beIDCard.sign(digestValue, beIDDigest, certificateFileType, false);
+			} finally {
+				if (logoff) {
+					beIDCard.logoff();
+				}
 			}
-			if (this.logoff) {
-				this.beIDCard.logoff();
-			}
-		} catch (final Exception ex) {
+		} catch (Exception ex) {
 			throw new SignatureException(ex);
 		}
-		return signatureValue;
 	}
 }

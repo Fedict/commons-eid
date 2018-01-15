@@ -50,17 +50,11 @@ import be.fedict.commons.eid.client.spi.Logger;
 public class BeIDKeyStoreParameter implements KeyStore.LoadStoreParameter {
 
 	private BeIDCard beIDCard;
-
 	private boolean logoff;
-
 	private Component parentComponent;
-
 	private Locale locale;
-
 	private boolean autoRecovery;
-
 	private boolean cardReaderStickiness;
-
 	private Logger logger;
 
 	@Override
@@ -72,50 +66,50 @@ public class BeIDKeyStoreParameter implements KeyStore.LoadStoreParameter {
 	 * Sets the {@link BeIDCard} to be used by the corresponding
 	 * {@link KeyStore}.
 	 */
-	public void setBeIDCard(final BeIDCard beIDCard) {
+	public void setBeIDCard(BeIDCard beIDCard) {
 		this.beIDCard = beIDCard;
 	}
 
 	public BeIDCard getBeIDCard() {
-		return this.beIDCard;
+		return beIDCard;
 	}
 
 	/**
 	 * Set to <code>true</code> if you want an eID logoff to be issued after
 	 * each PIN entry.
 	 */
-	public void setLogoff(final boolean logoff) {
+	public void setLogoff(boolean logoff) {
 		this.logoff = logoff;
 	}
 
 	public boolean getLogoff() {
-		return this.logoff;
+		return logoff;
 	}
 
 	/**
 	 * Sets the parent component used to position the default eID dialogs.
 	 */
-	public void setParentComponent(final Component parentComponent) {
+	public void setParentComponent(Component parentComponent) {
 		this.parentComponent = parentComponent;
 	}
 
 	public Component getParentComponent() {
-		return this.parentComponent;
+		return parentComponent;
 	}
 
 	/**
 	 * Sets the locale used for the default eID dialogs.
 	 */
-	public void setLocale(final Locale locale) {
+	public void setLocale(Locale locale) {
 		this.locale = locale;
 	}
 
 	public Locale getLocale() {
-		return this.locale;
+		return locale;
 	}
 
 	public boolean getAutoRecovery() {
-		return this.autoRecovery;
+		return autoRecovery;
 	}
 
 	/**
@@ -128,7 +122,7 @@ public class BeIDKeyStoreParameter implements KeyStore.LoadStoreParameter {
 	}
 
 	public boolean getCardReaderStickiness() {
-		return this.cardReaderStickiness;
+		return cardReaderStickiness;
 	}
 
 	/**
@@ -148,6 +142,6 @@ public class BeIDKeyStoreParameter implements KeyStore.LoadStoreParameter {
 	}
 
 	public Logger getLogger() {
-		return this.logger;
+		return logger;
 	}
 }

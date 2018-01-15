@@ -48,14 +48,11 @@ public class BeIDX509KeyManager extends X509ExtendedKeyManager {
 
 	private KeyStore keyStore;
 
-	public BeIDX509KeyManager() throws KeyStoreException,
-			NoSuchAlgorithmException, CertificateException, IOException {
+	public BeIDX509KeyManager() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
 		this(null);
 	}
 
-	public BeIDX509KeyManager(final BeIDManagerFactoryParameters beIDSpec)
-			throws KeyStoreException, NoSuchAlgorithmException,
-			CertificateException, IOException {
+	public BeIDX509KeyManager(BeIDManagerFactoryParameters beIDSpec) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
 		LOG.debug("constructor");
 		this.keyStore = KeyStore.getInstance("BeID");
 		BeIDKeyStoreParameter beIDKeyStoreParameter;
@@ -64,18 +61,15 @@ public class BeIDX509KeyManager extends X509ExtendedKeyManager {
 		} else {
 			beIDKeyStoreParameter = new BeIDKeyStoreParameter();
 			beIDKeyStoreParameter.setLocale(beIDSpec.getLocale());
-			beIDKeyStoreParameter.setParentComponent(beIDSpec
-					.getParentComponent());
+			beIDKeyStoreParameter.setParentComponent(beIDSpec.getParentComponent());
 			beIDKeyStoreParameter.setAutoRecovery(beIDSpec.getAutoRecovery());
-			beIDKeyStoreParameter.setCardReaderStickiness(beIDSpec
-					.getCardReaderStickiness());
+			beIDKeyStoreParameter.setCardReaderStickiness(beIDSpec.getCardReaderStickiness());
 		}
 		this.keyStore.load(beIDKeyStoreParameter);
 	}
 
 	@Override
-	public String chooseClientAlias(final String[] keyTypes,
-			final Principal[] issuers, final Socket socket) {
+	public String chooseClientAlias(String[] keyTypes, Principal[] issuers, Socket socket) {
 		LOG.debug("chooseClientAlias");
 		for (String keyType : keyTypes) {
 			LOG.debug("key type: " + keyType);
@@ -87,25 +81,23 @@ public class BeIDX509KeyManager extends X509ExtendedKeyManager {
 	}
 
 	@Override
-	public String chooseServerAlias(final String keyType,
-			final Principal[] issuers, final Socket socket) {
+	public String chooseServerAlias(String keyType, Principal[] issuers, Socket socket) {
 		LOG.debug("chooseServerAlias");
 		return null;
 	}
 
 	@Override
-	public X509Certificate[] getCertificateChain(final String alias) {
+	public X509Certificate[] getCertificateChain(String alias) {
 		LOG.debug("getCertificateChain: " + alias);
 		if ("beid".equals(alias)) {
 			Certificate[] certificateChain;
 			try {
-				certificateChain = this.keyStore
-						.getCertificateChain("Authentication");
-			} catch (final KeyStoreException e) {
+				certificateChain = keyStore.getCertificateChain("Authentication");
+			} catch (KeyStoreException e) {
 				LOG.error("BeID keystore error: " + e.getMessage(), e);
 				return null;
 			}
-			final X509Certificate[] x509CertificateChain = new X509Certificate[certificateChain.length];
+			X509Certificate[] x509CertificateChain = new X509Certificate[certificateChain.length];
 			for (int idx = 0; idx < certificateChain.length; idx++) {
 				x509CertificateChain[idx] = (X509Certificate) certificateChain[idx];
 			}
@@ -115,21 +107,19 @@ public class BeIDX509KeyManager extends X509ExtendedKeyManager {
 	}
 
 	@Override
-	public String[] getClientAliases(final String keyType,
-			final Principal[] issuers) {
+	public String[] getClientAliases(String keyType, Principal[] issuers) {
 		LOG.debug("getClientAliases");
 		return null;
 	}
 
 	@Override
-	public PrivateKey getPrivateKey(final String alias) {
+	public PrivateKey getPrivateKey(String alias) {
 		LOG.debug("getPrivateKey: " + alias);
 		if ("beid".equals(alias)) {
 			PrivateKey privateKey;
 			try {
-				privateKey = (PrivateKey) this.keyStore.getKey(
-						"Authentication", null);
-			} catch (final Exception e) {
+				privateKey = (PrivateKey) keyStore.getKey("Authentication", null);
+			} catch (Exception e) {
 				LOG.error("getKey error: " + e.getMessage(), e);
 				return null;
 			}
@@ -139,22 +129,19 @@ public class BeIDX509KeyManager extends X509ExtendedKeyManager {
 	}
 
 	@Override
-	public String[] getServerAliases(final String keyType,
-			final Principal[] issuers) {
+	public String[] getServerAliases(String keyType, Principal[] issuers) {
 		LOG.debug("getServerAliases");
 		return null;
 	}
 
 	@Override
-	public String chooseEngineClientAlias(final String[] keyType,
-			final Principal[] issuers, final SSLEngine engine) {
+	public String chooseEngineClientAlias(String[] keyType, Principal[] issuers, SSLEngine engine) {
 		LOG.debug("chooseEngineClientAlias");
 		return super.chooseEngineClientAlias(keyType, issuers, engine);
 	}
 
 	@Override
-	public String chooseEngineServerAlias(final String keyType,
-			final Principal[] issuers, final SSLEngine engine) {
+	public String chooseEngineServerAlias(String keyType, Principal[] issuers, SSLEngine engine) {
 		LOG.debug("chooseEngineServerAlias");
 		return super.chooseEngineServerAlias(keyType, issuers, engine);
 	}

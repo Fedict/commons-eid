@@ -12,32 +12,30 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, see 
+ * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
 
 package be.fedict.commons.eid.jca;
 
-import java.security.InvalidAlgorithmParameterException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.KeyManagerFactorySpi;
 import javax.net.ssl.ManagerFactoryParameters;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.KeyStore;
 
 /**
  * eID specific {@link KeyManagerFactory}. Can be used for mutual TLS
  * authentication.
  * <br>
  * Usage:
- * 
+ * <p>
  * <pre>
  * import javax.net.ssl.KeyManagerFactory;
  * import javax.net.ssl.SSLContext;
@@ -46,49 +44,44 @@ import org.apache.commons.logging.LogFactory;
  * SSLContext sslContext = SSLContext.getInstance(&quot;TLS&quot;);
  * sslContext.init(keyManagerFactory.getKeyManagers(), ..., ...);
  * </pre>
- * 
+ *
+ * @author Frank Cornelis
  * @see BeIDX509KeyManager
  * @see BeIDManagerFactoryParameters
- * @author Frank Cornelis
- * 
  */
 public class BeIDKeyManagerFactory extends KeyManagerFactorySpi {
 
-	private static final Log LOG = LogFactory
-			.getLog(BeIDKeyManagerFactory.class);
+	private static final Log LOG = LogFactory.getLog(BeIDKeyManagerFactory.class);
 
 	private BeIDManagerFactoryParameters beIDSpec;
+
+	@Override
+	protected void engineInit(ManagerFactoryParameters spec)
+			throws InvalidAlgorithmParameterException {
+		LOG.debug("engineInit(spec)");
+		if (null == spec) {
+			return;
+		}
+		if (!(spec instanceof BeIDManagerFactoryParameters)) {
+			throw new InvalidAlgorithmParameterException();
+		}
+		beIDSpec = (BeIDManagerFactoryParameters) spec;
+	}
+
+	@Override
+	protected void engineInit(KeyStore keyStore, char[] password) {
+		LOG.debug("engineInit(KeyStore,password)");
+	}
 
 	@Override
 	protected KeyManager[] engineGetKeyManagers() {
 		LOG.debug("engineGetKeyManagers");
 		KeyManager beidKeyManager;
 		try {
-			beidKeyManager = new BeIDX509KeyManager(this.beIDSpec);
-		} catch (final Exception e) {
+			beidKeyManager = new BeIDX509KeyManager(beIDSpec);
+		} catch (GeneralSecurityException | IOException e) {
 			throw new IllegalStateException(e);
 		}
-		final KeyManager[] keyManagers = new KeyManager[]{beidKeyManager};
-		return keyManagers;
-	}
-
-	@Override
-	protected void engineInit(final ManagerFactoryParameters spec)
-			throws InvalidAlgorithmParameterException {
-		LOG.debug("engineInit(spec)");
-		if (null == spec) {
-			return;
-		}
-		if (false == spec instanceof BeIDManagerFactoryParameters) {
-			throw new InvalidAlgorithmParameterException();
-		}
-		this.beIDSpec = (BeIDManagerFactoryParameters) spec;
-	}
-
-	@Override
-	protected void engineInit(final KeyStore keyStore, final char[] password)
-			throws KeyStoreException, NoSuchAlgorithmException,
-			UnrecoverableKeyException {
-		LOG.debug("engineInit(KeyStore,password)");
+		return new KeyManager[]{beidKeyManager};
 	}
 }

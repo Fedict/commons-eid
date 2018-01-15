@@ -40,14 +40,11 @@ import javax.net.ssl.SSLSocketFactory;
 public class BeIDSocketFactory {
 	private static SSLSocketFactory socketFactorSingleton;
 
-	public static SSLSocketFactory getSSLSocketFactory()
-			throws NoSuchAlgorithmException, KeyManagementException {
+	public static SSLSocketFactory getSSLSocketFactory() throws NoSuchAlgorithmException, KeyManagementException {
 		if (BeIDSocketFactory.socketFactorSingleton == null) {
-			final SSLContext sslContext = SSLContext.getInstance("TLS");
-			final KeyManagerFactory keyManagerFactory = KeyManagerFactory
-					.getInstance("BeID");
-			sslContext.init(keyManagerFactory.getKeyManagers(), null,
-					SecureRandom.getInstance("BeID"));
+			SSLContext sslContext = SSLContext.getInstance("TLS");
+			KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("BeID");
+			sslContext.init(keyManagerFactory.getKeyManagers(), null, SecureRandom.getInstance("BeID"));
 			socketFactorSingleton = sslContext.getSocketFactory();
 		}
 

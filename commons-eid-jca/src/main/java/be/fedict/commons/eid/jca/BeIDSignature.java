@@ -59,22 +59,17 @@ import org.apache.commons.logging.LogFactory;
  */
 public class BeIDSignature extends SignatureSpi {
 
-	private static final Log LOG = LogFactory.getLog(BeIDSignature.class);
-
+	private static Log LOG = LogFactory.getLog(BeIDSignature.class);
 	private final static Map<String, String> digestAlgos;
 
 	private final MessageDigest messageDigest;
-
 	private BeIDPrivateKey privateKey;
-
 	private Signature verifySignature;
-
 	private final String signatureAlgorithm;
-
 	private final ByteArrayOutputStream precomputedDigestOutputStream;
 
 	static {
-		digestAlgos = new HashMap<String, String>();
+		digestAlgos = new HashMap<>();
 		digestAlgos.put("SHA1withRSA", "SHA-1");
 		digestAlgos.put("SHA224withRSA", "SHA-224");
 		digestAlgos.put("SHA256withRSA", "SHA-256");
@@ -88,16 +83,17 @@ public class BeIDSignature extends SignatureSpi {
 		digestAlgos.put("SHA256withRSAandMGF1", "SHA-256");
 	}
 
-	BeIDSignature(final String signatureAlgorithm)
-			throws NoSuchAlgorithmException {
+	BeIDSignature(String signatureAlgorithm) throws NoSuchAlgorithmException {
 		LOG.debug("constructor: " + signatureAlgorithm);
+
 		this.signatureAlgorithm = signatureAlgorithm;
-		if (false == digestAlgos.containsKey(signatureAlgorithm)) {
+		if (!digestAlgos.containsKey(signatureAlgorithm)) {
 			LOG.error("no such algo: " + signatureAlgorithm);
 			throw new NoSuchAlgorithmException(signatureAlgorithm);
 		}
-		final String digestAlgo = digestAlgos.get(signatureAlgorithm);
-		if (null != digestAlgo) {
+
+		String digestAlgo = digestAlgos.get(signatureAlgorithm);
+		if (digestAlgo != null) {
 			this.messageDigest = MessageDigest.getInstance(digestAlgo);
 			this.precomputedDigestOutputStream = null;
 		} else {
@@ -108,97 +104,92 @@ public class BeIDSignature extends SignatureSpi {
 	}
 
 	@Override
-	protected void engineInitVerify(final PublicKey publicKey)
-			throws InvalidKeyException {
+	protected void engineInitVerify(PublicKey publicKey) throws InvalidKeyException {
 		LOG.debug("engineInitVerify");
-		if (null == this.verifySignature) {
+		if (null == verifySignature) {
 			try {
-				this.verifySignature = Signature
-						.getInstance(this.signatureAlgorithm);
-			} catch (final NoSuchAlgorithmException nsaex) {
-				throw new InvalidKeyException("no such algo: "
-						+ nsaex.getMessage(), nsaex);
+				verifySignature = Signature.getInstance(signatureAlgorithm);
+			} catch (NoSuchAlgorithmException nsaex) {
+				throw new InvalidKeyException("no such algo: " + nsaex.getMessage(), nsaex);
 			}
 		}
-		this.verifySignature.initVerify(publicKey);
+		verifySignature.initVerify(publicKey);
 	}
 
 	@Override
-	protected void engineInitSign(final PrivateKey privateKey)
+	protected void engineInitSign(PrivateKey privateKey)
 			throws InvalidKeyException {
 		LOG.debug("engineInitSign");
-		if (false == privateKey instanceof BeIDPrivateKey) {
+
+		if (!(privateKey instanceof BeIDPrivateKey)) {
 			throw new InvalidKeyException();
 		}
 		this.privateKey = (BeIDPrivateKey) privateKey;
-		if (null != this.messageDigest) {
-			this.messageDigest.reset();
+
+		if (null != messageDigest) {
+			messageDigest.reset();
 		}
 	}
 
 	@Override
-	protected void engineUpdate(final byte b) throws SignatureException {
-		this.messageDigest.update(b);
-		if (null != this.verifySignature) {
-			this.verifySignature.update(b);
+	protected void engineUpdate(byte b) throws SignatureException {
+		messageDigest.update(b);
+		if (null != verifySignature) {
+			verifySignature.update(b);
 		}
 	}
 
 	@Override
-	protected void engineUpdate(final byte[] b, final int off, final int len)
-			throws SignatureException {
-		if (null != this.messageDigest) {
-			this.messageDigest.update(b, off, len);
+	protected void engineUpdate(byte[] b, int off, int len) throws SignatureException {
+		if (null != messageDigest) {
+			messageDigest.update(b, off, len);
 		}
-		if (null != this.precomputedDigestOutputStream) {
-			this.precomputedDigestOutputStream.write(b, off, len);
+		if (null != precomputedDigestOutputStream) {
+			precomputedDigestOutputStream.write(b, off, len);
 		}
-		if (null != this.verifySignature) {
-			this.verifySignature.update(b, off, len);
+		if (null != verifySignature) {
+			verifySignature.update(b, off, len);
 		}
 	}
 
 	@Override
 	protected byte[] engineSign() throws SignatureException {
 		LOG.debug("engineSign");
-		final byte[] digestValue;
+		byte[] digestValue;
 		String digestAlgo;
-		if (null != this.messageDigest) {
-			digestValue = this.messageDigest.digest();
-			digestAlgo = this.messageDigest.getAlgorithm();
-			if (this.signatureAlgorithm.endsWith("andMGF1")) {
+		if (null != messageDigest) {
+			digestValue = messageDigest.digest();
+			digestAlgo = messageDigest.getAlgorithm();
+			if (signatureAlgorithm.endsWith("andMGF1")) {
 				digestAlgo += "-PSS";
 			}
-		} else if (null != this.precomputedDigestOutputStream) {
-			digestValue = this.precomputedDigestOutputStream.toByteArray();
+		} else if (null != precomputedDigestOutputStream) {
+			digestValue = precomputedDigestOutputStream.toByteArray();
 			digestAlgo = "NONE";
 		} else {
 			throw new SignatureException();
 		}
-		return this.privateKey.sign(digestValue, digestAlgo);
+		return privateKey.sign(digestValue, digestAlgo);
 	}
 
 	@Override
-	protected boolean engineVerify(final byte[] sigBytes)
-			throws SignatureException {
+	protected boolean engineVerify(byte[] sigBytes) throws SignatureException {
 		LOG.debug("engineVerify");
-		if (null == this.verifySignature) {
+		if (null == verifySignature) {
 			throw new SignatureException("initVerify required");
 		}
-		final boolean result = this.verifySignature.verify(sigBytes);
-		return result;
+
+		return verifySignature.verify(sigBytes);
 	}
 
 	@Override
 	@Deprecated
-	protected void engineSetParameter(final String param, final Object value)
-			throws InvalidParameterException {
+	protected void engineSetParameter(String param, Object value) throws InvalidParameterException {
 	}
 
 	@Override
 	@Deprecated
-	protected Object engineGetParameter(final String param)
-			throws InvalidParameterException {
+	protected Object engineGetParameter(String param) throws InvalidParameterException {
 		return null;
 	}
 }
