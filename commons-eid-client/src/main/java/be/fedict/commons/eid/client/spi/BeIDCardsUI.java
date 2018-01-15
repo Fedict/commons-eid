@@ -58,7 +58,7 @@ public interface BeIDCardsUI {
 	 * The user needs to insert a BeID Card. There are card terminals, but none
 	 * currently holds a BeID card.
 	 */
-	void adviseBeIDCardRequired() throws CancelledException;
+	void adviseBeIDCardRequired();
 
 	/**
 	 * The user needs to remove a BeID Card for security reasons.

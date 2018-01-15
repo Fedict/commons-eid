@@ -23,7 +23,6 @@ import java.util.Set;
 import javax.smartcardio.CardException;
 import be.fedict.commons.eid.client.BeIDCard;
 import be.fedict.commons.eid.client.BeIDCards;
-import be.fedict.commons.eid.client.BeIDCardsException;
 import be.fedict.commons.eid.client.CancelledException;
 import be.fedict.commons.eid.client.FileType;
 import be.fedict.commons.eid.consumer.Identity;

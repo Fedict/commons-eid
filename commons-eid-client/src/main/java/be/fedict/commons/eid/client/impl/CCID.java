@@ -308,7 +308,7 @@ public class CCID {
 		 * bit 2: 0 = left justify data
 		 * bit 1-0: 1 = BCD
 		 */
-		verifyCommand.write(0x80 | 0x08 | 0x00 | 0x01);
+		verifyCommand.write(0b1000_1001);
 
 		/*
 		 * bmPINBlockString
@@ -386,7 +386,7 @@ public class CCID {
 		 * bit 2: 0 = left justify data
 		 * bit 1-0: 1 = BCD
 		 */
-		modifyCommand.write(0x80 | 0x08 | 0x00 | 0x01);
+		modifyCommand.write(0b1000_1001);
 
 		/*
 		 * bmPINBlockString

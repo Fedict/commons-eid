@@ -1095,13 +1095,16 @@ public class BeIDCard implements AutoCloseable {
 		}
 
 		ResponseAPDU responseApdu = new ResponseAPDU(result);
-		if (0x6402 == responseApdu.getSW()) {
-			logger.debug("PINs differ");
-		} else if (0x6401 == responseApdu.getSW()) {
-			logger.debug("canceled by user");
-			throw new SecurityException("canceled by user", new ResponseAPDUException(responseApdu));
-		} else if (0x6400 == responseApdu.getSW()) {
-			logger.debug("PIN pad timeout");
+		switch (responseApdu.getSW()) {
+			case 0x6402:
+				logger.debug("PINs differ");
+				break;
+			case 0x6401:
+				logger.debug("canceled by user");
+				throw new SecurityException("canceled by user", new ResponseAPDUException(responseApdu));
+			case 0x6400:
+				logger.debug("PIN pad timeout");
+				break;
 		}
 
 		return responseApdu;

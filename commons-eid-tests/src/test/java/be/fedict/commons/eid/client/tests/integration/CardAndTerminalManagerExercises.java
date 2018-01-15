@@ -21,7 +21,6 @@ package be.fedict.commons.eid.client.tests.integration;
 import be.fedict.commons.eid.client.CardAndTerminalManager;
 import be.fedict.commons.eid.client.event.CardEventsListener;
 import be.fedict.commons.eid.client.event.CardTerminalEventsListener;
-import jdk.nashorn.internal.runtime.arrays.IntElements;
 import org.junit.Test;
 
 import javax.smartcardio.Card;

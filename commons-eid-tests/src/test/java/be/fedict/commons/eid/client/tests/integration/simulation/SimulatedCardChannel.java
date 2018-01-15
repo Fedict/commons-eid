@@ -22,7 +22,7 @@ import javax.smartcardio.*;
 import java.nio.ByteBuffer;
 
 public class SimulatedCardChannel extends CardChannel {
-	private SimulatedCard card;
+	private final SimulatedCard card;
 
 	public SimulatedCardChannel(SimulatedCard card) {
 		this.card = card;

@@ -50,7 +50,6 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 import java.net.Socket;
 import java.security.*;
-import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -127,9 +126,7 @@ public class SSLTest {
 
 	private static class TestRunnable implements Runnable {
 
-		private static Log LOG = LogFactory.getLog(TestRunnable.class);
-
-		private int serverPort;
+		private final int serverPort;
 
 		public TestRunnable(int serverPort) {
 			this.serverPort = serverPort;
@@ -218,8 +215,8 @@ public class SSLTest {
 	}
 
 	private static class ServerTestX509KeyManager implements X509KeyManager {
-		private PrivateKey serverPrivateKey;
-		private X509Certificate serverCertificate;
+		private final PrivateKey serverPrivateKey;
+		private final X509Certificate serverCertificate;
 
 		public ServerTestX509KeyManager(PrivateKey serverPrivateKey, X509Certificate serverCertificate) {
 			this.serverPrivateKey = serverPrivateKey;

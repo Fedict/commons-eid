@@ -29,8 +29,6 @@ import java.io.Serializable;
  * @author Frank Marien
  */
 public class CardData implements Serializable {
-	private static final long serialVersionUID = 1L;
-
 	// pkcs1 support masks
 	private static final int RSASSA_PKCS1_15_MASK = 1;
 	private static final int RSASSA_PSS_MASK = 2;

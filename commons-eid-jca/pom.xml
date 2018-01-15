@@ -19,10 +19,6 @@
 		</dependency>
 		<dependency>
 			<groupId>be.fedict.commons-eid</groupId>
-			<artifactId>commons-eid-consumer</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>be.fedict.commons-eid</groupId>
 			<artifactId>commons-eid-dialogs</artifactId>
 		</dependency>
 

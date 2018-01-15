@@ -34,10 +34,10 @@ import javax.swing.UIManager;
 public class Messages {
 
 	public static final String RESOURCE_BUNDLE_NAME = "be.fedict.commons.eid.dialogs.Messages";
-	private static Map<Locale, Messages> instances;
+	private static final Map<Locale, Messages> instances;
 
 	static {
-		instances = new HashMap<Locale, Messages>();
+		instances = new HashMap<>();
 	}
 
 	private ResourceBundle resourceBundle;
@@ -49,35 +49,64 @@ public class Messages {
 	 * @author Frank Cornelis
 	 * 
 	 */
-	public static enum MESSAGE_ID {
-		LOADING("loading"), SECURITY_ERROR("securityError"), CARD_ERROR(
-				"cardError"), GENERIC_ERROR("genericError"), DETECTING_CARD(
-				"detectingCard"), INSERT_CARD_QUESTION("insertCardQuestion"), READING_IDENTITY(
-				"readingIdentity"), TRANSMITTING_IDENTITY(
-				"transmittingIdentity"), DONE("done"), PRIVACY_QUESTION(
-				"privacyQuestion"), AUTHENTICATING("authenticating"), REMOVE_CARD(
-				"removeCard"), SIGNING("signing"), SELECT_FILES("selectFiles"), DIGESTING_FILES(
-				"digestingFiles"), COPY_ALL("copyAll"), MAIL("mail"), NO_MIDDLEWARE_ERROR(
-				"noMiddlewareError"), PIN_BLOCKED("pinBlocked"), PIN_CHANGED(
-				"pinChanged"), PIN_UNBLOCKED("pinUnblocked"), RETRIES_LEFT(
-				"retriesLeft"), PIN_INCORRECT("pinIncorrect"), CONNECT_READER(
-				"connectReader"), PIN_PAD("pinPad"), CURRENT_PIN("currentPin"), NEW_PIN(
-				"newPin"), OK("ok"), CANCEL("cancel"), PUK_PAD("pukPad"), PIN_PAD_CHANGE(
-				"pinPadChange"), KIOSK_MODE("kioskMode"), ENTER_PIN("enterPin"), LABEL_PIN(
-				"labelPin"), PIN_CHANGE("pinChange"), PIN_UNBLOCK("pinUnblock"), PIN_PAD_MODIFY_OLD(
-				"pinPadModifyOld"), PIN_PAD_MODIFY_NEW("pinPadModifyNew"), PIN_PAD_MODIFY_NEW_AGAIN(
-				"pinPadModifyNewAgain"), DIAGNOSTIC_MODE("diagnosticMode"), CERTIFICATE_EXPIRED_ERROR(
-				"certificateExpiredError"), CERTIFICATE_REVOKED_ERROR(
-				"certificateRevokedError"), IDENTITY_INFO("identityInfo"), IDENTITY_IDENTITY(
-				"identityIdentity"), IDENTITY_ADDRESS("identityAddress"), IDENTITY_PHOTO(
-				"identityPhoto"), DETAILS_BUTTON("detailsButtonText"), CANCEL_BUTTON(
-				"cancelButtonText"), NO_BUTTON("noButtonText"), OK_BUTTON(
-				"okButtonText"), YES_BUTTON("yesButtonText"), CERTIFICATE_NOT_TRUSTED(
-				"certificateNotTrusted"), PIN_REASON("pinReason");
+	public enum MESSAGE_ID {
+		LOADING("loading"),
+		SECURITY_ERROR("securityError"),
+		CARD_ERROR("cardError"),
+		GENERIC_ERROR("genericError"),
+		DETECTING_CARD("detectingCard"),
+		INSERT_CARD_QUESTION("insertCardQuestion"),
+		READING_IDENTITY("readingIdentity"),
+		TRANSMITTING_IDENTITY("transmittingIdentity"),
+		DONE("done"),
+		PRIVACY_QUESTION("privacyQuestion"),
+		AUTHENTICATING("authenticating"),
+		REMOVE_CARD("removeCard"),
+		SIGNING("signing"),
+		SELECT_FILES("selectFiles"),
+		DIGESTING_FILES("digestingFiles"),
+		COPY_ALL("copyAll"),
+		MAIL("mail"),
+		NO_MIDDLEWARE_ERROR("noMiddlewareError"),
+		PIN_BLOCKED("pinBlocked"),
+		PIN_CHANGED("pinChanged"),
+		PIN_UNBLOCKED("pinUnblocked"),
+		RETRIES_LEFT("retriesLeft"),
+		PIN_INCORRECT("pinIncorrect"),
+		CONNECT_READER("connectReader"),
+		PIN_PAD("pinPad"),
+		CURRENT_PIN("currentPin"),
+		NEW_PIN("newPin"),
+		OK("ok"),
+		CANCEL("cancel"),
+		PUK_PAD("pukPad"),
+		PIN_PAD_CHANGE("pinPadChange"),
+		KIOSK_MODE("kioskMode"),
+		ENTER_PIN("enterPin"),
+		LABEL_PIN("labelPin"),
+		PIN_CHANGE("pinChange"),
+		PIN_UNBLOCK("pinUnblock"),
+		PIN_PAD_MODIFY_OLD("pinPadModifyOld"),
+		PIN_PAD_MODIFY_NEW("pinPadModifyNew"),
+		PIN_PAD_MODIFY_NEW_AGAIN("pinPadModifyNewAgain"),
+		DIAGNOSTIC_MODE("diagnosticMode"),
+		CERTIFICATE_EXPIRED_ERROR("certificateExpiredError"),
+		CERTIFICATE_REVOKED_ERROR("certificateRevokedError"),
+		IDENTITY_INFO("identityInfo"),
+		IDENTITY_IDENTITY("identityIdentity"),
+		IDENTITY_ADDRESS("identityAddress"),
+		IDENTITY_PHOTO("identityPhoto"),
+		DETAILS_BUTTON("detailsButtonText"),
+		CANCEL_BUTTON("cancelButtonText"),
+		NO_BUTTON("noButtonText"),
+		OK_BUTTON("okButtonText"),
+		YES_BUTTON("yesButtonText"),
+		CERTIFICATE_NOT_TRUSTED("certificateNotTrusted"),
+		PIN_REASON("pinReason");
 
 		private final String id;
 
-		private MESSAGE_ID(final String id) {
+		MESSAGE_ID(final String id) {
 			this.id = id;
 		}
 
@@ -93,12 +122,7 @@ public class Messages {
 	}
 
 	public static Messages getInstance(Locale locale) {
-		Messages messages = Messages.instances.get(locale);
-		if (messages == null) {
-			messages = new Messages(locale);
-			Messages.instances.put(locale, messages);
-		}
-		return messages;
+		return Messages.instances.computeIfAbsent(locale, Messages::new);
 	}
 
 	// --------------------------------------------------------------------

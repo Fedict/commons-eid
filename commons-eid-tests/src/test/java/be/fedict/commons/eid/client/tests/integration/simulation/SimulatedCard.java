@@ -31,7 +31,7 @@ public class SimulatedCard extends Card {
 
 	protected ATR atr;
 	protected String protocol;
-	protected Map<BigInteger, byte[]> files;
+	protected final Map<BigInteger, byte[]> files;
 	protected byte[] selectedFile;
 
 	public SimulatedCard(ATR atr) {

@@ -59,7 +59,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class BeIDSignature extends SignatureSpi {
 
-	private static Log LOG = LogFactory.getLog(BeIDSignature.class);
+	private static final Log LOG = LogFactory.getLog(BeIDSignature.class);
 	private final static Map<String, String> digestAlgos;
 
 	private final MessageDigest messageDigest;

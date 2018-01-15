@@ -46,7 +46,7 @@ public class SimulatedBeIDCard extends SimulatedCard {
 		super(atr);
 	}
 
-	public SimulatedBeIDCard setFilesFromProfile(String profile) {
+	public void setFilesFromProfile(String profile) {
 		for (FileType type : FileType.values()) {
 			try {
 				setFileFromProfile(type, profile);
@@ -55,13 +55,11 @@ public class SimulatedBeIDCard extends SimulatedCard {
 			}
 		}
 
-		return this;
 	}
 
-	public SimulatedBeIDCard setFileFromProfile(FileType type,
-												String profile) throws IOException {
+	public void setFileFromProfile(FileType type,
+								   String profile) throws IOException {
 		InputStream idInputStream = SimulatedBeIDCard.class.getResourceAsStream("/" + profile + "_" + type + ".tlv");
 		setFile(type.getFileId(), IOUtils.toByteArray(idInputStream));
-		return this;
 	}
 }

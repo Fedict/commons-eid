@@ -47,7 +47,7 @@ public enum SpecialOrganisation implements Serializable {
 		return this.key;
 	}
 
-	private static Map<String, SpecialOrganisation> specialOrganisations = getSpecialOrganisations();
+	private static final Map<String, SpecialOrganisation> specialOrganisations = getSpecialOrganisations();
 
 	private static Map<String, SpecialOrganisation> getSpecialOrganisations() {
 		Map<String, SpecialOrganisation> specialOrganisations = new HashMap<>();

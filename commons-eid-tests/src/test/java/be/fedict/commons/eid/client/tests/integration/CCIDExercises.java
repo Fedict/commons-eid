@@ -19,16 +19,9 @@
 package be.fedict.commons.eid.client.tests.integration;
 
 import be.fedict.commons.eid.client.BeIDCard;
-import be.fedict.commons.eid.client.BeIDCards;
 import be.fedict.commons.eid.client.CancelledException;
-import be.fedict.commons.eid.client.FileType;
-import be.fedict.commons.eid.client.event.BeIDCardListener;
 import be.fedict.commons.eid.client.impl.CCID;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
-
-import static org.junit.Assert.assertNotNull;
 
 public class CCIDExercises extends BeIDTest {
 	

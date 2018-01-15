@@ -34,7 +34,7 @@ public class ErrorCapableBeIdCard extends SimulatedBeIDCard {
 	private boolean nextCardException;
 	private boolean nextConfused;
 	private int delay;
-	private Random random;
+	private final Random random;
 
 	public ErrorCapableBeIdCard(String profile) {
 		this(profile, System.currentTimeMillis());

@@ -36,12 +36,12 @@ public enum SpecialStatus implements Serializable {
 	YELLOW_CANE("4", false, false, true),
 	YELLOW_CANE_EXTENDED_MINORITY("5", false, true, true);
 
-	private String strValue;
-	private boolean whiteCane;
-	private boolean extendedMinority;
-	private boolean yellowCane;
+	private final String strValue;
+	private final boolean whiteCane;
+	private final boolean extendedMinority;
+	private final boolean yellowCane;
 
-	private static Map<String, SpecialStatus> map = getSpecialStatuses();
+	private static final Map<String, SpecialStatus> map = getSpecialStatuses();
 
 	private static Map<String, SpecialStatus> getSpecialStatuses(){
 		Map<String, SpecialStatus> map = new HashMap<>();

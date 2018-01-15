@@ -24,8 +24,6 @@ import be.fedict.commons.eid.client.CancelledException;
 import be.fedict.commons.eid.client.FileType;
 import be.fedict.commons.eid.consumer.Identity;
 import be.fedict.commons.eid.consumer.tlv.TlvParser;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 
 import javax.smartcardio.CardTerminal;

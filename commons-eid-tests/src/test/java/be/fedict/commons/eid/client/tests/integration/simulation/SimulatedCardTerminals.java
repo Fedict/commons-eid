@@ -24,29 +24,26 @@ import javax.smartcardio.CardTerminals;
 import java.util.*;
 
 public class SimulatedCardTerminals extends CardTerminals {
-	private Set<SimulatedCardTerminal> terminals;
+	private final Set<SimulatedCardTerminal> terminals;
 
 	public SimulatedCardTerminals() {
 		this.terminals = new HashSet<>();
 	}
 
-	public synchronized SimulatedCardTerminals attachCardTerminal(SimulatedCardTerminal terminal) {
+	public synchronized void attachCardTerminal(SimulatedCardTerminal terminal) {
 		terminal.setTerminals(this);
 		this.terminals.add(terminal);
 		notifyAll();
-		return this;
 	}
 
-	public synchronized SimulatedCardTerminals detachCardTerminal(SimulatedCardTerminal terminal) {
+	public synchronized void detachCardTerminal(SimulatedCardTerminal terminal) {
 		terminal.setTerminals(null);
 		this.terminals.remove(terminal);
 		notifyAll();
-		return this;
 	}
 
-	public synchronized SimulatedCardTerminals propagateCardEvent() {
+	public synchronized void propagateCardEvent() {
 		notifyAll();
-		return this;
 	}
 
 	@Override

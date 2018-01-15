@@ -20,8 +20,6 @@ package be.fedict.commons.eid.client.tests.integration;
 
 import be.fedict.commons.eid.client.FileType;
 import be.fedict.commons.eid.client.event.BeIDCardListener;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 public class TestBeIDCardListener implements BeIDCardListener {
 

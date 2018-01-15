@@ -25,14 +25,4 @@ package be.fedict.commons.eid.consumer.tlv;
  * @see DataConvertor
  */
 public class DataConvertorException extends Exception {
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Main constructor.
-	 *
-	 * @param message the exception message.
-	 */
-	public DataConvertorException(String message) {
-		super(message);
-	}
 }

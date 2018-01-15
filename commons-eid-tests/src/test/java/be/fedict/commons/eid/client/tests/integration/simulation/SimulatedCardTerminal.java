@@ -24,7 +24,7 @@ import javax.smartcardio.CardTerminal;
 
 public class SimulatedCardTerminal extends CardTerminal {
 
-	private String name;
+	private final String name;
 	private SimulatedCard card;
 	private SimulatedCardTerminals terminals;
 

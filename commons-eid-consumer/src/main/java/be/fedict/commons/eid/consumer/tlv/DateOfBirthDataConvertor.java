@@ -81,7 +81,7 @@ public class DateOfBirthDataConvertor implements DataConvertor<GregorianCalendar
 		throw new DataConvertorException("Unsupported Birth Date Format [" + dateOfBirthStr + "]");
 	}
 
-	private static String[][] MONTHS = new String[][]{
+	private static final String[][] MONTHS = new String[][]{
 			new String[]{"JAN"}, new String[]{"FEV", "FEB"},
 			new String[]{"MARS", "MAAR", "MÄR"}, new String[]{"AVR", "APR"},
 			new String[]{"MAI", "MEI"}, new String[]{"JUIN", "JUN"},

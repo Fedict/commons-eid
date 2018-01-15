@@ -61,7 +61,7 @@ public class CardAndTerminalManagerTests {
 	}
 
 	private class RecordKeepingCardTerminalEventsListener implements CardTerminalEventsListener {
-		private Set<CardTerminal> recordedState;
+		private final Set<CardTerminal> recordedState;
 
 		public RecordKeepingCardTerminalEventsListener() {
 			recordedState = new HashSet<>();
@@ -89,7 +89,7 @@ public class CardAndTerminalManagerTests {
 	}
 
 	private class RecordKeepingCardEventsListener implements CardEventsListener {
-		private Map<CardTerminal, Card> recordedState;
+		private final Map<CardTerminal, Card> recordedState;
 
 		public RecordKeepingCardEventsListener() {
 			recordedState = new HashMap<>();
