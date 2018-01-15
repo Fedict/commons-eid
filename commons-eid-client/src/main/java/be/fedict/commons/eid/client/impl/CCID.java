@@ -68,7 +68,7 @@ public class CCID {
 
 		private final byte tag;
 
-		FEATURE(final int tag) {
+		FEATURE(int tag) {
 			this.tag = (byte) tag;
 		}
 
@@ -84,7 +84,7 @@ public class CCID {
 
 		private final int ins;
 
-		INS(final int ins) {
+		INS(int ins) {
 			this.ins = ins;
 		}
 
@@ -124,13 +124,13 @@ public class CCID {
 		return usesPPDU;
 	}
 
-	public CCID(final Card card, final CardTerminal cardTerminal, final Logger logger) {
+	public CCID(Card card, CardTerminal cardTerminal, Logger logger) {
 		this.card = card;
 		this.logger = logger;
 		this.features = new EnumMap<>(FEATURE.class);
 		this.usesPPDU = false;
 
-		final boolean onMSWindows = (System.getProperty("os.name") != null && System.getProperty("os.name").startsWith("Windows"));
+		boolean onMSWindows = (System.getProperty("os.name") != null && System.getProperty("os.name").startsWith("Windows"));
 		this.logger.debug("Getting CCID FEATURES using standard control command");
 
 		try {
@@ -150,53 +150,53 @@ public class CCID {
 		}
 	}
 
-	private void getFeaturesUsingControlChannel(final Card card, final boolean onMSWindows) throws CardException {
+	private void getFeaturesUsingControlChannel(Card card, boolean onMSWindows) throws CardException {
 		byte[] featureBytes = card.transmitControlCommand(onMSWindows ? GET_FEATURES_MICROSOFT : GET_FEATURES, new byte[0]);
-		this.logger.debug("CCID FEATURES found using standard control command");
+		logger.debug("CCID FEATURES found using standard control command");
 
 		for (FEATURE feature : FEATURE.values()) {
 			Integer featureCode = findFeatureTLV(feature.getTag(), featureBytes);
-			this.features.put(feature, featureCode);
+			features.put(feature, featureCode);
 			if (featureCode != null) {
-				this.logger.debug("FEATURE " + feature.name() + " = " + Integer.toHexString(featureCode));
+				logger.debug("FEATURE " + feature.name() + " = " + Integer.toHexString(featureCode));
 			}
 		}
 	}
 
-	private void getFeaturesUsingPPDU(final Card card) throws CardException {
+	private void getFeaturesUsingPPDU(Card card) throws CardException {
 		ResponseAPDU responseAPDU = card.getBasicChannel().transmit(
 				new CommandAPDU((byte) 0xff, (byte) 0xc2, 0x01, 0x00, new byte[]{}, 32));
-		this.logger.debug("PPDU response: " + Integer.toHexString(responseAPDU.getSW()));
+		logger.debug("PPDU response: " + Integer.toHexString(responseAPDU.getSW()));
 
 		if (responseAPDU.getSW() == 0x9000) {
 			byte[] featureBytes = responseAPDU.getData();
-			this.logger.debug("CCID FEATURES found using Pseudo-APDU Fallback Strategy");
+			logger.debug("CCID FEATURES found using Pseudo-APDU Fallback Strategy");
 
 			for (FEATURE feature : FEATURE.values()) {
 				Integer featureCode = findFeaturePPDU(feature.getTag(), featureBytes);
-				this.features.put(feature, featureCode);
+				features.put(feature, featureCode);
 				if (featureCode != null) {
-					this.logger.debug("FEATURE " + feature.name() + " = " + Integer.toHexString(featureCode));
+					logger.debug("FEATURE " + feature.name() + " = " + Integer.toHexString(featureCode));
 				}
 			}
-			this.usesPPDU = true;
+			usesPPDU = true;
 		} else {
-			this.logger.error("CCID Features via PPDU Not Supported");
+			logger.error("CCID Features via PPDU Not Supported");
 		}
 	}
 
-	public boolean hasFeature(final FEATURE feature) {
+	public boolean hasFeature(FEATURE feature) {
 		return getFeature(feature) != null;
 	}
 
-	public Integer getFeature(final FEATURE feature) {
-		return this.features.get(feature);
+	public Integer getFeature(FEATURE feature) {
+		return features.get(feature);
 	}
 
-	private Integer findFeatureTLV(final byte featureTag, final byte[] features) {
+	private Integer findFeatureTLV(byte featureTag, byte[] features) {
 		int idx = 0;
 		while (idx < features.length) {
-			final byte tag = features[idx];
+			byte tag = features[idx];
 			idx += 2;
 			if (featureTag == tag) {
 				int feature = 0;
@@ -213,8 +213,8 @@ public class CCID {
 		return null;
 	}
 
-	private Integer findFeaturePPDU(final byte featureTag, final byte[] features) {
-		for (final byte tag : features) {
+	private Integer findFeaturePPDU(byte featureTag, byte[] features) {
+		for (byte tag : features) {
 			if (featureTag == tag)
 				return (int) tag;
 		}
@@ -222,7 +222,7 @@ public class CCID {
 		return null;
 	}
 
-	protected byte[] transmitPPDUCommand(final int controlCode, final byte[] command) throws CardException {
+	protected byte[] transmitPPDUCommand(int controlCode, byte[] command) throws CardException {
 		ResponseAPDU responseAPDU = card.getBasicChannel().transmit(
 				new CommandAPDU((byte) 0xff, (byte) 0xc2, 0x01, controlCode, command));
 
@@ -232,54 +232,54 @@ public class CCID {
 		return responseAPDU.getData().length == 0 ? responseAPDU.getBytes() : responseAPDU.getData();
 	}
 
-	protected byte[] transmitControlCommand(final int controlCode, final byte[] command) throws CardException {
+	protected byte[] transmitControlCommand(int controlCode, byte[] command) throws CardException {
 		if (usesPPDU()) return transmitPPDUCommand(controlCode, command);
 
-		return this.card.transmitControlCommand(controlCode, command);
+		return card.transmitControlCommand(controlCode, command);
 	}
 
 	public void waitForOK() throws CardException, InterruptedException {
 		// wait for key pressed
 		while (true) {
-			byte[] keyPressedResult = transmitControlCommand(this.getFeature(FEATURE.GET_KEY_PRESSED), new byte[0]);
+			byte[] keyPressedResult = transmitControlCommand(getFeature(FEATURE.GET_KEY_PRESSED), new byte[0]);
 			byte key = keyPressedResult[0];
 			switch (key) {
 				case 0x00:
-					this.logger.debug("waiting for CCID...");
+					logger.debug("waiting for CCID...");
 					Thread.sleep(200);
 					break;
 
 				case 0x2b:
-					this.logger.debug("PIN digit");
+					logger.debug("PIN digit");
 					break;
 
 				case 0x0a:
-					this.logger.debug("erase PIN digit");
+					logger.debug("erase PIN digit");
 					break;
 
 				case 0x0d:
-					this.logger.debug("user confirmed");
+					logger.debug("user confirmed");
 					return;
 
 				case 0x1b:
-					this.logger.debug("user canceled");
+					logger.debug("user canceled");
 					// XXX: need to send the PIN finish ioctl?
 					throw new SecurityException("canceled by user");
 
 				case 0x40:
 					// happens in case of a reader timeout
-					this.logger.debug("PIN abort");
+					logger.debug("PIN abort");
 					return;
 
 				default:
-					this.logger.debug("CCID get key pressed result: " + key
+					logger.debug("CCID get key pressed result: " + key
 							+ " hex: " + Integer.toHexString(key));
 			}
 		}
 	}
 
-	public final byte getLanguageId(final Locale locale) {
-		final String language = locale.getLanguage();
+	public byte getLanguageId(Locale locale) {
+		String language = locale.getLanguage();
 
 		if (DUTCH_LANGUAGE.equals(language)) {
 			return DUTCH_LANGUAGE_CODE;
@@ -296,8 +296,8 @@ public class CCID {
 		return ENGLISH_LANGUAGE_CODE;
 	}
 
-	public byte[] createPINVerificationDataStructure(final Locale locale, final INS ins) throws IOException {
-		final ByteArrayOutputStream verifyCommand = new ByteArrayOutputStream();
+	public byte[] createPINVerificationDataStructure(Locale locale, INS ins) throws IOException {
+		ByteArrayOutputStream verifyCommand = new ByteArrayOutputStream();
 		verifyCommand.write(30); // bTimeOut
 		verifyCommand.write(30); // bTimeOut2
 
@@ -345,7 +345,7 @@ public class CCID {
 		/*
 		 * 0x04 = default sub-language
 		 */
-		verifyCommand.write(new byte[]{this.getLanguageId(locale), 0x04});
+		verifyCommand.write(new byte[]{getLanguageId(locale), 0x04});
 
 		/*
 		 * 0x00 = PIN insertion prompt
@@ -357,7 +357,7 @@ public class CCID {
 		 */
 		verifyCommand.write(new byte[]{0x00, 0x00, 0x00}); // bTeoPrologue
 
-		final byte[] verifyApdu = new byte[]{
+		byte[] verifyApdu = new byte[]{
 				0x00, // CLA
 				(byte) ins.getIns(), // INS
 				0x00, // P1
@@ -374,8 +374,8 @@ public class CCID {
 		return verifyCommand.toByteArray();
 	}
 
-	public byte[] createPINModificationDataStructure(final Locale locale, final INS ins) throws IOException {
-		final ByteArrayOutputStream modifyCommand = new ByteArrayOutputStream();
+	public byte[] createPINModificationDataStructure(Locale locale, INS ins) throws IOException {
+		ByteArrayOutputStream modifyCommand = new ByteArrayOutputStream();
 		modifyCommand.write(30); // bTimeOut
 		modifyCommand.write(30); // bTimeOut2
 
@@ -437,7 +437,7 @@ public class CCID {
 		/*
 		 * 0x04 = default sub-language
 		 */
-		modifyCommand.write(new byte[]{this.getLanguageId(locale), 0x04});
+		modifyCommand.write(new byte[]{getLanguageId(locale), 0x04});
 
 		/*
 		 * 0x00 = PIN insertion prompt
@@ -459,7 +459,7 @@ public class CCID {
 		 */
 		modifyCommand.write(new byte[]{0x00, 0x00, 0x00}); // bTeoPrologue
 
-		final byte[] modifyApdu = new byte[]{
+		byte[] modifyApdu = new byte[]{
 				0x00, // CLA
 				(byte) ins.getIns(), // INS
 				0x00, // P1
