@@ -26,7 +26,7 @@
 			<param name="ConversionPattern" value="%-5p [%c{1}] %m%n" />
 		</layout>
 	</appender>
-	<category name="be.fedict">
+	<category name="be.bosa">
 		<priority value="DEBUG" />
 	</category>
 	<root>
