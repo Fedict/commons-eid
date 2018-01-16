@@ -1,22 +1,38 @@
 /*
  * Commons eID Project.
- * Copyright (C) 2008-2013 FedICT.
+ * Copyright (C) 2014 - 2018 BOSA.
  *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License version
- * 3.0 as published by the Free Software Foundation.
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License version 3.0 as published by
+ * the Free Software Foundation.
  *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+ * for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, see 
- * http://www.gnu.org/licenses/.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, see https://www.gnu.org/licenses/.
  */
 
 package be.fedict.commons.eid.consumer.tlv;
+
+import be.fedict.commons.eid.consumer.Address;
+import be.fedict.commons.eid.consumer.DocumentType;
+import be.fedict.commons.eid.consumer.Gender;
+import be.fedict.commons.eid.consumer.Identity;
+import be.fedict.commons.eid.consumer.SpecialOrganisation;
+import be.fedict.commons.eid.consumer.SpecialStatus;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.junit.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.util.Base64;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -25,24 +41,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.util.Base64;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.junit.Test;
-
-import be.fedict.commons.eid.consumer.Address;
-import be.fedict.commons.eid.consumer.DocumentType;
-import be.fedict.commons.eid.consumer.Gender;
-import be.fedict.commons.eid.consumer.Identity;
-import be.fedict.commons.eid.consumer.SpecialOrganisation;
-import be.fedict.commons.eid.consumer.SpecialStatus;
 
 public class TlvParserTest {
 

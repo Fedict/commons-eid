@@ -1,9 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Commons eID Project.
+  ~ Copyright (C) 2014 - 2018 BOSA.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it under the
+  ~ terms of the GNU Lesser General Public License version 3.0 as published by
+  ~ the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful, but WITHOUT
+  ~ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  ~ FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+  ~ for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with this software; if not, see https://www.gnu.org/licenses/.
+  -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>be.fedict.commons-eid</groupId>
-		<artifactId>parent</artifactId>
+		<groupId>be.bosa.commons-eid</groupId>
+		<artifactId>commons-eid-parent</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
@@ -23,50 +40,24 @@
 		</plugins>
 	</build>
 
-	<profiles>
-		<profile>
-			<id>netbeans</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<configuration>
-							<skip>false</skip>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>be.fedict.commons-eid</groupId>
-				<artifactId>commons-eid-bom</artifactId>
-				<version>0.2.1</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 	<dependencies>
 		<dependency>
-			<groupId>be.fedict.commons-eid</groupId>
+			<groupId>be.bosa.commons-eid</groupId>
 			<artifactId>commons-eid-client</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>be.fedict.commons-eid</groupId>
+			<groupId>be.bosa.commons-eid</groupId>
 			<artifactId>commons-eid-consumer</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>be.fedict.commons-eid</groupId>
+			<groupId>be.bosa.commons-eid</groupId>
 			<artifactId>commons-eid-dialogs</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>be.fedict.commons-eid</groupId>
+			<groupId>be.bosa.commons-eid</groupId>
 			<artifactId>commons-eid-jca</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

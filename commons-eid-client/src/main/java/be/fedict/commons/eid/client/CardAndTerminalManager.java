@@ -1,19 +1,18 @@
 /*
  * Commons eID Project.
- * Copyright (C) 2008-2013 FedICT.
+ * Copyright (C) 2014 - 2018 BOSA.
  *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License version
- * 3.0 as published by the Free Software Foundation.
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License version 3.0 as published by
+ * the Free Software Foundation.
  *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+ * for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, see
- * http://www.gnu.org/licenses/.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, see https://www.gnu.org/licenses/.
  */
 
 package be.fedict.commons.eid.client;
@@ -24,8 +23,12 @@ import be.fedict.commons.eid.client.impl.LibJ2PCSCGNULinuxFix;
 import be.fedict.commons.eid.client.impl.VoidLogger;
 import be.fedict.commons.eid.client.spi.Logger;
 
-import javax.smartcardio.*;
+import javax.smartcardio.Card;
+import javax.smartcardio.CardException;
+import javax.smartcardio.CardTerminal;
+import javax.smartcardio.CardTerminals;
 import javax.smartcardio.CardTerminals.State;
+import javax.smartcardio.TerminalFactory;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;

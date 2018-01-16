@@ -1,20 +1,18 @@
 /*
  * Commons eID Project.
- * Copyright (C) 2008-2013 FedICT.
- * Copyright (C) 2014 e-Contract.be BVBA.
+ * Copyright (C) 2014 - 2018 BOSA.
  *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License version
- * 3.0 as published by the Free Software Foundation.
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License version 3.0 as published by
+ * the Free Software Foundation.
  *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+ * for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, see
- * http://www.gnu.org/licenses/.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, see https://www.gnu.org/licenses/.
  */
 
 package be.fedict.commons.eid.client.tests.integration;
@@ -36,18 +34,29 @@ import javax.crypto.SecretKey;
 import javax.swing.*;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.security.*;
+import java.security.GeneralSecurityException;
+import java.security.Key;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.KeyStore;
 import java.security.KeyStore.Entry;
 import java.security.KeyStore.PrivateKeyEntry;
 import java.security.KeyStore.ProtectionParameter;
 import java.security.KeyStore.TrustedCertificateEntry;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Security;
+import java.security.Signature;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Enumeration;
 import java.util.Locale;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class JCATest {
 

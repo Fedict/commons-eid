@@ -1,32 +1,34 @@
 /*
  * Commons eID Project.
- * Copyright (C) 2008-2013 FedICT.
+ * Copyright (C) 2014 - 2018 BOSA.
  *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License version
- * 3.0 as published by the Free Software Foundation.
+ * This is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License version 3.0 as published by
+ * the Free Software Foundation.
  *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+ * for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, see 
- * http://www.gnu.org/licenses/.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software; if not, see https://www.gnu.org/licenses/.
  */
 
 package be.fedict.commons.eid.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Toolkit;
+import be.fedict.commons.eid.client.BeIDCard;
+import be.fedict.commons.eid.client.CancelledException;
+import be.fedict.commons.eid.client.FileType;
+import be.fedict.commons.eid.client.OutOfCardsException;
+import be.fedict.commons.eid.client.event.BeIDCardListener;
+import be.fedict.commons.eid.consumer.Identity;
+import be.fedict.commons.eid.consumer.text.Format;
+import be.fedict.commons.eid.consumer.tlv.TlvParser;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -37,26 +39,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.ListCellRenderer;
-import javax.swing.SwingUtilities;
-import be.fedict.commons.eid.client.BeIDCard;
-import be.fedict.commons.eid.client.FileType;
-import be.fedict.commons.eid.client.OutOfCardsException;
-import be.fedict.commons.eid.client.CancelledException;
-import be.fedict.commons.eid.client.event.BeIDCardListener;
-import be.fedict.commons.eid.consumer.Identity;
-import be.fedict.commons.eid.consumer.text.Format;
-import be.fedict.commons.eid.consumer.tlv.TlvParser;
 
 /**
  * Dynamically changing dialog listing BeIDCards by photo and main identity data
