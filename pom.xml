@@ -79,7 +79,7 @@
 		<encoding>UTF-8</encoding>
 		<project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
 
-		<version.bouncycastle>1.59</version.bouncycastle>
+		<version.org.bouncycastle>1.59</version.org.bouncycastle>
 		<version.commons-logging-api>1.1</version.commons-logging-api>
 		<version.commons-logging>1.2</version.commons-logging>
 		<version.commons-codec>1.11</version.commons-codec>
@@ -144,12 +144,12 @@
 			<dependency>
 				<groupId>org.bouncycastle</groupId>
 				<artifactId>bcprov-jdk15on</artifactId>
-				<version>${version.bouncycastle}</version>
+				<version>${version.org.bouncycastle}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.bouncycastle</groupId>
 				<artifactId>bcpkix-jdk15on</artifactId>
-				<version>${version.bouncycastle}</version>
+				<version>${version.org.bouncycastle}</version>
 			</dependency>
 
 			<dependency>
@@ -163,7 +163,6 @@
 				<version>${version.log4j}</version>
 			</dependency>
 
-			<!-- TODO Replace with Java DateTime? -->
 			<dependency>
 				<groupId>joda-time</groupId>
 				<artifactId>joda-time</artifactId>
