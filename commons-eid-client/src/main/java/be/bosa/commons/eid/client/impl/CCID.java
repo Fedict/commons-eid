@@ -17,6 +17,7 @@
 
 package be.bosa.commons.eid.client.impl;
 
+import be.bosa.commons.eid.client.exception.BeIDException;
 import be.bosa.commons.eid.client.spi.Logger;
 
 import javax.smartcardio.Card;
@@ -99,10 +100,6 @@ public class CCID {
 		}
 	}
 
-	/*
-	 * **********************************************************************************************************
-	 */
-
 	public static void riskPPDU(boolean riskPPDU) {
 		CCID.riskPPDU = riskPPDU;
 	}
@@ -170,8 +167,7 @@ public class CCID {
 	}
 
 	private void getFeaturesUsingPPDU(Card card) throws CardException {
-		ResponseAPDU responseAPDU = card.getBasicChannel().transmit(
-				new CommandAPDU((byte) 0xff, (byte) 0xc2, 0x01, 0x00, new byte[]{}, 32));
+		ResponseAPDU responseAPDU = card.getBasicChannel().transmit(new CommandAPDU((byte) 0xff, (byte) 0xc2, 0x01, 0x00, new byte[]{}, 32));
 		logger.debug("PPDU response: " + Integer.toHexString(responseAPDU.getSW()));
 
 		if (responseAPDU.getSW() == 0x9000) {
@@ -228,23 +224,27 @@ public class CCID {
 		return null;
 	}
 
-	protected byte[] transmitPPDUCommand(int controlCode, byte[] command) throws CardException {
-		ResponseAPDU responseAPDU = card.getBasicChannel().transmit(
-				new CommandAPDU((byte) 0xff, (byte) 0xc2, 0x01, controlCode, command));
+	protected byte[] transmitPPDUCommand(int controlCode, byte[] command) throws CardException, BeIDException {
+		ResponseAPDU responseAPDU = card.getBasicChannel().transmit(new CommandAPDU((byte) 0xff, (byte) 0xc2, 0x01, controlCode, command));
 
-		if (responseAPDU.getSW() != 0x9000)
-			throw new CardException("PPDU Command Failed: ResponseAPDU=" + responseAPDU.getSW());
+		if (responseAPDU.getSW() != 0x9000) {
+			throw new BeIDException("PPDU Command Failed: ResponseAPDU=" + responseAPDU.getSW());
+		}
 
 		return responseAPDU.getData().length == 0 ? responseAPDU.getBytes() : responseAPDU.getData();
 	}
 
-	protected byte[] transmitControlCommand(int controlCode, byte[] command) throws CardException {
-		if (usesPPDU()) return transmitPPDUCommand(controlCode, command);
+	protected byte[] transmitControlCommand(int controlCode, byte[] command) throws BeIDException {
+		try {
+			if (usesPPDU()) return transmitPPDUCommand(controlCode, command);
 
-		return card.transmitControlCommand(controlCode, command);
+			return card.transmitControlCommand(controlCode, command);
+		} catch (CardException e) {
+			throw new BeIDException("Error transmitting control command", e);
+		}
 	}
 
-	public void waitForOK() throws CardException, InterruptedException {
+	public void waitForOK() throws BeIDException, InterruptedException {
 		// wait for key pressed
 		while (true) {
 			byte[] keyPressedResult = transmitControlCommand(getFeature(FEATURE.GET_KEY_PRESSED), new byte[0]);

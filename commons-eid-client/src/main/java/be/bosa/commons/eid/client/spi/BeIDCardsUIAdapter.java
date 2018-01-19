@@ -31,7 +31,7 @@ import java.util.Locale;
  *
  * @author Frank Marien
  */
-public class BeIDCardsIUAdapter implements BeIDCardsUI {
+public class BeIDCardsUIAdapter implements BeIDCardsUI {
 	protected Locale locale;
 
 	@Override

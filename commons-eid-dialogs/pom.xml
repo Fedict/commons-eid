@@ -38,5 +38,11 @@
 			<groupId>be.bosa.commons-eid</groupId>
 			<artifactId>commons-eid-consumer</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>

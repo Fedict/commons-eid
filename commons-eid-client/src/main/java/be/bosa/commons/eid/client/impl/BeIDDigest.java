@@ -67,41 +67,40 @@ public enum BeIDDigest {
 	private final byte[] prefix;
 	private final byte algorithmReference;
 
-	BeIDDigest(final byte[] prefix, final int algorithmReference) {
+	BeIDDigest(byte[] prefix, int algorithmReference) {
 		this.prefix = prefix;
 		this.algorithmReference = (byte) algorithmReference;
 	}
 
-	BeIDDigest(final byte[] prefix) {
+	BeIDDigest(byte[] prefix) {
 		this(prefix, 0x01); // default algorithm reference: PKCS#1
 	}
 
-	public static BeIDDigest getInstance(final String name) {
+	public static BeIDDigest getInstance(String name) {
 		return valueOf(name);
 	}
 
-	public byte[] getPrefix(final int valueLength) {
+	public byte[] getPrefix(int valueLength) {
 		if (this.equals(PLAIN_TEXT)) {
-			final byte[] digestInfoPrefix = Arrays.copyOf(this.prefix,
-					this.prefix.length);
+			byte[] digestInfoPrefix = Arrays.copyOf(prefix, prefix.length);
 			digestInfoPrefix[1] = (byte) (valueLength + 13);
 			digestInfoPrefix[14] = (byte) valueLength;
 			return digestInfoPrefix;
 		}
 
-		return this.prefix;
+		return prefix;
 	}
 
 	public byte getAlgorithmReference() {
-		return this.algorithmReference;
+		return algorithmReference;
 	}
 
 	public String getStandardName() {
-		return this.name().replace('_', '-');
+		return name().replace('_', '-');
 	}
 
 	public MessageDigest getMessageDigestInstance()
 			throws NoSuchAlgorithmException {
-		return MessageDigest.getInstance(this.getStandardName());
+		return MessageDigest.getInstance(getStandardName());
 	}
 }

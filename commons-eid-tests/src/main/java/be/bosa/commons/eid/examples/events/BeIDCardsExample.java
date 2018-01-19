@@ -21,11 +21,10 @@ import be.bosa.commons.eid.client.BeIDCard;
 import be.bosa.commons.eid.client.BeIDCards;
 import be.bosa.commons.eid.client.CancelledException;
 import be.bosa.commons.eid.client.FileType;
+import be.bosa.commons.eid.client.exception.BeIDException;
 import be.bosa.commons.eid.consumer.Identity;
 import be.bosa.commons.eid.consumer.tlv.TlvParser;
 
-import javax.smartcardio.CardException;
-import java.io.IOException;
 import java.util.Set;
 
 public class BeIDCardsExample {
@@ -48,7 +47,7 @@ public class BeIDCardsExample {
 				byte[] idData = card.readFile(FileType.Identity);
 				Identity id = TlvParser.parse(idData, Identity.class);
 				System.out.println(id.firstName + "'s card");
-			} catch (CardException | IOException cex) {
+			} catch (BeIDException cex) {
 				cex.printStackTrace();
 			}
 

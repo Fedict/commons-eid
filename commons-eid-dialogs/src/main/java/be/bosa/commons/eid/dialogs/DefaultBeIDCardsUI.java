@@ -35,6 +35,7 @@ import java.util.Locale;
  * 
  */
 public class DefaultBeIDCardsUI implements BeIDCardsUI {
+
 	private final Component parentComponent;
 	private Messages messages;
 	private JFrame adviseFrame;
@@ -105,10 +106,6 @@ public class DefaultBeIDCardsUI implements BeIDCardsUI {
 			adviseFrame = null;
 		}
 	}
-
-	/*
-	 * **********************************************************************************************************************
-	 */
 
 	private void showAdvise(String title, String message) {
 		if (null != adviseFrame) {

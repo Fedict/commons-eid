@@ -20,13 +20,12 @@ package be.bosa.commons.eid.client.tests.integration;
 import be.bosa.commons.eid.client.BeIDCard;
 import be.bosa.commons.eid.client.BeIDCards;
 import be.bosa.commons.eid.client.FileType;
+import be.bosa.commons.eid.client.exception.BeIDException;
 import be.bosa.commons.eid.consumer.Identity;
 import be.bosa.commons.eid.consumer.tlv.TlvParser;
 import org.junit.Test;
 
-import javax.smartcardio.CardException;
 import javax.swing.*;
-import java.io.IOException;
 
 /**
  * See also: https://groups.google.com/forum/#!topic/eid-applet/N1mVFnYJ3VM
@@ -54,8 +53,7 @@ public class DisconnectConnectTest {
 		}
 	}
 
-	private Identity readIdentity(BeIDCard card) throws CardException,
-			IOException, InterruptedException {
+	private Identity readIdentity(BeIDCard card) throws InterruptedException, BeIDException {
 		byte[] idData = card.readFile(FileType.Identity);
 		return TlvParser.parse(idData, Identity.class);
 	}

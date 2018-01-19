@@ -15,7 +15,7 @@
  * along with this software; if not, see https://www.gnu.org/licenses/.
  */
 
-package be.bosa.commons.eid.client;
+package be.bosa.commons.eid.client.exception;
 
 import javax.smartcardio.ResponseAPDU;
 
@@ -25,7 +25,7 @@ import javax.smartcardio.ResponseAPDU;
  *
  * @author Frank Marien
  */
-public class ResponseAPDUException extends RuntimeException {
+public class ResponseAPDUException extends BeIDException {
 
 	private final ResponseAPDU apdu;
 

@@ -15,12 +15,22 @@
  * along with this software; if not, see https://www.gnu.org/licenses/.
  */
 
-package be.bosa.commons.eid.client.spi;
+package be.bosa.commons.eid.client.exception;
 
-/**
- * Exception thrown in case the user cancels the eID operation.
- *
- * @author Frank Cornelis
- */
-public class UserCancelledException extends Exception {
+public class BeIDException extends Exception {
+
+	public BeIDException() {
+	}
+
+	public BeIDException(String message) {
+		super(message);
+	}
+
+	public BeIDException(Throwable cause) {
+		super(cause);
+	}
+
+	public BeIDException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

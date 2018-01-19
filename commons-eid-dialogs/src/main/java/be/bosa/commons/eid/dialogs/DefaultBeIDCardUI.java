@@ -17,9 +17,9 @@
 
 package be.bosa.commons.eid.dialogs;
 
+import be.bosa.commons.eid.client.CancelledException;
 import be.bosa.commons.eid.client.PINPurpose;
 import be.bosa.commons.eid.client.spi.BeIDCardUI;
-import be.bosa.commons.eid.client.spi.UserCancelledException;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -192,7 +192,7 @@ public class DefaultBeIDCardUI implements BeIDCardUI {
 	}
 
 	@Override
-	public char[] obtainPIN(int retriesLeft, PINPurpose reason) throws UserCancelledException {
+	public char[] obtainPIN(int retriesLeft, PINPurpose reason) throws CancelledException {
 		JPanel mainPanel = new JPanelWithInsets(new Insets(BORDER_SIZE, BORDER_SIZE, BORDER_SIZE, BORDER_SIZE));
 		BoxLayout boxLayout = new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS);
 		mainPanel.setLayout(boxLayout);
@@ -278,7 +278,8 @@ public class DefaultBeIDCardUI implements BeIDCardUI {
 		if (dialogResult.result == DialogResult.Result.OK) {
 			return passwordField.getPassword();
 		}
-		throw new UserCancelledException();
+
+		throw new CancelledException();
 	}
 
 	@Override

@@ -20,10 +20,10 @@ package be.bosa.commons.eid.jca;
 import be.bosa.commons.eid.client.BeIDCard;
 import be.bosa.commons.eid.client.BeIDCards;
 import be.bosa.commons.eid.client.CancelledException;
+import be.bosa.commons.eid.client.exception.BeIDException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import javax.smartcardio.CardException;
 import java.security.SecureRandomSpi;
 
 /**
@@ -32,13 +32,12 @@ import java.security.SecureRandomSpi;
  * feature eID auto recovery.
  * <br>
  * Usage:
- * 
+ * <p>
  * <pre>
  * SecureRandom secureRandom = SecureRandom.getInstance(&quot;BeID&quot;);
  * </pre>
- * 
+ *
  * @author Frank Cornelis
- * 
  */
 public class BeIDSecureRandom extends SecureRandomSpi {
 
@@ -63,7 +62,7 @@ public class BeIDSecureRandom extends SecureRandomSpi {
 				beIDCard = getBeIDCard(true);
 				randomData = beIDCard.getChallenge(bytes.length);
 			}
-		} catch (CardException e) {
+		} catch (BeIDException | InterruptedException e) {
 			throw new RuntimeException(e);
 		}
 		System.arraycopy(randomData, 0, bytes, 0, bytes.length);
@@ -76,7 +75,7 @@ public class BeIDSecureRandom extends SecureRandomSpi {
 		byte[] randomData;
 		try {
 			randomData = beIDCard.getChallenge(numBytes);
-		} catch (CardException e) {
+		} catch (BeIDException | InterruptedException e) {
 			throw new RuntimeException(e);
 		}
 		return randomData;

@@ -32,7 +32,8 @@ import java.util.ResourceBundle;
  */
 public class Messages {
 
-	public static final String RESOURCE_BUNDLE_NAME = "Messages";
+	private static final String RESOURCE_BUNDLE_NAME = Messages.class.getName();
+
 	private static final Map<Locale, Messages> instances;
 
 	static {
@@ -101,11 +102,17 @@ public class Messages {
 		OK_BUTTON("okButtonText"),
 		YES_BUTTON("yesButtonText"),
 		CERTIFICATE_NOT_TRUSTED("certificateNotTrusted"),
-		PIN_REASON("pinReason");
+		PIN_REASON("pinReason"),
+		USAGE("usage"),
+		AUTHORIZATION_ERROR("authorizationError"),
+		PROTOCOL_SIGNATURE("protocolSignature"),
+		SIGNATURE_CREATION("signatureCreation"),
+		SIGN_QUESTION("signQuestion"),
+		SIGNATURE_ALGO("signatureAlgo");
 
 		private final String id;
 
-		MESSAGE_ID(final String id) {
+		MESSAGE_ID(String id) {
 			this.id = id;
 		}
 
@@ -113,8 +120,6 @@ public class Messages {
 			return this.id;
 		}
 	}
-
-	// --------------------------------------------------------------------
 
 	public static Messages getInstance() {
 		return getInstance(Locale.getDefault());
@@ -124,47 +129,32 @@ public class Messages {
 		return Messages.instances.computeIfAbsent(locale, Messages::new);
 	}
 
-	// --------------------------------------------------------------------
-
-	public String getMessage(final MESSAGE_ID messageId) {
+	public String getMessage(MESSAGE_ID messageId) {
 		return this.resourceBundle.getString(messageId.id);
 	}
 
-	public String getMessage(final MESSAGE_ID messageId, final String variant) {
+	public String getMessage(MESSAGE_ID messageId, String variant) {
 		return this.resourceBundle.getString(messageId.id + "_" + variant);
 	}
-
-	// --------------------------------------------------------------------
 
 	public Locale getLocale() {
 		return locale;
 	}
 
-	// --------------------------------------------------------------------
-
-	private Messages(final Locale locale) {
+	private Messages(Locale locale) {
 		this.locale = locale;
 		ResourceBundle bundle;
 		try {
 			bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME, locale);
-		} catch (final MissingResourceException mre) {
-			/*
-			 * In case the selected locale and default system locale are not
-			 * supported we default to english.
-			 */
-			bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME,
-					Locale.ENGLISH);
+		} catch (MissingResourceException mre) {
+			bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME, Locale.ENGLISH);
 		}
 		this.resourceBundle = bundle;
 
-		UIManager.put("OptionPane.cancelButtonText",
-				this.getMessage(MESSAGE_ID.CANCEL_BUTTON));
-		UIManager.put("OptionPane.noButtonText",
-				this.getMessage(MESSAGE_ID.NO_BUTTON));
-		UIManager.put("OptionPane.okButtonText",
-				this.getMessage(MESSAGE_ID.OK_BUTTON));
-		UIManager.put("OptionPane.yesButtonText",
-				this.getMessage(MESSAGE_ID.YES_BUTTON));
+		UIManager.put("OptionPane.cancelButtonText", this.getMessage(MESSAGE_ID.CANCEL_BUTTON));
+		UIManager.put("OptionPane.noButtonText", this.getMessage(MESSAGE_ID.NO_BUTTON));
+		UIManager.put("OptionPane.okButtonText", this.getMessage(MESSAGE_ID.OK_BUTTON));
+		UIManager.put("OptionPane.yesButtonText", this.getMessage(MESSAGE_ID.YES_BUTTON));
 	}
 
 }
