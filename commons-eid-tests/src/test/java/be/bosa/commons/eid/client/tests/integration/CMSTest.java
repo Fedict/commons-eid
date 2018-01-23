@@ -51,7 +51,7 @@ public class CMSTest {
 		CMSSignedDataGenerator gen = new CMSSignedDataGenerator();
 		ContentSigner sha256Signer = new JcaContentSignerBuilder("SHA256withRSA").build(privateKey);
 
-		gen.addSignerInfoGenerator(new JcaSignerInfoGeneratorBuilder(new JcaDigestCalculatorProviderBuilder().setProvider("BC").build())
+		gen.addSignerInfoGenerator(new JcaSignerInfoGeneratorBuilder(new JcaDigestCalculatorProviderBuilder().setProvider(BouncyCastleProvider.PROVIDER_NAME).build())
 				.build(sha256Signer, certificate));
 
 		CMSSignedData sigData = gen.generate(msg, false);
