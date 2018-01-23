@@ -50,6 +50,7 @@ public class Messages {
 	 * 
 	 */
 	public enum MESSAGE_ID {
+		EID_CLIENT("eidClient"),
 		LOADING("loading"),
 		SECURITY_ERROR("securityError"),
 		CARD_ERROR("cardError"),
