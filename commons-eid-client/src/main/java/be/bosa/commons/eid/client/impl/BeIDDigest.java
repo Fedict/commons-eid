@@ -77,6 +77,7 @@ public enum BeIDDigest {
 	}
 
 	public static BeIDDigest getInstance(String name) {
+		name = name.replaceAll("-", "_");
 		return valueOf(name);
 	}
 
