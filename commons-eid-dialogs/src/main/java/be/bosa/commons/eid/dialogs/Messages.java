@@ -134,10 +134,6 @@ public class Messages {
 		return this.resourceBundle.getString(messageId.id);
 	}
 
-	public String getMessage(MESSAGE_ID messageId, String variant) {
-		return this.resourceBundle.getString(messageId.id + "_" + variant);
-	}
-
 	public Locale getLocale() {
 		return locale;
 	}

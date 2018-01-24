@@ -113,7 +113,7 @@ public class DefaultBeIDCardUI implements BeIDCardUI {
 	@Override
 	public void advisePINPadPINEntry(int retriesLeft, PINPurpose purpose) {
 		showPINPadFrame(retriesLeft, "PIN",
-				messages.getMessage(Messages.MESSAGE_ID.PIN_REASON, purpose.getType()),
+				messages.getMessage(Messages.MESSAGE_ID.PIN_REASON),
 				messages.getMessage(Messages.MESSAGE_ID.PIN_PAD)
 		);
 	}
@@ -198,7 +198,7 @@ public class DefaultBeIDCardUI implements BeIDCardUI {
 		mainPanel.setLayout(boxLayout);
 
 		Box reasonPanel = Box.createHorizontalBox();
-		JLabel reasonLabel = new JLabel(messages.getMessage(Messages.MESSAGE_ID.PIN_REASON, reason.getType()));
+		JLabel reasonLabel = new JLabel(messages.getMessage(Messages.MESSAGE_ID.PIN_REASON));
 		reasonPanel.add(reasonLabel);
 		reasonPanel.add(Box.createHorizontalGlue());
 		mainPanel.add(reasonPanel);
