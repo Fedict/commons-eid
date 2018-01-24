@@ -1,9 +1,27 @@
-target
-.settings
-.classpath
+# Eclipse project files
 .project
+.classpath
+.settings/
+
+# IntelliJ IDEA project files
+.idea/
 *.iml
-.idea
-build
-.DS_Store
-bin
+
+# Maven build directory and special artifacts
+target/
+dependency-reduced-pom.xml
+
+# Log file
+*.log
+
+# Build and Package Files
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Virtual machine crash logs
+hs_err_pid*

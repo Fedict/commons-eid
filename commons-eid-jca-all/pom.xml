@@ -1,21 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Commons eID Project.
+  ~ Copyright (C) 2014 - 2018 BOSA.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it under the
+  ~ terms of the GNU Lesser General Public License version 3.0 as published by
+  ~ the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful, but WITHOUT
+  ~ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  ~ FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+  ~ for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with this software; if not, see https://www.gnu.org/licenses/.
+  -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>be.fedict</groupId>
-		<artifactId>commons-eid</artifactId>
-		<version>0.5.4-SNAPSHOT</version>
+		<groupId>be.bosa.commons-eid</groupId>
+		<artifactId>commons-eid-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>..</relativePath>
 	</parent>
-	<name>Commons eID JCA All</name>
-	<groupId>be.fedict.commons-eid</groupId>
+
 	<artifactId>commons-eid-jca-all</artifactId>
+	<name>Commons eID JCA All</name>
 	<description>eID based JCA security provider (shaded)</description>
+
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<configuration>
+					<artifactSet>
+						<includes>
+							<include>be.bosa.commons-eid:commons-eid-jca</include>
+							<include>be.bosa.commons-eid:commons-eid-client</include>
+							<include>be.bosa.commons-eid:commons-eid-dialogs</include>
+							<include>be.bosa.commons-eid:commons-eid-consumer</include>
+							<include>commons-logging:commons-logging-api</include>
+						</includes>
+					</artifactSet>
 				</configuration>
 				<executions>
 					<execution>
@@ -26,33 +54,17 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<configuration>
-					<reportPlugins>
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-javadoc-plugin</artifactId>
-						</plugin>
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-project-info-reports-plugin</artifactId>
-						</plugin>
-					</reportPlugins>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
+
 	<dependencies>
 		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging-api</artifactId>
+			<groupId>be.bosa.commons-eid</groupId>
+			<artifactId>commons-eid-jca</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>be.fedict.commons-eid</groupId>
-			<artifactId>commons-eid-jca</artifactId>
-			<version>${project.version}</version>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
 		</dependency>
 	</dependencies>
 </project>

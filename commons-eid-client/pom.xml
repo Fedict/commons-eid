@@ -1,42 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Commons eID Project.
+  ~ Copyright (C) 2014 - 2018 BOSA.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it under the
+  ~ terms of the GNU Lesser General Public License version 3.0 as published by
+  ~ the Free Software Foundation.
+  ~
+  ~ This software is distributed in the hope that it will be useful, but WITHOUT
+  ~ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  ~ FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+  ~ for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with this software; if not, see https://www.gnu.org/licenses/.
+  -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
-		<groupId>be.fedict</groupId>
-		<artifactId>commons-eid</artifactId>
-		<version>0.5.4-SNAPSHOT</version>
+		<groupId>be.bosa.commons-eid</groupId>
+		<artifactId>commons-eid-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>..</relativePath>
 	</parent>
+
+	<artifactId>commons-eid-client</artifactId>
 	<name>Commons eID Client</name>
 	<description>eID client library based on PC/SC</description>
-	<groupId>be.fedict.commons-eid</groupId>
-	<artifactId>commons-eid-client</artifactId>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<addMavenDescriptor>false</addMavenDescriptor>
-					</archive>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<configuration>
-					<reportPlugins>
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-javadoc-plugin</artifactId>
-						</plugin>
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-project-info-reports-plugin</artifactId>
-						</plugin>
-					</reportPlugins>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>
