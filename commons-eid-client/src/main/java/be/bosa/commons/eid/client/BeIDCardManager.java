@@ -241,8 +241,7 @@ public class BeIDCardManager {
 		@Override
 		public void cardInserted(CardTerminal cardTerminal, Card card) {
 			if (card != null && matchesEidAtr(card.getATR())) {
-				BeIDCard beIDCard = new BeIDCard(card, logger);
-				beIDCard.setCardTerminal(cardTerminal);
+				BeIDCard beIDCard = new BeIDCard(cardTerminal, card, logger);
 				beIDCard.setLocale(LocaleManager.getLocale());
 				terminalsAndCards.put(cardTerminal, beIDCard);
 

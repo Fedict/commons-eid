@@ -107,12 +107,14 @@ public class BeIDCard implements AutoCloseable {
 	private final CertificateFactory certificateFactory;
 
 	private final Card card;
+	private final CardTerminal cardTerminal;
 	private final Logger logger;
 
 	private CCID ccid;
 	private BeIDCardUI ui;
-	private CardTerminal cardTerminal;
 	private Locale locale;
+
+	private Thread exclusiveAccessThread;
 
 	/**
 	 * Instantiate a BeIDCard from an already connected javax.smartcardio.Card,
@@ -126,14 +128,16 @@ public class BeIDCard implements AutoCloseable {
 	 * @throws RuntimeException         when no CertificateFactory capable of producing X509
 	 *                                  Certificates is available.
 	 */
-	public BeIDCard(Card card, Logger logger) {
+	public BeIDCard(CardTerminal cardTerminal, Card card, Logger logger) {
 		if (logger == null) {
 			throw new IllegalArgumentException("logger expected");
 		}
 
+		this.cardTerminal = cardTerminal;
 		this.card = card;
-		this.cardChannel = card.getBasicChannel();
 		this.logger = logger;
+
+		this.cardChannel = card.getBasicChannel();
 		this.cardListeners = new LinkedList<>();
 
 		try {
@@ -152,8 +156,8 @@ public class BeIDCard implements AutoCloseable {
 	 * @throws RuntimeException when no CertificateFactory capable of producing X509
 	 *                          Certificates is available.
 	 */
-	public BeIDCard(Card card) {
-		this(card, new VoidLogger());
+	public BeIDCard(CardTerminal cardTerminal, Card card) {
+		this(cardTerminal, card, new VoidLogger());
 	}
 
 	/**
@@ -169,7 +173,7 @@ public class BeIDCard implements AutoCloseable {
 	 *                                  Certificates is available.
 	 */
 	public BeIDCard(CardTerminal cardTerminal, Logger logger) throws BeIDException {
-		this(connect(cardTerminal), logger);
+		this(cardTerminal, connect(cardTerminal), logger);
 	}
 
 	private static Card connect(CardTerminal cardTerminal) throws BeIDException {
@@ -186,7 +190,6 @@ public class BeIDCard implements AutoCloseable {
 	 */
 	public void close() {
 		logger.debug("closing eID card");
-		setCardTerminal(null);
 
 		try {
 			card.disconnect(true);
@@ -203,14 +206,12 @@ public class BeIDCard implements AutoCloseable {
 	 * SPR messages displayed will be consistent with the UI's language.
 	 *
 	 * @param userInterface an instance of BeIDCardUI
-	 * @return this BeIDCard instance, to allow method chaining
 	 */
-	public BeIDCard setUI(BeIDCardUI userInterface) {
+	public void setUI(BeIDCardUI userInterface) {
 		ui = userInterface;
 		if (locale == null) {
 			setLocale(userInterface.getLocale());
 		}
-		return this;
 	}
 
 	/**
@@ -218,14 +219,11 @@ public class BeIDCard implements AutoCloseable {
 	 * reading/signature operations executed by this BeIDCard.
 	 *
 	 * @param beIDCardListener a beIDCardListener instance
-	 * @return this BeIDCard instance, to allow method chaining
 	 */
-	public BeIDCard addCardListener(BeIDCardListener beIDCardListener) {
+	public void addCardListener(BeIDCardListener beIDCardListener) {
 		synchronized (cardListeners) {
 			cardListeners.add(beIDCardListener);
 		}
-
-		return this;
 	}
 
 	/**
@@ -233,14 +231,11 @@ public class BeIDCard implements AutoCloseable {
 	 * consequent file reading/signature operations executed by this BeIDCard.
 	 *
 	 * @param beIDCardListener a beIDCardListener instance
-	 * @return this BeIDCard instance, to allow method chaining
 	 */
-	public BeIDCard removeCardListener(BeIDCardListener beIDCardListener) {
+	public void removeCardListener(BeIDCardListener beIDCardListener) {
 		synchronized (cardListeners) {
 			cardListeners.remove(beIDCardListener);
 		}
-
-		return this;
 	}
 
 	/**
@@ -574,18 +569,14 @@ public class BeIDCard implements AutoCloseable {
 	 * Discard the citizen's PIN code from the PIN cache. Any subsequent
 	 * Authentication signatures will require PIN entry. (non-repudation
 	 * signatures are automatically protected)
-	 *
-	 * @return this BeIDCard instance, to allow method chaining
 	 */
-	public BeIDCard logoff() throws BeIDException, InterruptedException {
+	public void logoff() throws BeIDException, InterruptedException {
 		CommandAPDU logoffApdu = new CommandAPDU(0x80, 0xE6, 0x00, 0x00);
 		logger.debug("logoff...");
 		ResponseAPDU responseApdu = transmit(logoffApdu);
 		if (0x9000 != responseApdu.getSW()) {
 			throw new RuntimeException("logoff failed");
 		}
-
-		return this;
 	}
 
 	/**
@@ -652,15 +643,12 @@ public class BeIDCard implements AutoCloseable {
 	 * while using the global Locale settings made in BeIDCards and/or
 	 * BeIDCardManager by default, may have their own individual Locale settings
 	 * that may override those global settings.
-	 *
-	 * @return this BeIDCard instance, to allow method chaining
 	 */
-	public BeIDCard setLocale(Locale newLocale) {
+	public void setLocale(Locale newLocale) {
 		locale = newLocale;
 		if (locale != null && ui != null) {
 			ui.setLocale(locale);
 		}
-		return this;
 	}
 
 	// ===========================================================================================================
@@ -673,10 +661,8 @@ public class BeIDCard implements AutoCloseable {
 	/**
 	 * Select the BELPIC applet on the chip. Since the BELPIC applet is supposed
 	 * to be all alone on the chip, shouldn't be necessary.
-	 *
-	 * @return this BeIDCard instance, to allow method chaining
 	 */
-	public BeIDCard selectApplet() throws InterruptedException, BeIDException {
+	public void selectApplet() throws InterruptedException, BeIDException {
 		ResponseAPDU responseApdu;
 
 		responseApdu = transmitCommand(BeIDCommandAPDU.SELECT_APPLET, BELPIC_AID);
@@ -686,8 +672,6 @@ public class BeIDCard implements AutoCloseable {
 		} else {
 			logger.debug("BELPIC JavaCard applet selected by BELPIC_AID");
 		}
-
-		return this;
 	}
 
 	/**
@@ -705,33 +689,41 @@ public class BeIDCard implements AutoCloseable {
 	 * to be calling this when using some of the other low-level methods
 	 * (transmitCommand, etc..) *never* in combination with the high-level
 	 * methods.
-	 *
-	 * @return this BeIDCard Instance, to allow method chaining.
 	 */
-	public BeIDCard beginExclusive() throws BeIDException {
+	public void beginExclusive() throws BeIDException {
+		if (exclusiveAccessThread != null)
+			throw new IllegalStateException("Exclusive access already granted to " + exclusiveAccessThread.getName());
+
 		logger.debug("---begin exclusive---");
 		try {
 			card.beginExclusive();
+			exclusiveAccessThread = Thread.currentThread();
 		} catch (CardException e) {
 			throw new BeIDException("Cannot begin exclusive", e);
 		}
-		return this;
+	}
+
+	/**
+	 * Checks if current thread has exclusive access.
+	 */
+	public boolean hasExclusive() {
+		return exclusiveAccessThread == Thread.currentThread();
 	}
 
 	/**
 	 * Release an exclusive transaction with the card, started by
 	 * beginExclusive().
-	 *
-	 * @return this BeIDCard Instance, to allow method chaining.
 	 */
-	public BeIDCard endExclusive() throws BeIDException {
+	public void endExclusive() throws BeIDException {
+		if (Thread.currentThread() != exclusiveAccessThread) return;
+
 		logger.debug("---end exclusive---");
 		try {
+			exclusiveAccessThread = null;
 			card.endExclusive();
 		} catch (CardException e) {
 			throw new BeIDException("Cannot begin exclusive", e);
 		}
-		return this;
 	}
 
 	/**
@@ -789,9 +781,8 @@ public class BeIDCard implements AutoCloseable {
 	 * Selects a file to read on the card
 	 *
 	 * @param fileId the file to read
-	 * @return this BeIDCard Instance, to allow method chaining.
 	 */
-	public BeIDCard selectFile(byte[] fileId) throws BeIDException, InterruptedException {
+	public void selectFile(byte[] fileId) throws BeIDException, InterruptedException {
 		logger.debug("selecting file");
 
 		ResponseAPDU responseApdu = transmitCommand(BeIDCommandAPDU.SELECT_FILE, fileId);
@@ -805,8 +796,6 @@ public class BeIDCard implements AutoCloseable {
 		} catch (InterruptedException e) {
 			throw new RuntimeException("sleep error: " + e.getMessage());
 		}
-
-		return this;
 	}
 
 	/**
@@ -853,7 +842,7 @@ public class BeIDCard implements AutoCloseable {
 			while (cardTerminal.isCardPresent()) {
 				Thread.sleep(100);
 			}
-		} catch(CardException e) {
+		} catch (CardException e) {
 			throw new BeIDException("Error waiting for card removal", e);
 		}
 	}
@@ -1308,10 +1297,6 @@ public class BeIDCard implements AutoCloseable {
 	 */
 	public CardTerminal getCardTerminal() {
 		return cardTerminal;
-	}
-
-	public void setCardTerminal(CardTerminal cardTerminal) {
-		this.cardTerminal = cardTerminal;
 	}
 
 	/*
