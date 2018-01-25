@@ -282,7 +282,7 @@ public class JCATest {
 
 	@Test
 	public void testNonRepudiationSignaturePPDU() throws Exception {
-		CCID.riskPPDU(true);
+		CCID.setRiskPPDU(true);
 
 		KeyStore keyStore = KeyStore.getInstance("BeID");
 		keyStore.load(null);

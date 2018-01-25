@@ -36,7 +36,7 @@ public class CCIDExercises extends BeIDTest {
 
 	@Test
 	public void listCCIDFeaturesWithPPDU() throws CancelledException {
-		CCID.riskPPDU(true);
+		CCID.setRiskPPDU(true);
 		BeIDCard beIDCard = getBeIDCard();
 		beIDCard.addCardListener(new TestBeIDCardListener());
 

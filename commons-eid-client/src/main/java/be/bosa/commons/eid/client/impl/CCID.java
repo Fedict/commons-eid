@@ -27,11 +27,10 @@ import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumMap;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 
 /**
  * CCID I/O according to the USB Smart card CCID 1.1 specifications.
@@ -43,7 +42,7 @@ import java.util.Set;
 public class CCID {
 
 	private static final int GET_FEATURES = 0x42000D48;
-	private static final int GET_FEATURES_MICROSOFT = 0x31 << 16 | 3400 << 2;
+	private static final int GET_FEATURES_ON_WINDOWS = 0x31 << 16 | 3400 << 2;
 	private static final int MIN_PIN_SIZE = 4;
 	private static final int MAX_PIN_SIZE = 12;
 
@@ -55,13 +54,18 @@ public class CCID {
 	private static final int GERMAN_LANGUAGE_CODE = 0x07;
 	private static final int ENGLISH_LANGUAGE_CODE = 0x09;
 
-	private static boolean riskPPDU = false;
-	private static Set<String> ppduExceptions = null;
-
 	private final Logger logger;
 	private final Card card;
 	private final EnumMap<FEATURE, Integer> features;
 	private boolean usesPPDU;
+
+	private static boolean riskPpdu; // only for testing
+
+	private static final Collection<String> PPDU_NAMES = Arrays.asList(
+			"Digipass 870".toLowerCase(),
+			"Digipass 875".toLowerCase(),
+			"Digipass 920".toLowerCase()
+	);
 
 	public enum FEATURE {
 		VERIFY_PIN_START(0x01),
@@ -100,33 +104,6 @@ public class CCID {
 		}
 	}
 
-	public static void riskPPDU(boolean riskPPDU) {
-		CCID.riskPPDU = riskPPDU;
-	}
-
-	public static void setPPDUExceptions(Collection<String> ppduExceptions) {
-		CCID.ppduExceptions = new HashSet<>(ppduExceptions);
-	}
-
-	public static void addPPDUException(String terminalName) {
-		if (CCID.ppduExceptions == null) CCID.ppduExceptions = new HashSet<>();
-		CCID.ppduExceptions.add(terminalName);
-	}
-
-	public static void removePPDUException(String terminalName) {
-		if (CCID.ppduExceptions == null) return;
-		CCID.ppduExceptions.remove(terminalName);
-	}
-
-	private static boolean riskPPDUForCardTerminal(String name) {
-		if (CCID.ppduExceptions == null) return CCID.riskPPDU;
-		return CCID.riskPPDU ? (!CCID.ppduExceptions.contains(name)) : (CCID.ppduExceptions.contains(name));
-	}
-
-	public boolean usesPPDU() {
-		return usesPPDU;
-	}
-
 	public CCID(Card card, CardTerminal cardTerminal, Logger logger) {
 		this.card = card;
 		this.logger = logger;
@@ -134,13 +111,15 @@ public class CCID {
 		this.usesPPDU = false;
 
 		boolean onMSWindows = (System.getProperty("os.name") != null && System.getProperty("os.name").startsWith("Windows"));
-		this.logger.debug("Getting CCID FEATURES using standard control command");
 
 		try {
 			getFeaturesUsingControlChannel(card, onMSWindows);
 		} catch (CardException cexInNormal) {
 			this.logger.debug("GET_FEATURES over standard control command failed: " + cexInNormal.getMessage());
-			if (onMSWindows && riskPPDUForCardTerminal(cardTerminal.getName())) {
+		}
+
+		if (features.isEmpty()) {
+			if (onMSWindows && isPPDUCardTerminal(cardTerminal.getName())) {
 				this.logger.debug("Attempting To get CCID FEATURES using Pseudo-APDU Fallback Strategy");
 				try {
 					getFeaturesUsingPPDU(card);
@@ -154,7 +133,8 @@ public class CCID {
 	}
 
 	private void getFeaturesUsingControlChannel(Card card, boolean onMSWindows) throws CardException {
-		byte[] featureBytes = card.transmitControlCommand(onMSWindows ? GET_FEATURES_MICROSOFT : GET_FEATURES, new byte[0]);
+		logger.debug("Getting CCID FEATURES using standard control command");
+		byte[] featureBytes = card.transmitControlCommand(onMSWindows ? GET_FEATURES_ON_WINDOWS : GET_FEATURES, new byte[0]);
 		logger.debug("CCID FEATURES found using standard control command");
 
 		for (FEATURE feature : FEATURE.values()) {
@@ -164,6 +144,26 @@ public class CCID {
 				logger.debug("FEATURE " + feature.name() + " = " + Integer.toHexString(featureCode));
 			}
 		}
+	}
+
+	private Integer findFeatureTLV(byte featureTag, byte[] features) {
+		int idx = 0;
+		while (idx < features.length) {
+			byte tag = features[idx];
+			idx += 2;
+			if (featureTag == tag) {
+				int feature = 0;
+				for (int count = 0; count < 3; count++) {
+					feature |= features[idx] & 0xff;
+					idx++;
+					feature <<= 8;
+				}
+				feature |= features[idx] & 0xff;
+				return feature;
+			}
+			idx += 4;
+		}
+		return null;
 	}
 
 	private void getFeaturesUsingPPDU(Card card) throws CardException {
@@ -187,41 +187,24 @@ public class CCID {
 		}
 	}
 
+	private Integer findFeaturePPDU(byte featureTag, byte[] features) {
+		for (byte tag : features) {
+			if (featureTag == tag)
+				return (int) tag;
+		}
+		return null;
+	}
+
+	public boolean usesPPDU() {
+		return usesPPDU;
+	}
+
 	public boolean hasFeature(FEATURE feature) {
 		return getFeature(feature) != null;
 	}
 
 	public Integer getFeature(FEATURE feature) {
 		return features.get(feature);
-	}
-
-	private Integer findFeatureTLV(byte featureTag, byte[] features) {
-		int idx = 0;
-		while (idx < features.length) {
-			byte tag = features[idx];
-			idx += 2;
-			if (featureTag == tag) {
-				int feature = 0;
-				for (int count = 0; count < 3; count++) {
-					feature |= features[idx] & 0xff;
-					idx++;
-					feature <<= 8;
-				}
-				feature |= features[idx] & 0xff;
-				return feature;
-			}
-			idx += 4;
-		}
-		return null;
-	}
-
-	private Integer findFeaturePPDU(byte featureTag, byte[] features) {
-		for (byte tag : features) {
-			if (featureTag == tag)
-				return (int) tag;
-		}
-
-		return null;
 	}
 
 	protected byte[] transmitPPDUCommand(int controlCode, byte[] command) throws CardException, BeIDException {
@@ -481,6 +464,18 @@ public class CCID {
 		modifyCommand.write(0x00); // ulDataLength[3]
 		modifyCommand.write(modifyApdu); // abData
 		return modifyCommand.toByteArray();
+	}
+
+	/**
+	 * Forces the use of ppdu.
+	 * Only use this for testing!
+	 */
+	public static void setRiskPPDU(boolean riskPpdu) {
+		CCID.riskPpdu = riskPpdu;
+	}
+
+	private boolean isPPDUCardTerminal(String name) {
+		return riskPpdu || PPDU_NAMES.stream().anyMatch(ppduName -> name.toLowerCase().contains(ppduName));
 	}
 
 }
