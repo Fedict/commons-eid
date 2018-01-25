@@ -23,7 +23,7 @@ import be.bosa.commons.eid.client.impl.CCID;
 public class BeIDCardTestPPDU extends BeIDCardTest {
 
 	protected BeIDCard getBeIDCard() {
-		CCID.riskPPDU(true);
+		CCID.setRiskPPDU(true);
 		return super.getBeIDCard();
 	}
 }
