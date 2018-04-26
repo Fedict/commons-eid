@@ -1,5 +1,7 @@
 /*
  * Commons eID Project.
+ * Copyright (C) 2012-2013 FedICT.
+ * Copyright (C) 2014 e-Contract.be BVBA.
  * Copyright (C) 2014 - 2018 BOSA.
  *
  * This is free software; you can redistribute it and/or modify it under the
@@ -17,9 +19,9 @@
 
 package be.bosa.commons.eid.client.spi;
 
-import be.bosa.commons.eid.client.PINPurpose;
-
 import java.util.Locale;
+
+import be.bosa.commons.eid.client.PINPurpose;
 
 /**
  * An adapter implementing BeIDCardUI with empty default actions. Intended to be

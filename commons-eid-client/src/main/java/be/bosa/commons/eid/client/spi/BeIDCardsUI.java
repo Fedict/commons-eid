@@ -1,6 +1,6 @@
 /*
  * Commons eID Project.
- * Copyright (C) 2014 - 2018 BOSA.
+§ * Copyright (C) 2014 - 2018 BOSA.
  *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License version 3.0 as published by
@@ -17,13 +17,13 @@
 
 package be.bosa.commons.eid.client.spi;
 
+import java.util.Collection;
+import java.util.Locale;
+
 import be.bosa.commons.eid.client.BeIDCard;
 import be.bosa.commons.eid.client.BeIDCards;
 import be.bosa.commons.eid.client.CancelledException;
 import be.bosa.commons.eid.client.OutOfCardsException;
-
-import java.util.Collection;
-import java.util.Locale;
 
 /**
  * implement a BeIDCardsUI to interact with the user with an instance of

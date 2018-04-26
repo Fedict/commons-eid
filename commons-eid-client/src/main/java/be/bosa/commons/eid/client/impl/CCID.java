@@ -1,5 +1,7 @@
 /*
  * Commons eID Project.
+ * Copyright (C) 2008-2013 FedICT.
+ * Copyright (C) 2014 e-Contract.be BVBA.
  * Copyright (C) 2014 - 2018 BOSA.
  *
  * This is free software; you can redistribute it and/or modify it under the
@@ -17,20 +19,21 @@
 
 package be.bosa.commons.eid.client.impl;
 
-import be.bosa.commons.eid.client.exception.BeIDException;
-import be.bosa.commons.eid.client.spi.Logger;
-
-import javax.smartcardio.Card;
-import javax.smartcardio.CardException;
-import javax.smartcardio.CardTerminal;
-import javax.smartcardio.CommandAPDU;
-import javax.smartcardio.ResponseAPDU;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.Locale;
+
+import javax.smartcardio.Card;
+import javax.smartcardio.CardException;
+import javax.smartcardio.CardTerminal;
+import javax.smartcardio.CommandAPDU;
+import javax.smartcardio.ResponseAPDU;
+
+import be.bosa.commons.eid.client.exception.BeIDException;
+import be.bosa.commons.eid.client.spi.Logger;
 
 /**
  * CCID I/O according to the USB Smart card CCID 1.1 specifications.

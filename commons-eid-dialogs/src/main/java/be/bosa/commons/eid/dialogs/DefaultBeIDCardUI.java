@@ -1,5 +1,7 @@
 /*
  * Commons eID Project.
+ * Copyright (C) 2008-2013 FedICT.
+ * Copyright (C) 2009 Frank Cornelis.
  * Copyright (C) 2014 - 2018 BOSA.
  *
  * This is free software; you can redistribute it and/or modify it under the
@@ -17,17 +19,18 @@
 
 package be.bosa.commons.eid.dialogs;
 
-import be.bosa.commons.eid.client.CancelledException;
-import be.bosa.commons.eid.client.PINPurpose;
-import be.bosa.commons.eid.client.spi.BeIDCardUI;
-
-import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Arrays;
 import java.util.Locale;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+
+import be.bosa.commons.eid.client.CancelledException;
+import be.bosa.commons.eid.client.PINPurpose;
+import be.bosa.commons.eid.client.spi.BeIDCardUI;
 
 /**
  * Default Implementation of BeIDCardUI Interface

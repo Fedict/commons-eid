@@ -1,5 +1,6 @@
 /*
  * Commons eID Project.
+ * Copyright (C) 2013 Frank Cornelis.
  * Copyright (C) 2014 - 2018 BOSA.
  *
  * This is free software; you can redistribute it and/or modify it under the
@@ -17,7 +18,11 @@
 
 package be.bosa.commons.eid.client.tests.integration;
 
-import be.bosa.commons.eid.jca.BeIDProvider;
+import java.security.KeyStore;
+import java.security.PrivateKey;
+import java.security.Security;
+import java.security.cert.X509Certificate;
+
 import org.bouncycastle.cms.CMSProcessableByteArray;
 import org.bouncycastle.cms.CMSSignedData;
 import org.bouncycastle.cms.CMSSignedDataGenerator;
@@ -29,10 +34,7 @@ import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.operator.jcajce.JcaDigestCalculatorProviderBuilder;
 import org.junit.Test;
 
-import java.security.KeyStore;
-import java.security.PrivateKey;
-import java.security.Security;
-import java.security.cert.X509Certificate;
+import be.bosa.commons.eid.jca.BeIDProvider;
 
 public class CMSTest {
 

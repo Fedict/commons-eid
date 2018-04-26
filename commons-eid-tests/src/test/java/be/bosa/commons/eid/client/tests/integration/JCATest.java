@@ -1,5 +1,7 @@
 /*
  * Commons eID Project.
+ * Copyright (C) 2008-2013 FedICT.
+ * Copyright (C) 2014 e-Contract.be BVBA.
  * Copyright (C) 2014 - 2018 BOSA.
  *
  * This is free software; you can redistribute it and/or modify it under the
@@ -17,21 +19,11 @@
 
 package be.bosa.commons.eid.client.tests.integration;
 
-import be.bosa.commons.eid.client.BeIDCard;
-import be.bosa.commons.eid.client.BeIDCards;
-import be.bosa.commons.eid.client.impl.CCID;
-import be.bosa.commons.eid.jca.BeIDKeyStoreParameter;
-import be.bosa.commons.eid.jca.BeIDPrivateKey;
-import be.bosa.commons.eid.jca.BeIDProvider;
-import org.apache.commons.codec.binary.Hex;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import javax.swing.*;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
@@ -53,10 +45,22 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.Enumeration;
 import java.util.Locale;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.swing.*;
+
+import org.apache.commons.codec.binary.Hex;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import be.bosa.commons.eid.client.BeIDCard;
+import be.bosa.commons.eid.client.BeIDCards;
+import be.bosa.commons.eid.client.impl.CCID;
+import be.bosa.commons.eid.jca.BeIDKeyStoreParameter;
+import be.bosa.commons.eid.jca.BeIDPrivateKey;
+import be.bosa.commons.eid.jca.BeIDProvider;
 
 public class JCATest {
 

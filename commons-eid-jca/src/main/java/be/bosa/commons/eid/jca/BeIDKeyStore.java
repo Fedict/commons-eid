@@ -1,5 +1,7 @@
 /*
  * Commons eID Project.
+ * Copyright (C) 2008-2013 FedICT.
+ * Copyright (C) 2014 e-Contract.be BVBA.
  * Copyright (C) 2014 - 2018 BOSA.
  *
  * This is free software; you can redistribute it and/or modify it under the
@@ -17,22 +19,6 @@
 
 package be.bosa.commons.eid.jca;
 
-import be.bosa.commons.eid.client.BeIDCard;
-import be.bosa.commons.eid.client.BeIDCards;
-import be.bosa.commons.eid.client.CancelledException;
-import be.bosa.commons.eid.client.FileType;
-import be.bosa.commons.eid.client.impl.VoidLogger;
-import be.bosa.commons.eid.client.spi.BeIDCardUI;
-import be.bosa.commons.eid.client.spi.BeIDCardsUI;
-import be.bosa.commons.eid.client.spi.Logger;
-import be.bosa.commons.eid.dialogs.DefaultBeIDCardUI;
-import be.bosa.commons.eid.dialogs.DefaultBeIDCardsUI;
-import be.bosa.commons.eid.dialogs.Messages;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import javax.smartcardio.CardTerminal;
-import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,6 +44,24 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
+
+import javax.smartcardio.CardTerminal;
+import javax.swing.*;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import be.bosa.commons.eid.client.BeIDCard;
+import be.bosa.commons.eid.client.BeIDCards;
+import be.bosa.commons.eid.client.CancelledException;
+import be.bosa.commons.eid.client.FileType;
+import be.bosa.commons.eid.client.impl.VoidLogger;
+import be.bosa.commons.eid.client.spi.BeIDCardUI;
+import be.bosa.commons.eid.client.spi.BeIDCardsUI;
+import be.bosa.commons.eid.client.spi.Logger;
+import be.bosa.commons.eid.dialogs.DefaultBeIDCardUI;
+import be.bosa.commons.eid.dialogs.DefaultBeIDCardsUI;
+import be.bosa.commons.eid.dialogs.Messages;
 
 /**
  * eID based JCA {@link KeyStore}. Used to load eID key material via standard

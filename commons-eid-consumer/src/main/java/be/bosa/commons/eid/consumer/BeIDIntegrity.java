@@ -1,5 +1,7 @@
 /*
  * Commons eID Project.
+ * Copyright (C) 2008-2013 FedICT.
+ * Copyright (C) 2009 Frank Cornelis.
  * Copyright (C) 2014 - 2018 BOSA.
  *
  * This is free software; you can redistribute it and/or modify it under the
@@ -17,10 +19,6 @@
 
 package be.bosa.commons.eid.consumer;
 
-import be.bosa.commons.eid.consumer.tlv.TlvParser;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.io.ByteArrayInputStream;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
@@ -32,6 +30,11 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import be.bosa.commons.eid.consumer.tlv.TlvParser;
 
 /**
  * Utility class for various eID related integrity checks.
