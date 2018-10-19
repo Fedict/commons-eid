@@ -218,6 +218,26 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+				<version>3.3.2</version>
+				<configuration>
+					<failBuildOnCVSS>0</failBuildOnCVSS>
+					<format>html</format>
+					<suppressionFile>vulnerability-suppressions.xml</suppressionFile>
+					<centralAnalyzerEnabled>false</centralAnalyzerEnabled>
+					<failOnError>false</failOnError>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>aggregate</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 
 		<pluginManagement>
