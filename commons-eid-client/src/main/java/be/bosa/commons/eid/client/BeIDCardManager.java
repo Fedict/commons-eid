@@ -83,8 +83,9 @@ public class BeIDCardManager {
 	 * @param logger the logger instance
 	 */
 	public BeIDCardManager(Logger logger) {
-		this(logger, new CardAndTerminalManager());
+		this(logger, new CardAndTerminalManager(logger));
 		this.terminalManagerIsPrivate = true;
+		this.cardAndTerminalManager.setProtocol(Protocol.T0);
 	}
 
 	/**
@@ -114,10 +115,6 @@ public class BeIDCardManager {
 		this.otherCardListeners = Collections.synchronizedSet(new HashSet<>());
 		this.terminalsAndCards = Collections.synchronizedMap(new HashMap<>());
 		this.cardAndTerminalManager = cardAndTerminalManager;
-
-		if (this.terminalManagerIsPrivate) {
-			this.cardAndTerminalManager.setProtocol(Protocol.T0);
-		}
 
 		this.cardAndTerminalManager.addCardListener(new DefaultCardEventsListener());
 	}

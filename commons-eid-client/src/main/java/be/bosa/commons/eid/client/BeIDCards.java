@@ -54,6 +54,7 @@ public class BeIDCards implements AutoCloseable {
 	private static final String DEFAULT_UI_IMPLEMENTATION = "be.bosa.commons.eid.dialogs.DefaultBeIDCardsUI";
 
 	private final Logger logger;
+	private final CardAndTerminalManager cardAndTerminalManager;
 	private final BeIDCardManager cardManager;
 	private final Map<CardTerminal, BeIDCard> beIDTerminalsAndCards;
 	private final Sleeper terminalManagerInitSleeper, cardTerminalSleeper;
@@ -106,8 +107,8 @@ public class BeIDCards implements AutoCloseable {
 	public BeIDCards(Logger logger, BeIDCardsUI ui) {
 		this.logger = logger;
 
-		CardAndTerminalManager cardAndTerminalManager = new CardAndTerminalManager(logger);
-		cardAndTerminalManager.setProtocol(CardAndTerminalManager.Protocol.T0);
+		this.cardAndTerminalManager = new CardAndTerminalManager(logger);
+		this.cardAndTerminalManager.setProtocol(CardAndTerminalManager.Protocol.T0);
 		this.cardManager = new BeIDCardManager(logger, cardAndTerminalManager);
 
 		this.terminalManagerInitSleeper = new Sleeper();
@@ -122,10 +123,10 @@ public class BeIDCards implements AutoCloseable {
 
 		setUI(ui);
 
-		cardAndTerminalManager.addCardTerminalListener(new DefaultCardTerminalEventsListener());
+		this.cardAndTerminalManager.addCardTerminalListener(new DefaultCardTerminalEventsListener());
 		this.cardManager.addBeIDCardEventListener(new DefaultBeIDCardEventsListener());
 
-		cardAndTerminalManager.start();
+		this.cardAndTerminalManager.start();
 	}
 
 	/**
@@ -268,8 +269,9 @@ public class BeIDCards implements AutoCloseable {
 	/**
 	 * Call close() if you no longer need this BeIDCards instance.
 	 */
+	@Override
 	public void close() throws InterruptedException {
-		cardManager.stop();
+		this.cardAndTerminalManager.stop();
 	}
 
 	/**
