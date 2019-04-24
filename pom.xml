@@ -21,7 +21,7 @@
 
 	<groupId>be.bosa.commons-eid</groupId>
 	<artifactId>commons-eid-parent</artifactId>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Commons eID Project</name>
 
@@ -103,22 +103,22 @@
 			<dependency>
 				<groupId>be.bosa.commons-eid</groupId>
 				<artifactId>commons-eid-client</artifactId>
-				<version>1.0.3-SNAPSHOT</version>
+				<version>1.0.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>be.bosa.commons-eid</groupId>
 				<artifactId>commons-eid-consumer</artifactId>
-				<version>1.0.3-SNAPSHOT</version>
+				<version>1.0.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>be.bosa.commons-eid</groupId>
 				<artifactId>commons-eid-dialogs</artifactId>
-				<version>1.0.3-SNAPSHOT</version>
+				<version>1.0.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>be.bosa.commons-eid</groupId>
 				<artifactId>commons-eid-jca</artifactId>
-				<version>1.0.3-SNAPSHOT</version>
+				<version>1.0.2-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
