@@ -21,7 +21,7 @@
 
 	<groupId>be.bosa.commons-eid</groupId>
 	<artifactId>commons-eid-parent</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Commons eID Project</name>
 
@@ -58,7 +58,7 @@
 	<scm>
 		<connection>scm:git:ssh://git@github.com/Fedict/commons-eid.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/Fedict/commons-eid.git</developerConnection>
-		<tag>commons-eid-parent-1.0.3</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<distributionManagement>
@@ -103,22 +103,22 @@
 			<dependency>
 				<groupId>be.bosa.commons-eid</groupId>
 				<artifactId>commons-eid-client</artifactId>
-				<version>1.0.3</version>
+				<version>1.0.4-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>be.bosa.commons-eid</groupId>
 				<artifactId>commons-eid-consumer</artifactId>
-				<version>1.0.3</version>
+				<version>1.0.4-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>be.bosa.commons-eid</groupId>
 				<artifactId>commons-eid-dialogs</artifactId>
-				<version>1.0.3</version>
+				<version>1.0.4-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>be.bosa.commons-eid</groupId>
 				<artifactId>commons-eid-jca</artifactId>
-				<version>1.0.3</version>
+				<version>1.0.4-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
