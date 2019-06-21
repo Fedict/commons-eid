@@ -142,8 +142,8 @@ public class CCID {
 
 		for (FEATURE feature : FEATURE.values()) {
 			Integer featureCode = findFeatureTLV(feature.getTag(), featureBytes);
-			features.put(feature, featureCode);
 			if (featureCode != null) {
+				features.put(feature, featureCode);
 				logger.debug("FEATURE " + feature.name() + " = " + Integer.toHexString(featureCode));
 			}
 		}
