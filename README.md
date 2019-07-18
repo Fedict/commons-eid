@@ -8,6 +8,8 @@ The source code is hosted at: https://github.com/Fedict/commons-eid.
 The source code of the Commons eID Project is licensed under GNU LGPL v3.0.
 The license conditions can be found in the file: LICENSE.
 
+Releases are available at Maven Central.
+
 ## Build
 
 The following is required for compiling the Commons eID software:
