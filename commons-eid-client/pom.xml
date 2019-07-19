@@ -29,4 +29,11 @@
 	<artifactId>commons-eid-client</artifactId>
 	<name>Commons eID Client</name>
 	<description>eID client library based on PC/SC</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+	</dependencies>
 </project>

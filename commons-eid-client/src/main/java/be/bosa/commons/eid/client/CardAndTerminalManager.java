@@ -19,6 +19,7 @@ package be.bosa.commons.eid.client;
 
 import be.bosa.commons.eid.client.event.CardEventsListener;
 import be.bosa.commons.eid.client.event.CardTerminalEventsListener;
+import be.bosa.commons.eid.client.impl.CardTerminalsProxy;
 import be.bosa.commons.eid.client.impl.LibJ2PCSCGNULinuxFix;
 import be.bosa.commons.eid.client.impl.VoidLogger;
 import be.bosa.commons.eid.client.spi.Logger;
@@ -28,7 +29,6 @@ import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 import javax.smartcardio.CardTerminals;
 import javax.smartcardio.CardTerminals.State;
-import javax.smartcardio.TerminalFactory;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -133,9 +133,7 @@ public class CardAndTerminalManager implements Runnable {
 		this.protocol = Protocol.ANY;
 
 		if (cardTerminals == null) {
-			TerminalFactory terminalFactory = TerminalFactory
-					.getDefault();
-			this.cardTerminals = terminalFactory.terminals();
+			this.cardTerminals = CardTerminalsProxy.getCardTerminals(logger);
 		} else {
 			this.cardTerminals = cardTerminals;
 		}

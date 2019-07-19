@@ -87,6 +87,7 @@
 		<version.junit>4.12</version.junit>
 		<version.log4j>2.10.0</version.log4j>
 		<version.joda-time>2.3</version.joda-time>
+		<version.org.apache.commons.lang>3.5</version.org.apache.commons.lang>
 	</properties>
 
 	<modules>
@@ -167,6 +168,11 @@
 				<groupId>joda-time</groupId>
 				<artifactId>joda-time</artifactId>
 				<version>${version.joda-time}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${version.org.apache.commons.lang}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
