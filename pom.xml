@@ -87,7 +87,7 @@
 		<version.junit>4.12</version.junit>
 		<version.log4j>2.10.0</version.log4j>
 		<version.joda-time>2.3</version.joda-time>
-		<version.org.apache.commons.lang>3.5</version.org.apache.commons.lang>
+		<version.org.apache.commons.lang>3.9</version.org.apache.commons.lang>
 	</properties>
 
 	<modules>
