@@ -21,7 +21,7 @@
 
 	<groupId>be.bosa.commons-eid</groupId>
 	<artifactId>commons-eid-parent</artifactId>
-	<version>1.0.5-SNAPSHOT</version>
+	<version>1.0.5</version>
 	<packaging>pom</packaging>
 	<name>Commons eID Project</name>
 	<description>Commons eID: library to communicate with the Belgian eID card.</description>
@@ -61,7 +61,7 @@
 		<url>https://github.com/Fedict/commons-eid</url>
 		<connection>scm:git:ssh://git@github.com/Fedict/commons-eid.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/Fedict/commons-eid.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>commons-eid-parent-1.0.5</tag>
 	</scm>
 
 	<distributionManagement>
@@ -106,22 +106,22 @@
 			<dependency>
 				<groupId>be.bosa.commons-eid</groupId>
 				<artifactId>commons-eid-client</artifactId>
-				<version>1.0.5-SNAPSHOT</version>
+				<version>1.0.5</version>
 			</dependency>
 			<dependency>
 				<groupId>be.bosa.commons-eid</groupId>
 				<artifactId>commons-eid-consumer</artifactId>
-				<version>1.0.5-SNAPSHOT</version>
+				<version>1.0.5</version>
 			</dependency>
 			<dependency>
 				<groupId>be.bosa.commons-eid</groupId>
 				<artifactId>commons-eid-dialogs</artifactId>
-				<version>1.0.5-SNAPSHOT</version>
+				<version>1.0.5</version>
 			</dependency>
 			<dependency>
 				<groupId>be.bosa.commons-eid</groupId>
 				<artifactId>commons-eid-jca</artifactId>
-				<version>1.0.5-SNAPSHOT</version>
+				<version>1.0.5</version>
 			</dependency>
 
 			<dependency>
