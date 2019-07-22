@@ -21,9 +21,11 @@
 
 	<groupId>be.bosa.commons-eid</groupId>
 	<artifactId>commons-eid-parent</artifactId>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Commons eID Project</name>
+	<description>Commons eID: library to communicate with the Belgian eID card.</description>
+	<url>https://github.com/Fedict/commons-eid</url>
 
 	<inceptionYear>2012</inceptionYear>
 	<organization>
@@ -56,17 +58,17 @@
 	</developers>
 
 	<scm>
+		<url>https://github.com/Fedict/commons-eid</url>
 		<connection>scm:git:ssh://git@github.com/Fedict/commons-eid.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/Fedict/commons-eid.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 
 	<distributionManagement>
-		<repository>
-			<id>maven.eid.belgium.be</id>
-			<url>scpexe://maven.eid.belgium.be/home/maven</url>
-			<uniqueVersion>false</uniqueVersion>
-		</repository>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
 	</distributionManagement>
 
 	<issueManagement>
@@ -103,22 +105,22 @@
 			<dependency>
 				<groupId>be.bosa.commons-eid</groupId>
 				<artifactId>commons-eid-client</artifactId>
-				<version>1.0.4-SNAPSHOT</version>
+				<version>1.0.5-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>be.bosa.commons-eid</groupId>
 				<artifactId>commons-eid-consumer</artifactId>
-				<version>1.0.4-SNAPSHOT</version>
+				<version>1.0.5-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>be.bosa.commons-eid</groupId>
 				<artifactId>commons-eid-dialogs</artifactId>
-				<version>1.0.4-SNAPSHOT</version>
+				<version>1.0.5-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>be.bosa.commons-eid</groupId>
 				<artifactId>commons-eid-jca</artifactId>
-				<version>1.0.4-SNAPSHOT</version>
+				<version>1.0.5-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
@@ -184,59 +186,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<configuration>
-					<preparationGoals>clean install</preparationGoals>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-javadoc</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.owasp</groupId>
-				<artifactId>dependency-check-maven</artifactId>
-				<version>3.3.2</version>
-				<configuration>
-					<failBuildOnCVSS>0</failBuildOnCVSS>
-					<format>html</format>
-					<suppressionFile>vulnerability-suppressions.xml</suppressionFile>
-					<centralAnalyzerEnabled>false</centralAnalyzerEnabled>
-					<failOnError>false</failOnError>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>aggregate</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 
@@ -312,7 +261,6 @@
 					<artifactId>maven-jarsigner-plugin</artifactId>
 					<version>1.4</version>
 				</plugin>
-
 				<plugin>
 					<groupId>org.eclipse.jetty</groupId>
 					<artifactId>jetty-maven-plugin</artifactId>
@@ -335,16 +283,97 @@
 		</extensions>
 	</build>
 
-	<repositories>
-		<repository>
-			<id>eid-belgium</id>
-			<url>https://maven.eid.belgium.be/</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</repository>
-	</repositories>
+	<profiles>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-release-plugin</artifactId>
+						<configuration>
+							<preparationGoals>clean install</preparationGoals>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-javadoc</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.owasp</groupId>
+						<artifactId>dependency-check-maven</artifactId>
+						<version>3.3.2</version>
+						<configuration>
+							<failBuildOnCVSS>0</failBuildOnCVSS>
+							<format>html</format>
+							<suppressionFile>vulnerability-suppressions.xml</suppressionFile>
+							<centralAnalyzerEnabled>false</centralAnalyzerEnabled>
+							<failOnError>false</failOnError>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>validate</phase>
+								<goals>
+									<goal>aggregate</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.6</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+								<configuration>
+									<gpgArguments>
+										<arg>--pinentry-mode</arg>
+										<arg>loopback</arg>
+									</gpgArguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>1.6.8</version>
+						<extensions>true</extensions>
+						<configuration>
+							<serverId>ossrh</serverId>
+							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+							<autoReleaseAfterClose>false</autoReleaseAfterClose>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
