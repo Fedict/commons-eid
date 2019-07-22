@@ -34,11 +34,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import be.bosa.commons.eid.client.spi.Logger;
 
-/**
- * Created on 24/07/17.
- *
- * @author Reda.Housni-Alaoui
- */
 public class CardTerminalsProxy extends CardTerminals {
 
 	private final CardTerminals delegate;
